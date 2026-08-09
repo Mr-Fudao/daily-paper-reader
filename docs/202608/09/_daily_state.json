@@ -1,0 +1,89 @@
+{
+  "date": "20260809",
+  "date_label": "",
+  "generated_at": "2026-08-09 19:49:03 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2608.01537v1",
+      "route": "202608/09/2608.01537v1-small-samples-and-short-panels-evaluating-policy-evaluation-methods-with-realistic-data",
+      "title": "Small Samples and Short Panels: Evaluating Policy Evaluation Methods with Realistic Data",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "评估政策干预效果的方法在小样本情况下的表现，可应用于政府财政绩效评估",
+      "first_seen_at": "2026-08-09 19:49:03 UTC",
+      "updated_at": "2026-08-09 19:49:03 UTC"
+    },
+    {
+      "paper_id": "2608.06305v1",
+      "route": "202608/09/2608.06305v1-beyond-top-k-replacing-black-box-retrieval-with-interpretable-agentic-operations",
+      "title": "Beyond Top-K: Replacing Black-Box Retrieval with Interpretable Agentic Operations",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "针对780页政府财务报告的检索处理，提升预算执行与财政分析能力",
+      "first_seen_at": "2026-08-09 19:49:03 UTC",
+      "updated_at": "2026-08-09 19:49:03 UTC"
+    },
+    {
+      "paper_id": "2608.01137v1",
+      "route": "202608/09/2608.01137v1-double-machine-learning-with-high-dimensional-interactive-fixed-effects",
+      "title": "Double Machine Learning with High-dimensional Interactive Fixed Effects",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "高维面板因果推断估计方法，适用于政府预算与财政绩效评估",
+      "first_seen_at": "2026-08-09 19:49:03 UTC",
+      "updated_at": "2026-08-09 19:49:03 UTC"
+    },
+    {
+      "paper_id": "2608.05017v1",
+      "route": "202608/09/2608.05017v1-algorithm-driven-svars-navigating-the-wilderness-of-big-data",
+      "title": "Algorithm-Driven SVARs: Navigating the Wilderness of Big Data",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "贝叶斯结构向量自回归变量选择方法，可迁移至财政绩效评估",
+      "first_seen_at": "2026-08-09 19:49:03 UTC",
+      "updated_at": "2026-08-09 19:49:03 UTC"
+    },
+    {
+      "paper_id": "2608.05958v1",
+      "route": "202608/09/2608.05958v1-stability-of-ranking-dependent-pair-wise-comparison-patterns-in-the-analytic-hierarchy-process",
+      "title": "Stability of Ranking-dependent Pair-wise Comparison Patterns in the Analytic Hierarchy Process",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "提供基于层次分析法（AHP）的排序依赖成对比较方法，适用于财政绩效评估中的多准则评价",
+      "first_seen_at": "2026-08-09 19:49:03 UTC",
+      "updated_at": "2026-08-09 19:49:03 UTC"
+    }
+  ]
+}

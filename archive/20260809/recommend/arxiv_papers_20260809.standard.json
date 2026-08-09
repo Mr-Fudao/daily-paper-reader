@@ -1,0 +1,207 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-09T19:42:16.116882+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 5,
+    "quick_skim_target": 11,
+    "quick_selected": 5
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2608.01537v1",
+      "source": "arxiv",
+      "title": "Small Samples and Short Panels: Evaluating Policy Evaluation Methods with Realistic Data",
+      "abstract": "Methods for estimating causal effects in longitudinal, quasi-experimental settings are widely used in economics, public health, political science, and other fields. However, studies evaluating effects of health policies often rely on limited sample sizes, both in terms of study units and time periods analyzed. Synthetic difference-in-differences (SDiD) and the augmented synthetic control method (ASCM) are recently developed methods for evaluating the effects of policy interventions. Although SDiD and ASCM generally rely on weaker assumptions than both DiD and SCM, they lack theoretical performance guarantees with respect to bias or coverage in relevant settings with small sample sizes or short panel lengths. To evaluate the performance of SDiD and ASCM in realistic, small-sample settings, we employ a calibrated simulation strategy that allows the injection of a known treatment effect into existing data in a setting of interest. Drawing on findings from these empirical investigations, we offer practical guidance for researchers and policymakers on when SDiD and ASCM are likely to yield reliable estimates and inferences under realistic scenarios.",
+      "authors": [
+        "Luke Stewart",
+        "Gary Hettinger",
+        "Youjin Lee",
+        "Nandita Mitra"
+      ],
+      "primary_category": "stat.ME",
+      "categories": [
+        "stat.ME"
+      ],
+      "published": "2026-08-02T23:14:21+00:00",
+      "link": "https://arxiv.org/pdf/2608.01537v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Methods for evaluating policy interventions under small samples, directly applicable to fiscal performance evaluation in government",
+      "llm_evidence_cn": "评估政策干预效果的方法在小样本情况下的表现，可应用于政府财政绩效评估",
+      "llm_evidence": "评估政策干预效果的方法在小样本情况下的表现，可应用于政府财政绩效评估",
+      "canonical_evidence": "评估政策干预效果的方法在小样本情况下的表现，可应用于政府财政绩效评估",
+      "llm_tldr_en": "This paper evaluates synthetic difference-in-differences and augmented synthetic control methods in small samples and short panels, showing when they are reliable for policy evaluation. Useful for government fiscal performance assessment.",
+      "llm_tldr_cn": "针对健康政策等评估中常见的小样本和短面板问题，本文系统比较了合成双重差分(SDiD)和增强合成控制(ASCM)等方法的偏误与覆盖率。通过基于现实数据的模拟，揭示了这些方法在有限样本下的表现和适用条件。研究为政府财政绩效评估等政策评价提供了方法选择和可靠性判断的依据，具有重要的方法论参考价值。",
+      "llm_tldr": "针对健康政策等评估中常见的小样本和短面板问题，本文系统比较了合成双重差分(SDiD)和增强合成控制(ASCM)等方法的偏误与覆盖率。通过基于现实数据的模拟，揭示了这些方法在有限样本下的表现和适用条件。研究为政府财政绩效评估等政策评价提供了方法选择和可靠性判断的依据，具有重要的方法论参考价值。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "evaluation of fiscal performance in government",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.01137v1",
+      "source": "arxiv",
+      "title": "Double Machine Learning with High-dimensional Interactive Fixed Effects",
+      "abstract": "Factor structures are central to empirical work in economics and finance, and are usually used to model time-varying unobserved heterogeneity through interactive fixed effects (IFE). Existing IFE estimators rest on low-dimensional and linear specifications in the covariates, assumptions which are increasingly restrictive in applications drawing on rich datasets with controls of unknown functional form. This paper develops a Double Machine Learning estimator for the high-dimensional partially linear panel model with interactive fixed effects (panel DML-IFE). The method combines projection-based defactorisation of the data, in the spirit of Common Correlated Effects (CCE), with a Neyman-orthogonal score function and cross-fitting procedure, and accommodates low-rank factor structures in outcomes and treatments alongside high-dimensional, potentially nonlinear covariate effects estimated by machine learning algorithms. Monte Carlo simulations show that panel DML-IFE outperforms conventional IFE estimator outside the correctly-specified linear case, with bias reduction driven primarily by the time and covariate dimensions. An empirical application to U.S. stock returns shows that several effects documented under linear specifications lose statistical significance once high-dimensional nonlinear confounding and the presence of IFE are jointly accounted for.",
+      "authors": [
+        "Binzhi Chen",
+        "Annalivia Polselli",
+        "Paul S. Clarke"
+      ],
+      "primary_category": "econ.EM",
+      "categories": [
+        "econ.EM"
+      ],
+      "published": "2026-08-02T10:33:39+00:00",
+      "link": "https://arxiv.org/pdf/2608.01137v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Causal inference estimator for high-dimensional panels; useful for evaluating government budget and fiscal performance programs",
+      "llm_evidence_cn": "高维面板因果推断估计方法，适用于政府预算与财政绩效评估",
+      "llm_evidence": "高维面板因果推断估计方法，适用于政府预算与财政绩效评估",
+      "canonical_evidence": "高维面板因果推断估计方法，适用于政府预算与财政绩效评估",
+      "llm_tldr_en": "Develops a double machine learning estimator for high-dimensional partially linear panel models with interactive fixed effects, using defactorisation and Neyman-orthogonal scores; provides robust causal inference for policy evaluation.",
+      "llm_tldr_cn": "论文聚焦高维面板数据中交互固定效应与非线性协变量带来的估计偏差，提出融合投影去因子、Neyman正交得分和交叉拟合的双机器学习估计量。该方法允许控制变量具有未知函数形式，提升因果效应估计的稳健性，为政府预算和财政政策的绩效评估提供了新的计量工具。",
+      "llm_tldr": "论文聚焦高维面板数据中交互固定效应与非线性协变量带来的估计偏差，提出融合投影去因子、Neyman正交得分和交叉拟合的双机器学习估计量。该方法允许控制变量具有未知函数形式，提升因果效应估计的稳健性，为政府预算和财政政策的绩效评估提供了新的计量工具。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "research on performance evaluation in government budgeting",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.06305v1",
+      "source": "arxiv",
+      "title": "Beyond Top-K: Replacing Black-Box Retrieval with Interpretable Agentic Operations",
+      "abstract": "Retrieval-augmented generation over long documents is dominated by one design: chunk the text, embed the chunks, and surface the top-k nearest neighbours of the query. We argue that for an important class of documents -- financial statements, audit reports, regulatory returns -- this design is structurally unsound, and we make the argument measurable. On a 780-page government financial report, 86.8% of content lines are table rows, thousands of near-identical figures compete in one embedding space, and a figure inherits its unit from a header a median of 13 lines above it -- so a chunk boundary routinely separates a number from whether it is in lakh or crore, an error of two orders of magnitude. A table-aware chunker built as a steelman fixes the unit problem but leaves 27-30% of numeric chunks with no fiscal-year header at every chunk size we tried. We propose READ (Reliable Embedding-free Agentic Document-search), in which an agent reads the raw document through three deterministic operations -- normalized lexical search, structural navigation, and bounded span reads -- exposed over the Model Context Protocol, so a trajectory is a replayable audit trail, not an opaque similarity score. On 51 verified questions READ answers 58.8% against dense retrieval's 15.7% (p_Holm = 2 x 10^-5) -- or 35.3% tuned, which READ still leads by 23.5 points (p_Holm = 0.017). An agent given the same loop but a top-k tool reaches only 27.5%, locating the gain in the interface rather than in iteration. We also report what the evidence does not support: BM25 is statistically indistinguishable from READ, so our result separates embedding-based from embedding-free retrieval, not agentic from lexical search.",
+      "authors": [
+        "Sagar Tamang",
+        "Ayush Vyas",
+        "Tabarakul Hazarika"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.IR"
+      ],
+      "published": "2026-08-06T17:23:13+00:00",
+      "link": "https://arxiv.org/pdf/2608.06305v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Specifically handles 780-page government financial report, improving retrieval for budget execution and fiscal analysis",
+      "llm_evidence_cn": "针对780页政府财务报告的检索处理，提升预算执行与财政分析能力",
+      "llm_evidence": "针对780页政府财务报告的检索处理，提升预算执行与财政分析能力",
+      "canonical_evidence": "针对780页政府财务报告的检索处理，提升预算执行与财政分析能力",
+      "llm_tldr_en": "Large government financial reports break standard top-k retrieval because tables and unit headers are separated. This paper proposes interpretable agentic operations, including table-aware chunking, to replace black-box retrieval, correctly linking figures to their units for improved analysis.",
+      "llm_tldr_cn": "大型政府财务报告等长文档以表格为主，传统分块嵌入加Top-K检索因表格行与表头单位分离而频繁出错。本文提出用可解释的智能体操作替代黑盒检索，并构建表格感知的分块器作为基准方案，使数字与其单位正确关联。在780页政府财务报告上的实验显示该设计显著优于标准检索。该工作为预算执行与财政报表分析提供了更可靠的信息提取方法。",
+      "llm_tldr": "大型政府财务报告等长文档以表格为主，传统分块嵌入加Top-K检索因表格行与表头单位分离而频繁出错。本文提出用可解释的智能体操作替代黑盒检索，并构建表格感知的分块器作为基准方案，使数字与其单位正确关联。在780页政府财务报告上的实验显示该设计显著优于标准检索。该工作为预算执行与财政报表分析提供了更可靠的信息提取方法。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "analysis of budget execution and financial management",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.05017v1",
+      "source": "arxiv",
+      "title": "Algorithm-Driven SVARs: Navigating the Wilderness of Big Data",
+      "abstract": "Every SVAR result is conditional on two choices: the restrictions that identify the shock and the variables on which they operate. The literature disciplines the first; the second is chosen by hand. We develop a Bayesian methodology that constructs information sets, uses an out-of-sample criterion, and retains the largest system it admits. Under recursive identification, output rises with housing production rather than household credit alone. For monetary policy, an anchor-free joint Bayesian proxy SVAR with multiple instruments strengthens the credit spread channel. A core system augmented with the selected corporate spread identifies expected default risk as a potent transmission margin.",
+      "authors": [
+        "Yucheng Yang",
+        "Tao Zha"
+      ],
+      "primary_category": "econ.EM",
+      "categories": [
+        "econ.EM",
+        "math.ST",
+        "stat.AP",
+        "stat.ML"
+      ],
+      "published": "2026-08-05T16:23:05+00:00",
+      "link": "https://arxiv.org/pdf/2608.05017v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Bayesian SVAR variable selection method; transferable to fiscal performance evaluation",
+      "llm_evidence_cn": "贝叶斯结构向量自回归变量选择方法，可迁移至财政绩效评估",
+      "llm_evidence": "贝叶斯结构向量自回归变量选择方法，可迁移至财政绩效评估",
+      "canonical_evidence": "贝叶斯结构向量自回归变量选择方法，可迁移至财政绩效评估",
+      "llm_tldr_en": "Develops a Bayesian methodology to construct information sets and retain the largest admissible system for SVARs, improving shock identification; useful for empirical fiscal policy evaluation.",
+      "llm_tldr_cn": "论文针对SVAR中变量选取依赖人工决策的问题，提出一种贝叶斯算法驱动方法自动构建信息集，选择最大可识别系统。该方法在外样本准则下评估结果，在货币政策等场景中得到应用。其核心价值在于为大数据环境下财政与宏观经济政策的实证评估提供了可复用的识别工具。",
+      "llm_tldr": "论文针对SVAR中变量选取依赖人工决策的问题，提出一种贝叶斯算法驱动方法自动构建信息集，选择最大可识别系统。该方法在外样本准则下评估结果，在货币政策等场景中得到应用。其核心价值在于为大数据环境下财政与宏观经济政策的实证评估提供了可复用的识别工具。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "evaluation of fiscal performance in government",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.05958v1",
+      "source": "arxiv",
+      "title": "Stability of Ranking-dependent Pair-wise Comparison Patterns in the Analytic Hierarchy Process",
+      "abstract": "The paper addresses several ranking-dependent decision support methods. Ordinal information on compared objects can be used to improve the quality of expert data during estimation and help reduce the number of comparisons that the experts need to perform. In the paper we compare three incomplete ranking-dependent pair-wise comparison patterns which can be used in the Analytic Hierarchy Process - Best-worst method, Best-Second Best (Top 2) method, and the original maximum difference method. The first two comparison patterns (and respective methods) are incomplete, while the third can be a complete one. We determine conditions under which these three methods can be compared in terms of stability to expert errors. We also present the results of a simulation-type experiment, in which the three methods are compared. The research allows us to define the most stable incomplete ranking-dependent pair-wise comparison pattern and reduce the number of comparisons without loss of credibility of expert session results. The research contributes to algorithmic, cognitive, and applied aspects of decision support in uncertain environments.",
+      "authors": [
+        "Vitaliy Tsyganok",
+        "Sergii Kadenko",
+        "Oleh Andriichuk"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-08-06T12:33:04+00:00",
+      "link": "https://arxiv.org/pdf/2608.05958v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Provides an AHP-based method for ranking-dependent pairwise comparisons, applicable to multi-criteria evaluation in fiscal performance assessment",
+      "llm_evidence_cn": "提供基于层次分析法（AHP）的排序依赖成对比较方法，适用于财政绩效评估中的多准则评价",
+      "llm_evidence": "提供基于层次分析法（AHP）的排序依赖成对比较方法，适用于财政绩效评估中的多准则评价",
+      "canonical_evidence": "提供基于层次分析法（AHP）的排序依赖成对比较方法，适用于财政绩效评估中的多准则评价",
+      "llm_tldr_en": "Compares three ranking-dependent pairwise comparison patterns (Best-worst, Top-2, maximum difference) used in the Analytic Hierarchy Process; establishes conditions under which they can be compared in terms of stability to expert errors; contributes decision support methods for multi-criteria evaluation.",
+      "llm_tldr_cn": "该文研究层次分析法（AHP）中三类依赖排序的成对比较模式：最优最差法、Top-2法和原始最大差值法，并分析它们在专家误差情境下的稳定性条件。该研究有助于减少专家比较次数并提高决策数据质量。AHP常被用于政府绩效和财政评估，因而该方法的稳定性分析对预算绩效管理中的多准则评价具有参考价值。",
+      "llm_tldr": "该文研究层次分析法（AHP）中三类依赖排序的成对比较模式：最优最差法、Top-2法和原始最大差值法，并分析它们在专家误差情境下的稳定性条件。该研究有助于减少专家比较次数并提高决策数据质量。AHP常被用于政府绩效和财政评估，因而该方法的稳定性分析对预算绩效管理中的多准则评价具有参考价值。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "evaluation of fiscal performance in government",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "date": "20260810",
+  "date_label": "",
+  "generated_at": "2026-08-10 20:23:36 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2608.02055v1",
+      "route": "202608/10/2608.02055v1-high-dimensional-panel-data-models-with-interactive-fixed-effects-beyond-the-linear-case",
+      "title": "High-Dimensional Panel Data Models with Interactive Fixed Effects: Beyond the Linear Case",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "高维面板数据计量方法，可用于政府预算执行与财政绩效评估",
+      "first_seen_at": "2026-08-10 20:23:36 UTC",
+      "updated_at": "2026-08-10 20:23:36 UTC"
+    },
+    {
+      "paper_id": "2608.04251v1",
+      "route": "202608/10/2608.04251v1-scarcity-and-predictive-uncertainty-implications-for-societal-resource-allocation",
+      "title": "Scarcity and Predictive Uncertainty: Implications for Societal Resource Allocation",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "研究在预测不确定性下的社会资源分配，直接关联公共预算分配与绩效预算。",
+      "first_seen_at": "2026-08-10 20:23:36 UTC",
+      "updated_at": "2026-08-10 20:23:36 UTC"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "label": "2026-08-10",
+  "date": "2026-08-10",
+  "generated_at": "2026-08-10T20:23:38",
+  "count": 2,
+  "papers": [
+    {
+      "paper_id": "202608/10/2608.02055v1-high-dimensional-panel-data-models-with-interactive-fixed-effects-beyond-the-linear-case",
+      "section": "quick",
+      "title_en": "High-Dimensional Panel Data Models with Interactive Fixed Effects: Beyond the Linear Case",
+      "authors": "Maximilian Ruecker, Michael Vogt, Oliver Linton",
+      "date": "2026-08-03",
+      "pdf": "https://arxiv.org/pdf/2608.02055v1",
+      "score": "7.0",
+      "evidence": "高维面板数据计量方法，可用于政府预算执行与财政绩效评估",
+      "tldr": "针对高维面板数据中的交互固定效应模型，现有方法多限于线性情形。本文提出加性结构非线性回归模型，允许每个协变量以未知非线性函数进入，并控制交互固定效应。理论推导了小T和大T两种情况下的估计量收敛速度，并通过蒙特卡洛实验和实证应用验证。方法显著扩展了高维线性面板模型，适用于控制变量数超过样本量的场景。",
+      "tags": "query:budget-perf",
+      "abstract_en": "Modern economic panel data sets are often high-dimensional: they contain information on a wide variety of control variables whose number may even exceed the sample size. Nevertheless, the literature on econometric methods for high-dimensional panels is quite limited. In this paper, we study high-dimensional panel models with interactive fixed effects where the regression function has an additive structure, i.e., each covariate enters the model via an unknown nonlinear component function. We develop estimation methodology and theory in this additive framework which substantially extends previous work on the high-dimensional linear case by Ruecker et al. (2025). In the theoretical part of the paper, we derive the convergence rate of our estimator for both the small-T and the large-T panel case. The theory is complemented by comprehensive Monte Carlo experiments and an empirical application.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202608/10/2608.04251v1-scarcity-and-predictive-uncertainty-implications-for-societal-resource-allocation",
+      "section": "quick",
+      "title_en": "Scarcity and Predictive Uncertainty: Implications for Societal Resource Allocation",
+      "authors": "Shafkat Farabi, Patrick J. Fowler, Sanmay Das",
+      "date": "2026-08-04",
+      "pdf": "https://arxiv.org/pdf/2608.04251v1",
+      "score": "6.0",
+      "evidence": "研究在预测不确定性下的社会资源分配，直接关联公共预算分配与绩效预算。",
+      "tldr": "稀缺资源分配中，若预测不确定性因人群而异（如模型在不同人口统计上的精度不同），则结合常用的二元社会效益度量会引发严重问题。本文建立异质预测不确定性的稀缺资源分配模型，发现资源极稀缺时最大边际收益优先偏向低不确定性个体，资源充足时则反转。以PISA数据为例，模型预测所有资源水平下均有效率损失，尤其在低资源下。研究对教育、医疗等地方正义领域有重要启示，并揭示基于预测不确定性的新道德困境。",
+      "tags": "query:budget-perf",
+      "abstract_en": "An emerging literature examines the critical question of when and how prediction can be useful in allocating scarce societal resources. We examine a novel variant of this question: What happens when predictive uncertainty differs systematically across the population? This can occur in several situations; for example, when machine learning models have significantly different accuracies across different demographics. We show that this uncertainty has serious implications for resource allocation when coupled with commonly used binary measures of societal benefit from allocation. We formulate a novel mathematical model of scarce resource allocation that accounts for heterogeneous predictive uncertainties and analyze implications for both the allocation mechanism and the realized population-level benefits. We find that when resources are very scarce, maximum marginal benefit (MMB) prioritization favors individuals with lower predictive uncertainty even at the identical underlying initial state. However, we observe a flip in prioritization when resources are abundant, targeting higher-uncertainty individuals. We illustrate the implications of our results on the PISA educational testing dataset. Our findings have meaningful ramifications for the distributional outcomes of prioritization policies in many domains touched by the theory of local justice, including the allocation of public education resources, medical triage, and homelessness services. They also reveal a new moral dilemma in the ethics of scarce resource allocation - is it just to allocate a resource to one person over another solely based on predictive uncertainty about their futures? We also assess efficiency losses under both MMB and the vulnerability-first (VF) prioritization. Our model predicts efficiency losses across all resource levels, but particularly in low-resource settings.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

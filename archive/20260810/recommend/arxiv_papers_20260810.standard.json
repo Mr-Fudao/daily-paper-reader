@@ -1,0 +1,91 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-10T20:20:46.686630+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 2,
+    "quick_skim_target": 11,
+    "quick_selected": 2
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2608.02055v1",
+      "source": "arxiv",
+      "title": "High-Dimensional Panel Data Models with Interactive Fixed Effects: Beyond the Linear Case",
+      "abstract": "Modern economic panel data sets are often high-dimensional: they contain information on a wide variety of control variables whose number may even exceed the sample size. Nevertheless, the literature on econometric methods for high-dimensional panels is quite limited. In this paper, we study high-dimensional panel models with interactive fixed effects where the regression function has an additive structure, i.e., each covariate enters the model via an unknown nonlinear component function. We develop estimation methodology and theory in this additive framework which substantially extends previous work on the high-dimensional linear case by Ruecker et al. (2025). In the theoretical part of the paper, we derive the convergence rate of our estimator for both the small-T and the large-T panel case. The theory is complemented by comprehensive Monte Carlo experiments and an empirical application.",
+      "authors": [
+        "Maximilian Ruecker",
+        "Michael Vogt",
+        "Oliver Linton"
+      ],
+      "primary_category": "econ.EM",
+      "categories": [
+        "econ.EM"
+      ],
+      "published": "2026-08-03T10:52:27+00:00",
+      "link": "https://arxiv.org/pdf/2608.02055v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "High-dimensional panel econometric method applicable to fiscal performance evaluation using government budget panels",
+      "llm_evidence_cn": "高维面板数据计量方法，可用于政府预算执行与财政绩效评估",
+      "llm_evidence": "高维面板数据计量方法，可用于政府预算执行与财政绩效评估",
+      "canonical_evidence": "高维面板数据计量方法，可用于政府预算执行与财政绩效评估",
+      "llm_tldr_en": "Extends high-dimensional linear panel models with interactive fixed effects to additive nonlinear structures, providing estimation theory and convergence rates; relevant for government finance and fiscal performance panels.",
+      "llm_tldr_cn": "现代经济面板数据常呈高维特征，控制变量数可能超过样本量，但现有高维面板方法多局限于线性情形，难以为政府财政绩效评估提供灵活建模。为此该文研究具有交互固定效应的高维可加非线性面板模型，提出了分量函数估计方法并给出收敛速率理论保证。该方法可应用于政府预算执行、财政支出等多维面板数据，支撑预算绩效管理和政府财政绩效评估，弥补了非线性高维面板工具的不足。",
+      "llm_tldr": "现代经济面板数据常呈高维特征，控制变量数可能超过样本量，但现有高维面板方法多局限于线性情形，难以为政府财政绩效评估提供灵活建模。为此该文研究具有交互固定效应的高维可加非线性面板模型，提出了分量函数估计方法并给出收敛速率理论保证。该方法可应用于政府预算执行、财政支出等多维面板数据，支撑预算绩效管理和政府财政绩效评估，弥补了非线性高维面板工具的不足。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "evaluation of fiscal performance in government",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.04251v1",
+      "source": "arxiv",
+      "title": "Scarcity and Predictive Uncertainty: Implications for Societal Resource Allocation",
+      "abstract": "An emerging literature examines the critical question of when and how prediction can be useful in allocating scarce societal resources. We examine a novel variant of this question: What happens when predictive uncertainty differs systematically across the population? This can occur in several situations; for example, when machine learning models have significantly different accuracies across different demographics. We show that this uncertainty has serious implications for resource allocation when coupled with commonly used binary measures of societal benefit from allocation. We formulate a novel mathematical model of scarce resource allocation that accounts for heterogeneous predictive uncertainties and analyze implications for both the allocation mechanism and the realized population-level benefits. We find that when resources are very scarce, maximum marginal benefit (MMB) prioritization favors individuals with lower predictive uncertainty even at the identical underlying initial state. However, we observe a flip in prioritization when resources are abundant, targeting higher-uncertainty individuals. We illustrate the implications of our results on the PISA educational testing dataset. Our findings have meaningful ramifications for the distributional outcomes of prioritization policies in many domains touched by the theory of local justice, including the allocation of public education resources, medical triage, and homelessness services. They also reveal a new moral dilemma in the ethics of scarce resource allocation - is it just to allocate a resource to one person over another solely based on predictive uncertainty about their futures? We also assess efficiency losses under both MMB and the vulnerability-first (VF) prioritization. Our model predicts efficiency losses across all resource levels, but particularly in low-resource settings.",
+      "authors": [
+        "Shafkat Farabi",
+        "Patrick J. Fowler",
+        "Sanmay Das"
+      ],
+      "primary_category": "cs.CY",
+      "categories": [
+        "cs.CY"
+      ],
+      "published": "2026-08-04T22:12:26+00:00",
+      "link": "https://arxiv.org/pdf/2608.04251v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Addresses resource allocation under predictive uncertainty, directly relevant to public budget allocation and performance-based budgeting.",
+      "llm_evidence_cn": "研究在预测不确定性下的社会资源分配，直接关联公共预算分配与绩效预算。",
+      "llm_evidence": "研究在预测不确定性下的社会资源分配，直接关联公共预算分配与绩效预算。",
+      "canonical_evidence": "研究在预测不确定性下的社会资源分配，直接关联公共预算分配与绩效预算。",
+      "llm_tldr_en": "This paper models how heterogeneous predictive uncertainties affect the allocation of scarce societal resources, showing that ignoring such uncertainty can undermine commonly used benefit-based allocation rules, with implications for budget allocation and public policy.",
+      "llm_tldr_cn": "论文关注稀缺社会资源配置中预测不确定性系统性差异的影响。作者构建了一个考虑异质预测不确定性的资源配置数学模型，并结合常用社会效益二元决策分析其后果。结果表明，若忽视不同群体的预测精度差异，可能导致总体福利受损。该模型为公共部门的预算分配与绩效导向资源配置提供了方法论基础。",
+      "llm_tldr": "论文关注稀缺社会资源配置中预测不确定性系统性差异的影响。作者构建了一个考虑异质预测不确定性的资源配置数学模型，并结合常用社会效益二元决策分析其后果。结果表明，若忽视不同群体的预测精度差异，可能导致总体福利受损。该模型为公共部门的预算分配与绩效导向资源配置提供了方法论基础。",
+      "llm_tags": [
+        "query:budget-perf:composite"
+      ],
+      "matched_query_tag": "query:budget-perf:composite",
+      "matched_query_text": "Papers central to 预算绩效管理相关论文检索, especially work that connects or combines: budget performance management in public sector; performance budgeting concept and implementation; evaluation of fiscal performance in government; analysis of budget execution and financial management; academic papers on budget performance management; research on performance evaluation in government budgeting; literature review of performance based budgeting.",
+      "matched_requirement_id": "req-composite-budget-perf",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

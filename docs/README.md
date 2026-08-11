@@ -41,17 +41,17 @@
 <section class="dpr-home-dashboard-card dpr-home-report-card">
   <div class="dpr-home-dashboard-header">
     <div>
-      <span class="dpr-home-dashboard-kicker">2026-08-10</span>
+      <span class="dpr-home-dashboard-kicker">2026-08-11</span>
       <h3 class="dpr-home-dashboard-title">今日汇总</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">共 2 篇</strong>
+    <strong class="dpr-home-dashboard-count">共 3 篇</strong>
   </div>
   <dl class="dpr-home-dashboard-stats">
     <div class="dpr-home-dashboard-stat"><dt>累计更新</dt><dd>1 次</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>0</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>1</dd></div>
     <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>2</dd></div>
   </dl>
-  <p class="dpr-home-dashboard-body">最近更新：2026-08-10 20:23:36 UTC<br>状态：成功</p>
+  <p class="dpr-home-dashboard-body">最近更新：2026-08-11 19:56:22 UTC<br>状态：成功</p>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-brief-card">
   <div class="dpr-home-dashboard-header">
@@ -62,9 +62,7 @@
     <strong class="dpr-home-dashboard-count">AI</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p>今日速读2篇论文，无精读，覆盖高维面板数据模型与资源分配预测两大方向。</p>
-<p>最值得关注的是《High-Dimensional Panel Data Models》（7.0分），探讨非线性交互固定效应；《Scarcity and Predictive Uncertainty》（6.0分）则关联社会资源分配。</p>
-<p>建议优先精读第一篇以掌握前沿计量方法，第二篇可作交叉参考。</p>
+<p>今日共处理3篇论文，含1篇精读与2篇速读，核心聚焦数据包络分析、教育投资与预算分配。最值得关注的是精读论文《A Unified Maximum-Margin Framework for Data Envelopment Analysis》，其理论框架获得9.0高分，兼具数学基础与数值验证。建议普通读者优先研读该文，理解统一最大边际方法对效率评估的改进意义。</p>
   </div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-deep-card">
@@ -73,12 +71,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">精读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">0 篇</strong>
+    <strong class="dpr-home-dashboard-count">1 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p class="dpr-home-dashboard-empty">今日暂无推荐。</p>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="A Unified Maximum-Margin Framework for Data Envelopment Analysis: Theoretical Foundations and Numerical Evidence">A Unified Maximum-Margin Framework for Data Envelopment Analysis: Theoretical Foundations and Numerical Evidence</span></li></ul>
   </div>
-
+  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">budget-perf <strong>1</strong></span></div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-skim-card">
   <div class="dpr-home-dashboard-header">
@@ -89,7 +87,7 @@
     <strong class="dpr-home-dashboard-count">2 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="High-Dimensional Panel Data Models with Interactive Fixed Effects: Beyond the Linear Case">High-Dimensional Panel Data Models with Interactive Fixed Effects: Beyond the Linear Case</span></li><li><span class="dpr-home-dashboard-paper-title" title="Scarcity and Predictive Uncertainty: Implications for Societal Resource Allocation">Scarcity and Predictive Uncertainty: Implications for Societal Resource Allocation</span></li></ul>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Learning Long-Term Educational Investment Policies under Residential Sorting">Learning Long-Term Educational Investment Policies under Residential Sorting</span></li><li><span class="dpr-home-dashboard-paper-title" title="Sparse Linear Surrogates for Interpretable Budget Allocation">Sparse Linear Surrogates for Interpretable Budget Allocation</span></li></ul>
   </div>
   <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">budget-perf <strong>2</strong></span></div>
 </section>

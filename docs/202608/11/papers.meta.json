@@ -1,0 +1,54 @@
+{
+  "label": "2026-08-11",
+  "date": "2026-08-11",
+  "generated_at": "2026-08-11T19:56:25",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202608/11/2608.08530v1-a-unified-maximum-margin-framework-for-data-envelopment-analysis-theoretical-foundations-and-numerical-evidence",
+      "section": "deep",
+      "title_en": "A Unified Maximum-Margin Framework for Data Envelopment Analysis: Theoretical Foundations and Numerical Evidence",
+      "authors": "Teruki Akahoshi, Hiroki Ueda, Tomonari Kitahara",
+      "date": "2026-08-09",
+      "pdf": "https://arxiv.org/pdf/2608.08530v1",
+      "score": "9.0",
+      "evidence": "数据包络分析效率评价方法，适用于政府财政绩效评估",
+      "tldr": "经典CCR-DEA模型在变量多、DMU少时区分度不足，大量DMU效率均为1。为此提出最大间隔DEA模型(MM-DEA)，排除目标DMU并显式上界其得分，保证效率值落在[0,1]。该模型是CCR的推广，α=0时退化为CCR，且分数规划可等价转为线性规划。高维实验显示MM-DEA给出唯一排名，间隔可作为管理韧性和竞争优势的关键指标。",
+      "tags": "query:budget-perf",
+      "abstract_en": "Data Envelopment Analysis (DEA) is a widely used non-parametric method for evaluating the relative efficiency of decision-making units (DMUs). However, the classic Charnes-Cooper-Rhodes (CCR) model often suffers from a lack of discriminatory power, particularly when the number of input and output variables is large relative to the number of DMUs. Under such conditions, many DMUs are evaluated as \"CCR-efficient\" with a score of unity, making it difficult to rank or distinguish between top performers. To address this limitation, we propose a novel Maximum-Margin DEA (MM-DEA) model that integrates the concept of \"margin maximization\" -- inspired by structural risk minimization in machine learning -- directly into the efficiency measurement framework. Like the traditional super-efficiency model, the proposed MM-DEA model excludes the target DMU from the reference set used to evaluate it; unlike the super-efficiency model, however, MM-DEA imposes an explicit upper bound on the target DMU's own score, ensuring that every score remains within the standard $[0,1]$ range rather than potentially exceeding one. We theoretically demonstrate that the MM-DEA model is a generalized extension of the CCR model, reducing to the latter when the trade-off parameter $α$ is zero. Furthermore, we show that the fractional programming formulation of MM-DEA can be rigorously transformed into a linear programming (LP) problem, ensuring computational efficiency. In our numerical experiments, MM-DEA produced a unique ranking for a high-dimensional synthetic dataset on which the CCR model failed to discriminate among any of the DMUs. Our results suggest that the \"margin\" serves as a critical metric for managerial resilience and competitive advantage.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202608/11/2608.07295v1-learning-long-term-educational-investment-policies-under-residential-sorting",
+      "section": "quick",
+      "title_en": "Learning Long-Term Educational Investment Policies under Residential Sorting",
+      "authors": "Honglei Guo, Shuo Chen, Mingjie Bi, Zeyang Sun, Xiaoxi Wang, Yuhan Zhao",
+      "date": "2026-08-07",
+      "pdf": "https://arxiv.org/pdf/2608.07295v1",
+      "score": "7.0",
+      "evidence": "政府教育投资规划与预算分配的长期绩效评估",
+      "tldr": "公共教育投资受居住分选影响：学校改善会抬高周边房价、改变入学结构，甚至挤出低收入家庭，而静态模型难以刻画这些长期联动效应。为此，本文提出动态多智能体框架，将政府投资、家庭择居、房价、人口更替、入学和学校质量演化内在耦合，并使用强化学习(RL)求解多年期分配政策。模拟结果表明，RL政策获得的累计教育获取水平最高(0.4780)，同时获取基尼系数仅0.0164，在有效性与公平性之间取得良好平衡，并降低了社会经济分层。该框架首次显式建模教育与住房反馈，为长期教育投资决策提供了新的系统性工具。",
+      "tags": "query:budget-perf",
+      "abstract_en": "Allocating public-school investment effectively and fairly is difficult when school access depends on residence. School improvements can raise nearby housing demand and prices, reshape enrollment, and potentially limit access for lower-income households. These effects evolve as residential sorting changes school composition, quality, and future investment needs. Existing approaches often study school funding, household choice, and housing markets separately, while static models can miss their interconnected, long-term effects. We address this gap with a dynamic multi-agent framework that links government investment, household sorting, housing prices, population turnover, enrollment, and evolving school quality. A government planner uses reinforcement learning (RL) to identify multiyear allocation policies that account for household responses while balancing aggregate educational access and equity. In simulations, our RL-based policy attains the highest access level (0.4780) and second-lowest access Gini coefficient (0.0164) among representative baselines, demonstrating a favorable effectiveness-equity balance. The results also indicate reduced socioeconomic stratification in educational access. By making education-housing feedback explicit, our framework supports long-term analysis of how school investment shapes educational opportunity over time.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202608/11/2608.01858v1-sparse-linear-surrogates-for-interpretable-budget-allocation",
+      "section": "quick",
+      "title_en": "Sparse Linear Surrogates for Interpretable Budget Allocation",
+      "authors": "Marc Goerigk, Michael Hartisch, Sebastian Merten",
+      "date": "2026-08-03",
+      "pdf": "https://arxiv.org/pdf/2608.01858v1",
+      "score": "6.0",
+      "evidence": "为预算分配优化提供可解释的稀疏线性替代模型，与预算执行和财务管理分析相关",
+      "tldr": "针对预算分配问题，本文提出稀疏线性代理规则，将实例映射到基于特征的解表示，提升可解释性。采用混合整数规划精确求解与启发式近似两种计算方式。实验分析两者性能，权衡解质量与效率。该研究为可解释优化提供了新途径。",
+      "tags": "query:budget-perf",
+      "abstract_en": "To address the demand for inherently interpretable optimization methods, we introduce novel linear surrogates for budget allocation problems. These surrogates consist of sparse linear rules that map instances to feature-based representations of solutions. We present an exact approach based on mixed-integer programming as well as a heuristic for their computation. The performance of both approaches is analyzed through computational experiments.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

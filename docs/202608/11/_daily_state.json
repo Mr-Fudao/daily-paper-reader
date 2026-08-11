@@ -1,0 +1,57 @@
+{
+  "date": "20260811",
+  "date_label": "",
+  "generated_at": "2026-08-11 19:56:22 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2608.08530v1",
+      "route": "202608/11/2608.08530v1-a-unified-maximum-margin-framework-for-data-envelopment-analysis-theoretical-foundations-and-numerical-evidence",
+      "title": "A Unified Maximum-Margin Framework for Data Envelopment Analysis: Theoretical Foundations and Numerical Evidence",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 9.0,
+      "evidence": "数据包络分析效率评价方法，适用于政府财政绩效评估",
+      "first_seen_at": "2026-08-11 19:56:22 UTC",
+      "updated_at": "2026-08-11 19:56:22 UTC"
+    },
+    {
+      "paper_id": "2608.07295v1",
+      "route": "202608/11/2608.07295v1-learning-long-term-educational-investment-policies-under-residential-sorting",
+      "title": "Learning Long-Term Educational Investment Policies under Residential Sorting",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "政府教育投资规划与预算分配的长期绩效评估",
+      "first_seen_at": "2026-08-11 19:56:22 UTC",
+      "updated_at": "2026-08-11 19:56:22 UTC"
+    },
+    {
+      "paper_id": "2608.01858v1",
+      "route": "202608/11/2608.01858v1-sparse-linear-surrogates-for-interpretable-budget-allocation",
+      "title": "Sparse Linear Surrogates for Interpretable Budget Allocation",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "为预算分配优化提供可解释的稀疏线性替代模型，与预算执行和财务管理分析相关",
+      "first_seen_at": "2026-08-11 19:56:22 UTC",
+      "updated_at": "2026-08-11 19:56:22 UTC"
+    }
+  ]
+}

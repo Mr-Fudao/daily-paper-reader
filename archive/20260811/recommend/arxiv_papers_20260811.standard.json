@@ -1,0 +1,131 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-11T19:54:00.802560+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 1,
+    "deep_cap": 6,
+    "deep_selected": 1,
+    "quick_candidates": 2,
+    "quick_skim_target": 11,
+    "quick_selected": 2
+  },
+  "deep_dive": [
+    {
+      "id": "2608.08530v1",
+      "source": "arxiv",
+      "title": "A Unified Maximum-Margin Framework for Data Envelopment Analysis: Theoretical Foundations and Numerical Evidence",
+      "abstract": "Data Envelopment Analysis (DEA) is a widely used non-parametric method for evaluating the relative efficiency of decision-making units (DMUs). However, the classic Charnes-Cooper-Rhodes (CCR) model often suffers from a lack of discriminatory power, particularly when the number of input and output variables is large relative to the number of DMUs. Under such conditions, many DMUs are evaluated as \"CCR-efficient\" with a score of unity, making it difficult to rank or distinguish between top performers. To address this limitation, we propose a novel Maximum-Margin DEA (MM-DEA) model that integrates the concept of \"margin maximization\" -- inspired by structural risk minimization in machine learning -- directly into the efficiency measurement framework. Like the traditional super-efficiency model, the proposed MM-DEA model excludes the target DMU from the reference set used to evaluate it; unlike the super-efficiency model, however, MM-DEA imposes an explicit upper bound on the target DMU's own score, ensuring that every score remains within the standard $[0,1]$ range rather than potentially exceeding one. We theoretically demonstrate that the MM-DEA model is a generalized extension of the CCR model, reducing to the latter when the trade-off parameter $α$ is zero. Furthermore, we show that the fractional programming formulation of MM-DEA can be rigorously transformed into a linear programming (LP) problem, ensuring computational efficiency. In our numerical experiments, MM-DEA produced a unique ranking for a high-dimensional synthetic dataset on which the CCR model failed to discriminate among any of the DMUs. Our results suggest that the \"margin\" serves as a critical metric for managerial resilience and competitive advantage.",
+      "authors": [
+        "Teruki Akahoshi",
+        "Hiroki Ueda",
+        "Tomonari Kitahara"
+      ],
+      "primary_category": "math.OC",
+      "categories": [
+        "math.OC"
+      ],
+      "published": "2026-08-09T06:59:21+00:00",
+      "link": "https://arxiv.org/pdf/2608.08530v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "DEA methodology for efficiency evaluation applicable to fiscal performance assessment",
+      "llm_evidence_cn": "数据包络分析效率评价方法，适用于政府财政绩效评估",
+      "llm_evidence": "数据包络分析效率评价方法，适用于政府财政绩效评估",
+      "canonical_evidence": "数据包络分析效率评价方法，适用于政府财政绩效评估",
+      "llm_tldr_en": "Addresses DEA's weak discrimination when variables are many; proposes maximum-margin DEA using structural risk minimization to better rank efficient units, with theory and numerical evidence for efficiency-based performance evaluation.",
+      "llm_tldr_cn": "经典CCR数据包络分析模型在指标较多时区分度不足，难以排序受评单元。论文提出最大边际DEA方法，将机器学习中的结构风险最小化思想引入效率评价，以拉开有效单元之间的差距。数值实验显示新框架能够提高DEA的判别能力，为政府财政绩效评价等场景提供更灵活的效率评估工具。",
+      "llm_tldr": "经典CCR数据包络分析模型在指标较多时区分度不足，难以排序受评单元。论文提出最大边际DEA方法，将机器学习中的结构风险最小化思想引入效率评价，以拉开有效单元之间的差距。数值实验显示新框架能够提高DEA的判别能力，为政府财政绩效评价等场景提供更灵活的效率评估工具。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "evaluation of fiscal performance in government",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2608.07295v1",
+      "source": "arxiv",
+      "title": "Learning Long-Term Educational Investment Policies under Residential Sorting",
+      "abstract": "Allocating public-school investment effectively and fairly is difficult when school access depends on residence. School improvements can raise nearby housing demand and prices, reshape enrollment, and potentially limit access for lower-income households. These effects evolve as residential sorting changes school composition, quality, and future investment needs. Existing approaches often study school funding, household choice, and housing markets separately, while static models can miss their interconnected, long-term effects. We address this gap with a dynamic multi-agent framework that links government investment, household sorting, housing prices, population turnover, enrollment, and evolving school quality. A government planner uses reinforcement learning (RL) to identify multiyear allocation policies that account for household responses while balancing aggregate educational access and equity. In simulations, our RL-based policy attains the highest access level (0.4780) and second-lowest access Gini coefficient (0.0164) among representative baselines, demonstrating a favorable effectiveness-equity balance. The results also indicate reduced socioeconomic stratification in educational access. By making education-housing feedback explicit, our framework supports long-term analysis of how school investment shapes educational opportunity over time.",
+      "authors": [
+        "Honglei Guo",
+        "Shuo Chen",
+        "Mingjie Bi",
+        "Zeyang Sun",
+        "Xiaoxi Wang",
+        "Yuhan Zhao"
+      ],
+      "primary_category": "cs.MA",
+      "categories": [
+        "cs.MA"
+      ],
+      "published": "2026-08-07T14:50:56+00:00",
+      "link": "https://arxiv.org/pdf/2608.07295v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "government education investment planning and budget allocation with long-term performance evaluation",
+      "llm_evidence_cn": "政府教育投资规划与预算分配的长期绩效评估",
+      "llm_evidence": "政府教育投资规划与预算分配的长期绩效评估",
+      "canonical_evidence": "政府教育投资规划与预算分配的长期绩效评估",
+      "llm_tldr_en": "This paper addresses long-term public school investment under residential sorting with a dynamic multi-agent framework linking government investment, household choices, housing prices, and school quality, and learns investment policies via reinforcement learning to improve equity and efficiency.",
+      "llm_tldr_cn": "学校投资分配通常与住房市场相互交织，但静态模型常忽略居住分选带来的长期反馈，导致资金配置失衡。本文提出一个动态多智能体框架，将政府教育投资、家庭搬迁、房价、入学率和学校质量联合建模，并基于强化学习学习长期投资策略。实验结果显示，该方法能够适应住房市场的动态变化，在公平与效率之间取得更好权衡，优于静态方法的资金配置效果。这项研究为公共部门预算绩效管理提供了可迁移的动态建模与优化工具，有助于实现公共资金的长期价值。",
+      "llm_tldr": "学校投资分配通常与住房市场相互交织，但静态模型常忽略居住分选带来的长期反馈，导致资金配置失衡。本文提出一个动态多智能体框架，将政府教育投资、家庭搬迁、房价、入学率和学校质量联合建模，并基于强化学习学习长期投资策略。实验结果显示，该方法能够适应住房市场的动态变化，在公平与效率之间取得更好权衡，优于静态方法的资金配置效果。这项研究为公共部门预算绩效管理提供了可迁移的动态建模与优化工具，有助于实现公共资金的长期价值。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "budget performance management in public sector",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.01858v1",
+      "source": "arxiv",
+      "title": "Sparse Linear Surrogates for Interpretable Budget Allocation",
+      "abstract": "To address the demand for inherently interpretable optimization methods, we introduce novel linear surrogates for budget allocation problems. These surrogates consist of sparse linear rules that map instances to feature-based representations of solutions. We present an exact approach based on mixed-integer programming as well as a heuristic for their computation. The performance of both approaches is analyzed through computational experiments.",
+      "authors": [
+        "Marc Goerigk",
+        "Michael Hartisch",
+        "Sebastian Merten"
+      ],
+      "primary_category": "math.OC",
+      "categories": [
+        "math.OC"
+      ],
+      "published": "2026-08-03T08:08:02+00:00",
+      "link": "https://arxiv.org/pdf/2608.01858v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Interpretable sparse linear surrogates for budget allocation optimization, relevant to budget execution and financial management",
+      "llm_evidence_cn": "为预算分配优化提供可解释的稀疏线性替代模型，与预算执行和财务管理分析相关",
+      "llm_evidence": "为预算分配优化提供可解释的稀疏线性替代模型，与预算执行和财务管理分析相关",
+      "canonical_evidence": "为预算分配优化提供可解释的稀疏线性替代模型，与预算执行和财务管理分析相关",
+      "llm_tldr_en": "The paper introduces sparse linear surrogates that map instances to feature-based solution representations for budget allocation, with an exact mixed-integer programming approach and a heuristic, enabling intuitive interpretability in budget optimization.",
+      "llm_tldr_cn": "预算分配问题通常依赖黑盒优化，难以解释决策依据。论文提出稀疏线性替代模型，将实例映射到基于特征的解的表示，实现内在可解释的预算分配。研究给出基于混合整数规划的精确算法和启发式方法，并通过计算实验分析性能。这为公共部门预算执行与财务管理的透明化决策提供了可借鉴的工具。",
+      "llm_tldr": "预算分配问题通常依赖黑盒优化，难以解释决策依据。论文提出稀疏线性替代模型，将实例映射到基于特征的解的表示，实现内在可解释的预算分配。研究给出基于混合整数规划的精确算法和启发式方法，并通过计算实验分析性能。这为公共部门预算执行与财务管理的透明化决策提供了可借鉴的工具。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "analysis of budget execution and financial management",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

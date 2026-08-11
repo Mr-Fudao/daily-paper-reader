@@ -1,0 +1,1539 @@
+Title: Learning Long-Term Educational Investment Policies under Residential Sorting
+
+URL Source: https://arxiv.org/pdf/2608.07295v1
+
+Published Time: Mon, 10 Aug 2026 01:13:07 GMT
+
+Number of Pages: 21
+
+Markdown Content:
+# Learning Long-Term Educational Investment Policies under Residential Sorting 
+
+# Honglei Guo 1,2 , Shuo Chen 2, Mingjie Bi 2, Zeyang Sun 2, Xiaoxi Wang 2, Yuhan Zhao 2 
+
+> 1
+
+College of Artificial Intelligence, Zhejiang University  
+
+> 2
+
+State Key Laboratory of General Artificial Intelligence, BIGAI zhaoyuhan@bigai.ai 
+
+Abstract 
+
+Allocating public-school investment effectively and fairly is difficult when school access depends on residence. School improvements can raise nearby housing demand and prices, reshape enrollment, and potentially limit access for lower-income households. These effects evolve as residential sort-ing changes school composition, quality, and future invest-ment needs. Existing approaches often study school fund-ing, household choice, and housing markets separately, while static models can miss their interconnected, long-term effects. We address this gap with a dynamic multi-agent framework that links government investment, household sorting, housing prices, population turnover, enrollment, and evolving school quality. A government planner uses reinforcement learning (RL) to identify multiyear allocation policies that account for household responses while balancing aggregate educational access and equity. In simulations, our RL-based policy at-tains the highest access level (0.4780) and second-lowest ac-cess Gini coefficient (0.0164) among representative baselines, demonstrating a favorable effectiveness–equity balance. The results also indicate reduced socioeconomic stratification in educational access. By making education–housing feedback explicit, our framework supports long-term analysis of how school investment shapes educational opportunity over time. 
+
+# Introduction 
+
+Access to high-quality education is central for long-term so-cial opportunity. However, in many public-school-dominant education systems, access to educational quality is highly impacted by residential location and school-district assign-ment. When high-quality schools are concentrated in partic-ular communities, households with sufficient resources may compete for housing in these areas, while less advantaged households may face limited access to the same educational opportunities (Chetty, Hendren, and Katz 2016; Biasi 2023; Owens 2018). This makes educational resource allocation an important but difficult social planning problem. Govern-ments must allocate limited resources across schools or dis-tricts while balancing multiple objectives, such as reducing inequality in access and maintaining efficient resource use. In this work, we operationalize these educational resources as government investment at the school level, which repre-sents policy inputs that can improve school quality, such as teacher development, facility improvement, and other forms of school-level support. The difficulty of educational investment is that its effect does not stop at the school receiving the resource. It propa-gates through a dynamic social loop. Government investment changes school quality; school quality affects household res-idential and school choices; household choices change hous-ing prices, student enrollment, and the demographic com-position of schools; these changes then reshape inequality, school demand, and future allocation needs. Planning within this loop is challenging for several reasons. When residential location determines school access, educational investment becomes coupled with the housing market, so improvements in school quality may also change local housing demand and prices. Household responses are also heterogeneous be-cause families differ in income and preferences, leading the same investment to affect access differently across groups. Moreover, the effects of investment unfold gradually and can persist across multiple periods. These mechanisms interact simultaneously, meaning that the outcome of an allocation decision depends not only on the government’s action but also on the endogenous responses of households, schools, and housing markets. Prior work has examined important parts of this system. For example, Barseghyan, Clark, and Coate (2019) studied household behavior model with a focus on peer preferences in public school choice; Abdulkadiroğlu and Sönmez (2003) approached the school choice problem via mechanism de-sign; Black (1999) and Caetano (2019) investigated the re-lationship between school quality and housing prices; while Monarrez (2023) and Owens, Reardon, and Jencks (2016) fo-cused on educational inequality and segregation. These stud-ies characterize important links in the social loop, but they typically examine them separately rather than as part of a uni-fied dynamic resource-allocation problem. This leaves open how a government should allocate resources when school quality, residential sorting, housing prices, enrollment, and educational access co-evolve over time. To address this gap, we propose a dynamic multi-agent framework for educational investment allocation. As illus-trated in Figure 1, the framework models households and government as interacting agents, while representing schools, the housing market, and demographic change as key environ-ment components. Households differ in socioeconomic char-acteristics and preferences, choose residential locations un-der housing and educational constraints, and generate evolv-arXiv:2608.07295v1 [cs.MA] 7 Aug 2026 Figure 1: Overview of the multi-agent resource allocation framework. Government resource allocation affects school access indirectly through household sorting, housing-market adjustment, enrollment, and school-quality dynamics. These interactions jointly determine the next-period state, and the government uses reinforcement learning to learn a sequential allocation policy. ing enrollment patterns. Schools receive government invest-ment and update their educational quality over time. The gov-ernment observes the evolving system and allocates limited investment across schools while balancing multiple objec-tives. Building on this framework, we formulate government allocation as a sequential decision-making problem and use reinforcement learning (RL) to learn allocation policies. We use simulations to compare different allocation strategies and examine their effects on educational access, resource ef-ficiency, residential and school segregation, and inequality over time. We further conduct sensitivity analyses to study how key factors, including household preferences and school educational performance, shape policy outcomes. Our con-tributions are as follows: 
+
+• We develop a multi-agent computational framework that captures the dynamic education–housing feedback loop, linking government investment, school quality, household sorting, enrollment, and educational access. 
+
+• We characterize household sorting through a convex pro-gram and develop efficient algorithms for computing the resulting equilibrium. 
+
+• We develop an RL-based allocation approach that enables a government planner to learn multi-objective investment policies under delayed effects and endogenous household responses. 
+
+• We conduct comprehensive simulations based on the framework and conduct social impact analysis to show that our RL-based policy achieves a favorable balance between efficiency and equity by reducing disparities in school quality while preserving socioeconomic matching. 
+
+# Related Work 
+
+School Access and Household Sorting. School-choice re-search studies assignment mechanisms and how preferences for school effectiveness and peer composition shape enroll-ment (Abdulkadiroğlu and Sönmez 2003; Abdulkadiroğlu et al. 2020; Barseghyan, Clark, and Coate 2019). A related structural literature models residential sorting as an equilib-rium outcome of heterogeneous household preferences and endogenous housing prices. Epple and Sieg (1999) estimate equilibrium sorting across local jurisdictions, while Bayer, McMillan, and Rueben (2004) integrate heterogeneous dis-crete residential choice with urban housing-market equi-librium. Bayer, Ferreira, and McMillan (2007) extend this framework to estimate preferences for schools and neigh-borhood attributes. Empirical evidence further shows that school quality is capitalized into housing prices and that school districts and attendance boundaries affect residential and school segregation (Black 1999; Caetano 2019; Turnbull and Zheng 2021; Owens 2017; Owens, Reardon, and Jencks 2016; Monarrez 2023). More integrated equilibrium models connect community composition, school spending, housing, peer effects, and migration (Fernández and Rogerson 1996; Nechyba 1999). Recent spatial and agent-based models rep-resent additional feedback between residential and school choices (Agostinelli, Luflade, and Martellini 2024; Dignum et al. 2022, 2024). Our framework builds directly on the equilibrium-sorting literature but embeds household sorting within a dynamic system in which government investment changes school quality, housing demand, enrollment, and future allocation needs. 
+
+School Investment and Resource Planning. Causal ev-idence from school-finance reforms shows that sustained spending can improve educational and long-term economic outcomes, often with larger benefits for disadvantaged stu-dents and effects that emerge gradually (Jackson, Johnson, and Persico 2016; Lafortune, Rothstein, and Schanzenbach 2018; Biasi 2023; Jackson and Mackevicius 2024). Dy-namic general-equilibrium analysis has also examined the long-run distributional and welfare consequences of school-finance reform (Fernández and Rogerson 1998). Compu-tational work addresses different planning decisions. May-erle et al. (2022) jointly match students, schools, teachers, classes, and classrooms, while attendance-boundary opti-mization balances integration, travel, and enrollment con-straints (Gillani et al. 2023). Guan et al. (2025) incorporate predicted school choices into stochastic rezoning optimiza-tion, and Zhang et al. (2026) use deep RL for multistep school-district adjustment. These methods optimize finance reform, resource matching, or geographic assignment. Our planner instead allocates a recurring school-level investment budget and evaluates effectiveness and fairness after endoge-nous changes in quality, residential sorting, housing prices, and enrollment. 
+
+Closest Comparisons. Three recent studies are especially close to ours. Agostinelli, Luflade, and Martellini (2024) jointly model housing, school access, and heterogeneous res-idential sorting, but evaluate school-choice expansion and housing vouchers rather than repeated school investment. Guan et al. (2025) use predicted household school choices to inform a segregation-oriented boundary redesign, whereas our household response operates through a housing-market sorting equilibrium after each investment decision. Zhang et al. (2026) also use RL for multistep school planning, but their actions modify district boundaries and their objectives concern distance and utilization. Our RL planner allocates in-vestment and evaluates the long-term distribution of accessed school quality. The main distinction is the combination of sequential investment, endogenous education–housing feed-back, and an explicit effectiveness–equity objective. 
+
+# Agent Models and Environment Components 
+
+The model is built around an institutional feature of pub-lic education: residential location determines school ac-cess. When government investment improves a school, it may also increase nearby housing demand and the price of entering that district. The same policy can therefore raise school quality while changing which households can access it. We capture this feedback through two decision-making agents, households and the government, and three environ-ment components: communities and housing markets, pop-ulation turnover, and schools. 
+
+Setting and Notation. We study a region with M res-idential communities and K public schools over periods 
+
+t = 0 , . . . , T . A fixed district map D : {1, . . . , M } → {1, . . . , K } identifies the school serving each community. Thus, moving to community m provides access to school 
+
+D(m). Community m has a fixed amenity value Qm, housing capacity Cm, current vacancies V tm, and housing price P tm.These quantities distinguish school access from other neigh-borhood amenities and housing costs. School k has quality 
+
+rtk, and rt = ( rt
+
+> 1
+
+, . . . , r tK ) denotes the regional school quality profile. Housing capacity limits immediate access to desir-able schools. Instead, households compete for units released through turnover, and prices mediate this competition. 
+
+Household Model. A household’s residential choice de-pends on its types/characteristics (e.g., income, parental ed-ucation, child performance) and stage in the school life cycle. We describe household i by a state tuple 
+
+sti = ( θi, c ti, m ti), θi = ( yi, z i, e i) ∈ Θ. (1) Here, θi denotes the type vector, which includes income yi,parental education zi, and the child’s persistent latent ability 
+
+ei. cti is the child’s age, and mti is the current community. Household types follow a finite distribution {pθ }θ∈Θ esti-mated from China Education Panel Survey data (National Survey Research Center 2015). Households consider school access only when a child en-ters school. Children below age six occupy housing but are not yet enrolled. At age six, household i joins the entry cohort 
+
+It = {i : cti = 6 } and may stay or move. Once enrolled, the household remains in its chosen community for W school periods. Thus, only part of the population can respond to a new allocation in any period. For a school-entry household, action ati selects a com-munity, including the option to remain in mti. The choice trades off school quality, housing cost, moving cost D, and neighborhood amenities, captured by the utility 
+
+utim := uti(ati = m)= αirt 
+
+> D(m)
+
++ ηQ m − βiP tm + D 1(m̸ = mti)
+
+| {z }
+
+> ¯utim
+
++εtim .
+
+(2) The housing price and moving cost apply only to movers be-cause an incumbent retains its current unit. The shocks εtim ∼
+
+Gumbel(0 , τ ) models unobserved household-specific con-siderations and are independent across households, commu-nities, and periods. Detailed specifications of parameters and utility design are provided in Appendix A.1. New households entering the region provide a second source of housing demand. Let J t denote these preschool-age in-migrants. They do not yet make a school-entry deci-sion, so their current utility depends on amenities and hous-ing prices: 
+
+vtim := vti (ati = m) = ηQ m − βiP tm
+
+| {z }
+
+> ¯vtim
+
++εin ,t im . (3) Their shocks satisfy the same independence and distribu-tional assumptions as those in (2). In-migrants compete for vacant units and therefore affect the prices faced by It. They may reconsider their residential locations when their children later enter school. 
+
+Population Turnover. At the start of period t, turnover from the preceding period has formed the resident population 
+
+Ht, released vacancies, and identified It and J t. Eligible non-school-age households may depart, and new preschool-age households are drawn from pθ . Each departure releases one unit in the household’s community, so vacancies arise through turnover rather than being reset exogenously. The population module maintains P 
+
+> i∈H t
+
+1(mti = m) ≤
+
+Cm and scales in-migration so that expected new demand does not exceed aggregate vacancies. This makes residen-tial composition slow-moving and prevents a policy from immediately reshuffling all students after quality changes. Appendix A.2 provides the transition details. 
+
+School Model. Schools are modeled as education-production components. They take government allocation and household choices as input and generate education per-formance measured by school qualities. Let Ltk be the chil-dren enrolled in school k after period-t sorting, and let 
+
+N tk = |L tk|. The mean ability of enrolled children is 
+
+Stk = 1
+
+N tk
+
+X
+
+> i∈L tk
+
+ei. (4) Thus, peer composition changes endogenously as households select across communities. Given per-student investment htk,school quality updates after sorting according to 
+
+rt+1  
+
+> k
+
+= (1 − δ)rtk + δ wv gv (htk) + wsStk
+
+ . (5) The persistence parameter δ reflects gradual change in school conditions. The increasing, concave function gv captures di-minishing returns to investment, while wv and ws weight resources and peer composition. We normalize rtk ∈ (0 , 1] 
+
+and Stk, g v (htk) ∈ [0 , 1] , and set wv + ws = 1 , so rtk is a comparable quality index. For a child living in community mti, we denote current accessed quality as ρti = rt 
+
+> D(mti)
+
+. We also define the child learning-outcome index by 
+
+oti = ρtieψi . (6) This index combines accessed quality with persistent ability, which can be used to measure a child’s received educational benefit. The exponent ψ controls how persistent ability enters the learning-outcome index. 
+
+Government Model. The government cannot directly as-sign households to schools. Its policy instrument is an annual budget Bt divided among the K schools. Define the alloca-tion simplex as ∆K = {b ∈ RK 
+
+> +
+
+: PKk=1 bk = 1 }. The government chooses shares bt ∈ ∆K , so school k receives total funding gtk = btkBt. After enrollment, per-student in-vestment is htk = gtk/N tk. It is clear that PKk=1 gtk = Bt. The central difficulty to determine the budget share is tempo-ral. Current investment changes future school quality, future school quality changes residential demand, and residential choices changes who benefits from subsequent investment. We formalize this sequence and the government’s objective in the next section. 
+
+# Multi-Agent Learning Framework 
+
+The components above interact once in every simulated pe-riod. Turnover at the end of period t − 1 creates the start-of-period population and housing state at t. The feedback is illustrated in Figure 1. We describe this interaction as a dynamic leader–follower framework with lagged household response. The decision process can be divided into two levels. In the lower level, households compete for available residen-tial spots given school quality rt, which leads to a sorting equilibrium. In the upper level, the government anticipates the sorting equilibrium and determine the budget allocation 
+
+bt, which changes the quality observed by households in later periods. 
+
+Lower-Level Household Sorting 
+
+Logit Demand. Only communities with vacancies can ac-cept a mover. Let Mt = {m : V tm > 0}. A school-entry household chooses between staying and moving, with feasi-ble set Ati = {mti} ∪ M t; an in-migrant must choose from 
+
+Mt. Given Pt = ( P t 
+
+> 1
+
+, . . . , P tM ) and school quality rt, the Gumbel shocks in (2)–(3) imply (See Appendix B.1) 
+
+σtim (Pt; rt) = exp(¯ utim /τ )
+
+P
+
+> m′∈A ti
+
+exp(¯ utim ′ /τ ) , (7) 
+
+μtim (Pt) = exp(¯ vtim /τ )
+
+P 
+
+> m′∈M t
+
+exp(¯ vtim ′ /τ ) . (8) These probabilities describe utility-maximizing choices un-der independent unobserved preferences. Summing them gives expected fresh demand for vacant units in community 
+
+m:
+
+Dtm(Pt; rt) = X
+
+> i∈I t
+> m̸=mti
+
+σtim (Pt; rt) + X 
+
+> i∈J t
+
+μtim (Pt). (9) The first term is demand from school-entry movers; the sec-ond is demand from in-migrants. Households that stay do not consume vacancies. 
+
+Market Clearing. We make the following assumption. 
+
+Assumption 1 (Slack supply and price floor) . In every pe-riod, expected fresh demand does not exceed aggregate va-cancies, P 
+
+> m
+
+Dtm ≤ P 
+
+> m
+
+V tm. Moreover, housing prices sat-isfy P tm ≥ Pmin > 0.
+
+The first condition allows the region to contain vacant units even when particular districts are contested. The second gives housing a minimum reservation value. Communities with excess capacity remain at the price floor, while contested communities get a price premium until expected demand matches vacancies. Thus, the clearing condition becomes a complementarity system: for each m ∈ M t, we have 
+
+Dtm(Pt; rt) ≤ V tm, P tm ≥ Pmin ,
+
+(P tm − Pmin )[ V tm − Dtm(Pt; rt)] = 0 . (10) A sorting equilibrium is a triple (Pt⋆ , σt⋆ , μt⋆ ) in which both household groups choose according to (7)–(8) at pre-vailing prices and expected demand satisfies (10). Prices summarize competition from other households; once prices are fixed, the logit probabilities determine choice behav-ior. This equilibrium is central to the social-impact ques-tion because it captures whether school improvements are capitalized into housing prices that limit access. We pro-vide a convex-program characterization and Algorithm 1 to efficiently compute the equilibrium in Appendix B.2. After obtaining the equilibrium, a capacity-feasible realization pro-cedure then maps these probabilities to discrete residential assignments (See Appendix B.4). 
+
+Upper-Level Allocation 
+
+Government Objective. The government rewards both the aggregate level and the distribution of publicly supplied school quality. Let ρt, + 
+
+> i
+
+= rt+1   
+
+> D(mti)
+
+be the end-of-period qual-ity accessible to a child enrolled after period-t sorting. For every household i ∈ L t := S 
+
+> k
+
+Ltk, we define 
+
+Wϵ(ρt, +) = 1
+
+|L t|
+
+X
+
+> i∈L t
+
+(ρt, + 
+
+> i
+
+)1−ϵ
+
+!1/(1 −ϵ)
+
+, ϵ ≥ 0.
+
+(11) At ϵ = 0 , the objective is average accessed quality, which rep-resents aggregate effectiveness under the fixed annual budget. Larger ϵ gives more priority to children with lower access, and the limit as ϵ → ∞ is maximin access. Parameter ϵ
+
+therefore makes the effectiveness–equity judgment explicit. For the special case where ϵ = 1 , we use the continuous geometric mean extension. Access is the primary welfare basis because it represents the school quality supplied through public policy. Across the horizon, the government seeks an observation-based policy 
+
+π that maximizes 
+
+Eπ
+
+"T −1X
+
+> t=0
+
+γt Wϵ(ρt, +) − λ∥bt − bt−1∥22
+
+#
+
+, (12) with b−1 properly initialized. The optimization is subject to population turnover, household sorting, school-quality tran-sitions, and the annual budget. Discount factor γ controls the weight on future cohorts, and λ ≥ 0 discourages abrupt changes in allocation shares. 
+
+Remark. Access is the primary welfare basis because it rep-resents the school quality supplied through public policy. The government does not optimize ot directly because this index reflects persistent child ability, which is more appropriate to be used as a measure of educational outcomes. 
+
+Learning Allocation Policy. The government’s problem is sequential and we represent it as a partially observable Markov decision process (POMDP). The full state xt ∈ X 
+
+contains the household-level population and the variables required for the transition to be Markov. The government receives only a summarized observation 
+
+qt = O(xt) = 
+
+"
+
+rt,
+
+ occ tm
+
+Cm
+
+Mm=1 
+
+, yt, et, χt
+
+#
+
+, (13) where occ tm is community occupancy, yt and et are community-level mean income and ability, and χt summa-rizes the entry group. The action is bt ∈ ∆K . We parame-terize the observation-based policy as 
+
+bt ∼ πϕ(· | qt) = Dirichlet( κϕ(qt)) , (14) so every sampled allocation satisfies the annual budget con-straint. After each action, the environment computes sorting, enrollment, the school transition, welfare, and turnover. The one-period reward is the corresponding term in (12). We use PPO (Schulman et al. 2017) to learn a policy over full trajec-tories. Household sorting is solved within each environment step rather than learned by the government. Appendix C pro-vides POMDP characterization and the training algorithm. 
+
+# Simulations and Experiments 
+
+Setup. We initialize the environment with 4 schools and 12 communities, and the corresponding school districts are shown in Figure 2. Each community has 100 residential po-sitions. Household profiles, including income, educational level, child ability, are sampled from the CEPS data. Their utility coefficients are computed based on sampled profiles. The data preprocessing and parameter calibration are pro-vided in Appendix D.1. 
+
+Figure 2: Initial environment settings. 12 communities (C1–C12) with amenity Qm are allocated to 4 school (Sch1-Sch4) districts, distinguished by colors. Households are spa-tially distributed among communities and schools provide heterogeneous educational quality rk. This setting serves as the basis for evaluating different allocation policies. 
+
+Metrics. We propose six complementary metrics summa-rized in Table 1 to evaluate efficiency and equity. Mean Ac-cess (MA) and Human Capital (HC) measure overall alloca-tion efficiency. Gini Access (GA) and Income Access Gap (IA) measure inequality in educational opportunities, while Income Dissimilarity (ID) and Income–Quality Correlation (IQ) capture socioeconomic segregation and the association between household income and school quality, respectively. Detailed definitions and implementations are provided in Appendix D.2. 
+
+Metric Interpretation 
+
+MA Average school quality accessed by households HC Aggregate educational outcomes GA Inequality in access to school quality IA Access gap between income groups ID Residential segregation across income groups IQ Association between household income and school quality Table 1: Summary of evaluation metrics. To evaluate the effectiveness, robustness, and scalability of our framework, we conduct four sets of experiments: (i) com-parisons with representative baseline resource-allocation policies, (ii) module-level ablation studies, (iii) parameter sensitivity analyses, and (iv) scalability evaluations across increasing problem sizes. 
+
+Comparison with Allocation Baselines 
+
+We compare the PPO allocation policy with three transpar-ent policy rules. The equal-split policy assigns the same total funding to every school; the enrollment-proportional 
+
+policy allocates funding according to current enrollment, Metric \ Policy Equal Enroll Prop. Compensatory PPO MA (×10 −2) ↑ 47.77(0.27) 47.77(0.32) 47.78(0.36) 47.80(0.27)                              
+
+> HC ↑106.59(1.58) 106.28(1.58) 106.60(1.67) 106.40(1.61) GA (×10 −2)↓2.29(0.21) 0.59(0.07) 1.99(0.21) 1.64(0.18) IA (×10 −3)| · | ↓ -5.41(1.43) 0.39(0.51) -4.51(1.16) 6.00(1.34) ID (×10 −1)↓1.41(0.14) 1.44(0.16) 1.39(0.14) 1.47(0.15) IQ (×10 −1)| · | ↓ -2.95(0.60) 0.56(0.92) -2.90(0.59) 3.99(0.66)
+
+Table 2: Long-term average performance across allocation policies. For IA and IQ, values closer to zero indicate greater equality between income groups. thereby equalizing per-student investment; and the compen-satory policy assigns larger budget shares to lower-quality schools. Appendix D.5 provides the formal definitions and evaluation protocol. Table 2 reports long-term average performance experi-mented by 100 seeds. The PPO policy provides the strongest balance on the planner’s primary objectives, achieving the highest Mean Access (MA; 0.478) and the second-lowest Gini Access (GA; 0.0164). The MA values are close across all policies (0.477–0.478), but the proposed policy reaches the highest access level while maintaining substantially lower inequality than equal-split and compensatory funding. Its Human Capital is also within 0.19% of the best result (106.39 versus 106.60), indicating that the improved access balance does not require a substantial loss in overall educational out-comes. The income-based measures provide an important qual-ification. The IA remains close to zero under every pol-icy (-0.0054–0.006), and ID also lies within a narrow range (0.139–0.147). The PPO policy therefore does not create a large income access gap, although its positive IQ (0.399) indi-cates that higher-income communities remain more strongly associated with higher-quality schools. Figure 3 illustrates this relationship. These findings distinguish equality in the overall distribu-tion of school quality from equality between income groups. The proposed policy improves the former, which is directly represented in the government objective, while its advantages are more limited for the latter. This is socially important be-cause it shows that equalizing school-quality access alone may not eliminate the residential mechanisms through which income differences persist. The framework makes this dis-tinction visible and can support future evaluations in which income-based fairness or housing access is incorporated ex-plicitly into policy design. Besides, The limited variation within each policy in Ta-ble 2 shows that the main findings are not driven by a partic-ular simulated population. In particular, the proposed policy consistently maintains high average access and relatively low access inequality. Because the numerical differences in MA are small, these results support a stable balance between access and equality rather than a large advantage on every individual metric. 
+
+Figure 3: The policy impact on (a) school-level mean house-hold income and (b) school quality before and after policy simulations. 
+
+Metric \ Mode Neither Composition only Prices only Full model MA (×10 −2) ↑ 46.38 46.34 46.39 46.41 
+
+HC ↑ 111.77 111.50 111.67 111.99 
+
+GA (×10 −2) ↓ 2.08 2.08 1.26 1.22 
+
+IA (×10 −3) | · | ↓ 0.10 0.00 0.10 0.30 ID (×10 −1) ↓ 0.67 0.64 1.38 1.39 IQ (×10 −1) | · | ↓ 0.05 0.05 -0.06 0.13 
+
+Table 3: Performance under different ablation settings. Bold indicates the best value. For IA and IQ, values closer to zero indicate greater equality between income groups. 
+
+Ablation Study 
+
+We examine the contributions of two social mechanisms: student-composition feedback in school-quality evolution and endogenous housing-price formation. The student-composition feed mechanism affects peer composition on school quality evolution in (5) and removing it freezes Stk in every simulation periods. Removing the housing-price for-mation mechanism fixes housing prices and eliminates the feedback between household choices and residential sorting. Table 3 compares the model without either mechanism, with each mechanism separately, and with both mechanisms. The full model achieves the highest MA (0.4641) and HC (111.99) and the lowest GA (0.0122). The MA values re-main within a narrow range (0.4634–0.4641), so the main benefit is not a large increase in one outcome but con-sistent performance across access, educational outcomes, and access inequality. When housing prices are endogenous, adding student-composition feedback produces modest im-provements in MA ( +0 .2 × 10 −3), HC ( +0 .314 ), and GA (−0.4 × 10 −3). This suggests that composition feedback is most useful when it operates within the complete education– housing interaction. The housing-price mechanism produces the more socially consequential change. When student-composition feedback is present, allowing prices to respond more than doubles ID (from 0.064 to 0.139), even as GA falls from 0.0208 to Figure 4: Evolution of (a) mean housing price and (b) school quality under the ablation settings. 0.0122. Thus, endogenous housing prices can make school-quality access more evenly distributed overall while simulta-neously strengthening income sorting across locations. The apparently lower segregation obtained when prices are fixed should therefore be interpreted cautiously: it results partly from removing the channel through which demand for better schools affects residential costs. Figure 4 supports this interpretation dynamically. Housing prices respond to household demand only when endogenous price formation is included, while student-composition feed-back changes how school quality evolves after households sort. Including both mechanisms enables the framework to represent an important social tension: school investment may improve overall access while its benefits remain mediated by residential markets. 
+
+Sensitivity and Scale Analysis 
+
+We first vary one parameter at a time while keeping the re-maining parameters fixed. The analysis covers government inequality aversion, household preferences for school qual-ity, sensitivity to housing prices, randomness in residential choice, and the contribution of student composition to school quality. Average access remains stable when inequality aver-sion, school-quality preference, and housing-price sensitiv-ity are varied (MA: 0.5083–0.5137), while the equity mea-sures respond more clearly. For example, increasing inequal-ity aversion from 0 to 2 reduces GA from 0.0512 to 0.0261 without materially changing MA. This result confirms that the government objective can place greater weight on house-holds with lower access without substantially reducing the overall access level. The remaining parameters reveal socially meaningful trade-offs. Stronger housing-price sensitivity raises access inequality while leaving average access nearly unchanged. Greater randomness in residential choice reduces ID (from 0.1253 to 0.0637) but also lowers MA (from 0.5101 to 0.4857). Increasing the contribution of student composition similarly lowers GA but produces a limited reduction in MA. Thus, the main access result is stable under several behavioral assumptions, whereas the distributional outcomes appropri-ately depend on how households respond to school quality and housing costs. Appendix D.3 reports all parameter set-tings and results. We also evaluate six environments containing 12 or 24 communities and 4, 8, or 12 schools. Increasing the num-ber of communities has the largest effect on average access (approximately 0.477 to 0.368), indicating that maintaining educational access becomes more difficult as households are distributed across a larger residential system. Increasing the number of schools has a smaller effect on MA but a clearer effect on inequality and sorting. With 12 communities, in-creasing the number of schools from 4 to 12 raises GA from 0.030 to 0.084 and Income Dissimilarity from 0.145 to 0.258. These results show that expanding the number of schools does not by itself guarantee broader or more equal educa-tional opportunity. In a residence-dependent system, a larger set of schools can create more differentiated access patterns and greater scope for household sorting. Educational plan-ning should therefore consider the spatial distribution of households and schools together rather than treating school expansion as an independent solution. Complete results are provided in Appendix D.4. 
+
+# Disucssions and Conclusions 
+
+In this work, we presented a dynamic multi-agent framework for allocating public-school investment under endogenous household responses. Its main contribution is to connect a tractable household-sorting equilibrium with sequential gov-ernment decisions: investment changes school quality, which affects housing prices, residential sorting, enrollment, and fu-ture allocation needs. We further formulate the government problem as a POMDP and use RL to learn budget-feasible policies that balance aggregate access and equity. In simula-tions, the learned policy achieves the highest access level and the second-lowest access Gini among representative base-lines, showing that explicitly accounting for the education– housing feedback can improve long-term allocation deci-sions. The PPO policy achieves a favorable balance between efficiency and equity by reducing disparities in school qual-ity while preserving socioeconomic matching. This promotes more equitable access to schools while increasing per-student investment. Scalability experiments further show that spatial expansion poses greater challenges to accessibility, whereas increasing school quantity alone may intensify sorting and reduce equity. Overall, the proposed framework provides a computational foundation for evaluating educational invest-ments whose effectiveness and distributional consequences evolve through household behavior over time. Several extensions provide directions for future work. The current setting focuses on public-school funding with fixed attendance boundaries and residential decisions made at school entry. This allows us to isolate the central investment– sorting feedback without incorporating every education and housing mechanism into one model. Future work could in-troduce student transfers and richer demographic dynamics, private or charter-school options, and additional policy in-struments such as teacher allocation and boundary adjust-ment. Calibrating these extensions with regional data would also support location-specific policy analysis. References 
+
+Abdulkadiroğlu, A.; Pathak, P. A.; Schellenberg, J.; and Wal-ters, C. R. 2020. Do Parents Value School Effectiveness? 
+
+American Economic Review , 110(5): 1502–1539. Abdulkadiroğlu, A.; and Sönmez, T. 2003. School choice: A mechanism design approach. American economic review ,93(3): 729–747. Agostinelli, F.; Luflade, M.; and Martellini, P. 2024. On the Spatial Determinants of Educational Access. Working Paper 32246, National Bureau of Economic Research. Barseghyan, L.; Clark, D.; and Coate, S. 2019. Peer prefer-ences, school competition, and the effects of public school choice. American Economic Journal: Economic Policy ,11(4): 124–158. Bayer, P.; Ferreira, F.; and McMillan, R. 2007. A Uni-fied Framework for Measuring Preferences for Schools and Neighborhoods. Journal of Political Economy , 115(4): 588– 638. Bayer, P.; McMillan, R.; and Rueben, K. 2004. An Equilib-rium Model of Sorting in an Urban Housing Market. Working Paper 10865, National Bureau of Economic Research. Biasi, B. 2023. School finance equalization increases inter-generational mobility. Journal of Labor Economics , 41(1): 1–38. Black, S. E. 1999. Do better schools matter? Parental val-uation of elementary education. The quarterly journal of economics , 114(2): 577–599. Caetano, G. 2019. Neighborhood sorting and the value of public school quality. Journal of Urban Economics , 114: 103193. Chetty, R.; Hendren, N.; and Katz, L. F. 2016. The effects of exposure to better neighborhoods on children: New evi-dence from the moving to opportunity experiment. American Economic Review , 106(4): 855–902. Dignum, E.; Athieniti, E.; Boterman, W.; Flache, A.; and Lees, M. 2022. Mechanisms for Increased School Segre-gation Relative to Residential Segregation: A Model-Based Analysis. Computers, Environment and Urban Systems , 93: 101772. Dignum, E.; Boterman, W.; Flache, A.; and Lees, M. 2024. A Data-Driven Agent-Based Model of Primary School Seg-regation in Amsterdam. The Journal of Mathematical Soci-ology , 48(3): 362–392. Epple, D.; and Sieg, H. 1999. Estimating Equilibrium Models of Local Jurisdictions. Journal of Political Economy , 107(4): 645–681. Fernández, R.; and Rogerson, R. 1996. Income Distribution, Communities, and the Quality of Public Education. The Quarterly Journal of Economics , 111(1): 135–164. Fernández, R.; and Rogerson, R. 1998. Public Education and Income Distribution: A Dynamic Quantitative Evaluation of Education-Finance Reform. American Economic Review ,88(4): 813–833. Gillani, N.; Beeferman, D.; Vega-Pourheydarian, C.; Overney, C.; Van Hentenryck, P.; and Roy, D. 2023. Redraw-ing Attendance Boundaries to Promote Racial and Ethnic Diversity in Elementary Schools. Educational Researcher ,52(6): 348–364. Guan, H.; Gillani, N.; Simko, T.; Mangat, J.; and Van Henten-ryck, P. 2025. Contextual Stochastic Optimization for School Desegregation Policymaking. Proceedings of the AAAI Con-ference on Artificial Intelligence , 39(27): 28024–28032. Jackson, C. K.; Johnson, R. C.; and Persico, C. 2016. The Effects of School Spending on Educational and Economic Outcomes: Evidence from School Finance Reforms. The Quarterly Journal of Economics , 131(1): 157–218. Jackson, C. K.; and Mackevicius, C. L. 2024. What Impacts Can We Expect from School Spending Policy? Evidence from Evaluations in the United States. American Economic Journal: Applied Economics , 16(1): 412–446. Lafortune, J.; Rothstein, J.; and Schanzenbach, D. W. 2018. School Finance Reform and the Distribution of Student Achievement. American Economic Journal: Applied Eco-nomics , 10(2): 1–26. Mayerle, S. F.; Rodrigues, H. F.; de Figueiredo, J. N.; and De Genaro Chiroli, D. M. 2022. Optimal Student/School/-Class/Teacher/Classroom Matching to Support Efficient Pub-lic School System Resource Allocation. Socio-Economic Planning Sciences , 83: 101341. McFadden, D. 1972. Conditional logit analysis of qualitative choice behavior. Monarrez, T. E. 2023. School attendance boundaries and the segregation of public schools in the United States. American Economic Journal: Applied Economics , 15(3): 210–237. National Survey Research Center. 2015. China Education Panel Survey (CEPS), 2013–2014 Baseline Survey. Chinese National Survey Data Archive. Nechyba, T. J. 1999. School Finance Induced Migration and Stratification Patterns: The Impact of Private School Vouchers. Journal of Public Economic Theory , 1(1): 5–50. Owens, A. 2017. Racial Residential Segregation of School-Age Children and Adults: The Role of Schooling as a Segre-gating Force. RSF: The Russell Sage Foundation Journal of the Social Sciences , 3(2): 63–80. Owens, A. 2018. Income segregation between school dis-tricts and inequality in students’ achievement. Sociology of education , 91(1): 1–27. Owens, A.; Reardon, S. F.; and Jencks, C. 2016. Income segregation between schools and school districts. American Educational Research Journal , 53(4): 1159–1197. Schulman, J.; Wolski, F.; Dhariwal, P.; Radford, A.; and Klimov, O. 2017. Proximal policy optimization algorithms. 
+
+arXiv preprint arXiv:1707.06347 .Turnbull, G. K.; and Zheng, M. 2021. A Meta-Analysis of School Quality Capitalization in U.S. House Prices. Real Estate Economics , 49: 1120–1171. Zhang, D.; Mu, S.; Mango, J.; and Li, X. 2026. Deep Rein-forcement Learning for Spatial Resource Allocation: A Case Study of School Districting. Environment and Planning B: Urban Analytics and City Science , 53(2): 418–434. A Model Specifications 
+
+A.1 Household Parameters 
+
+In Equation (2), we set αi = α(1 + ξz i), which is increasing in parental education and measures household i’s preference for school quality. Price sensitivity is βi = β0/y i, so an equal price increase places a greater utility burden on a lower-income household. Here, α, ξ, and β0 are tunable parameters. This is the main channel from school investment to socioeconomic sorting: improved quality can increase local demand and prices, thereby limiting access for households with fewer resources. Parameter η weights fixed neighborhood amenities, and τ controls the dispersion of unobserved preferences. As τ → 0, choices concentrate on the highest deterministic utility; larger τ gives flatter choice probabilities. All taste shocks are independent across households, alternatives, and periods. Child ability ei is persistent for a household throughout the simulation. 
+
+A.2 Demographic Transitions 
+
+The population transition from the end of period t to the start of period t + 1 proceeds in three steps: 1. Aging. Set ct+1  
+
+> i
+
+= cti + 1 for every resident child. 2. Departures. Each eligible non-school-age household exits according to the specified departure process. Enrolled households cannot exit during the W -period schooling window. Each departure releases one unit in the household’s community. 3. In-migration. Draw incoming preschool-age household types from pθ . In period t + 1 , their locations are determined jointly with school-entry movers through the lower-level sorting equilibrium rather than assigned exogenously. At the beginning of period t+1 , the transition identifies the school-entry group It+1 , the in-migrant group J t+1 , and community vacancies Vt+1 . The government observes the resulting school and community summaries before selecting bt+1 . In-migration is scaled so that aggregate expected fresh demand does not exceed vacancies and community capacity is preserved. 
+
+A.3 School Enrollment Specifications 
+
+Every school has positive enrollment at initialization. However, free competitions allow households decide to not enroll certain schools, resulting in zero enrollment. In this case, we use the last non-zero enrollment number to help government decide the investment allocation. We define ℓk(t) = max {s ≤ t : N sk > 0}. If N tk = 0 for some school k and t > 0, we set the reference enrollment and composition as 
+
+eN tk = N ℓk (t) 
+
+> k
+
+, eStk = Sℓk (t) 
+
+> k
+
+. (15) Thus, current values are used for a nonempty school, while an empty school uses its most recent nonempty data. Total funding remains gtk = btkBt, per-student investment is htk = gtk/ eN tk.
+
+# B Sorting-Equilibrium Characterization 
+
+B.1 Logit Demand Derivation 
+
+For household i, the logit demand on a community is the probability distribution of applying the softmax function to the utilities of all communities. It originates from the discrete choice theory in (McFadden 1972). We briefly introduce theory here. Suppose an agent chooses an object j from a finite set S based on the utility Uj = Vj + εj , where Vj is a deterministic quantity and εj is random. The utility is defined for every object j ∈ S, and we assume that εj are i.i.d. for all j. The probability of the agent choosing the object i can be written as 
+
+Pr( Ui > U j , ∀j) ⇒ Pr( Vi + εi > V j + εj , ∀j) ⇒ Pr( εj < ε i + Vi − Vj , ∀j) := Pr( i chosen ). (16) When εj , j ∈ S, follows a Gumbel distribution Gumbel(0 , τ ), its CDF and PDF are given by 
+
+F (x) = e−e−x/τ 
+
+, f (x) = 1
+
+τ e−(x/τ +e−x/τ ).
+
+Since all εj are independent, when i is chosen conditioned on the value of εi = t, we have 
+
+Pr( i chosen ) = 
+
+Z ∞−∞ 
+
+f (t) Y 
+
+> j̸=i
+
+F (t + Vi − Vj )dt =
+
+Z ∞−∞ 
+
+1
+
+τ e−t/τ e−et/τ P  
+
+> je(Vj−Vi)/τ
+
+dt. (17) Using a change of variable y = e−t, we can simplify (17) and obtain 
+
+Pr( i chosen ) = 
+
+Z ∞
+
+> 0
+
+e−y P  
+
+> je(Vj−Vi)/τ
+
+dy = 1
+
+P 
+
+> j
+
+e(Vj −Vi)/τ = eVi/τ 
+
+P 
+
+> j
+
+eVj /τ . (18) Checking utilities (2)-(3) and using the result in (18), we obtain the logit demand results in (7)-(8). B.2 Convex-Program Characterization 
+
+We characterize the sorting-equilibrium price vector as the solution of a convex program. Let P = ( Pm)m∈M t denotes the prices of communities with vacancies. Prices outside Mt do not enter the sorting problem. Define the potential function 
+
+Φt(P) = X
+
+> i∈I t
+
+τβi
+
+log X
+
+> ℓ∈A ti
+
+exp  ¯utiℓ (P)/τ  + X 
+
+> i∈J t
+
+τβi
+
+log X
+
+> ℓ∈M t
+
+exp  ¯vtiℓ (P)/τ  + X
+
+> m∈M t
+
+V tmPm. (19) The first two terms are the log-sum-exp potentials associated with school-entry households and in-migrants, respectively. The last term accounts for the available housing supply. 
+
+Proposition 1 (Convex-program characterization) . Under Assumption 1, suppose that τ > 0 and βi > 0 for every active household. A feasible price vector Pt⋆ satisfies the market-clearing conditions in (10) if and only if 
+
+Pt⋆ ∈ arg min  
+
+> P≥Pmin 1
+
+Φt(P). (20) 
+
+A minimizer exists if X
+
+> m∈M t
+
+V tm > |J t|. (21) 
+
+The minimizer is unique whenever Φt is strictly convex on the constraint set. In particular, a sufficient condition for strict convexity is that J t is nonempty and at least one household in It has a feasible destination other than its current community. Proof. We first establish convexity and derive the gradient of Φt. From (2) and (3), for m ∈ M t,
+
+∂ ¯utiℓ (P)
+
+∂P m
+
+= −βi1(ℓ = m)1(m̸ = mti), (22) 
+
+∂¯vtiℓ (P)
+
+∂P m
+
+= −βi1(ℓ = m). (23) Thus, each deterministic utility is affine in P. Because log-sum-exp is convex and τ /β i > 0, the first two terms in (19) are convex. The supply term is linear. Hence, Φt is convex. Consider the contribution of household i ∈ I t to the potential. Using (22) and the logit probability in (7), we obtain 
+
+∂∂P m
+
+ τβi
+
+log X
+
+> ℓ∈A ti
+
+exp  ¯utiℓ (P)/τ 
+
+= τβi
+
+exp (¯ utim (P)/τ )
+
+P
+
+> ℓ∈A ti
+
+exp (¯ utiℓ (P)/τ )
+
+−βi
+
+τ 1(m̸ = mti) = −σtim (P; rt)1(m̸ = mti).
+
+(24) Similarly, for an in-migrant i ∈ J t, equations (23) and (8) give 
+
+∂∂P m
+
+"
+
+τβi
+
+log X
+
+> ℓ∈M t
+
+exp  ¯vtiℓ (P)/τ #
+
+= −μtim (P). (25) Combining (24) and (25) with the derivative of the supply term yields 
+
+∂Φt(P)
+
+∂P m
+
+= V tm − X
+
+> i∈I t
+> m̸=mti
+
+σtim (P; rt) − X 
+
+> i∈J t
+
+μtim (P) = V tm − Dtm(P; rt). (26) Thus, the demand function in (9) arises directly from the gradient of the potential. Next, we show the equivalence between the convex program and the market-clearing conditions. Let λm ≥ 0 be the multiplier associated with the constraint Pmin − Pm ≤ 0. We obtain the Lagrangian 
+
+L(P, λ) = Φ t(P) + X
+
+> m∈M t
+
+λm(Pmin − Pm).
+
+The KKT conditions are therefore 
+
+Pm ≥ Pmin , (27) 
+
+λm ≥ 0, (28) 
+
+V tm − Dtm(P; rt) − λm = 0 , (29) 
+
+λm(Pm − Pmin ) = 0 . (30) Eliminating λm using (29) yields 
+
+Dtm(P; rt) ≤ V tm, Pm ≥ Pmin , (Pm − Pmin )[ V tm − Dtm(P; rt)] = 0 ,
+
+which are exactly the market-clearing conditions in (10). Note that the constraint set C = {P : P ≥ Pmin 1} is a polyhedron and the Slater’s condition clearly holds. Therefore, the KKT conditions (27)-(30) are necessary and sufficient for optimality. Hence, a feasible price vector solves (20) if and only if it is a sorting-equilibrium price vector. Next, we show existence. Since the constraint set is closed but unbounded, convexity and continuity alone do not guarantee that the minimum is attained. Thus, we need to show that Φt is coercive on the constraint set because a continuous coercive function can attain its minimum on a nonempty closed subset of a finite-dimensional space. That is to show 
+
+Φt(P) −→ +∞ whenever ∥P∥2 −→ ∞ , P ≥ Pmin 1.
+
+For each i ∈ I t, staying in mti is feasible, and its utility does not depend on the prices of vacant units. Therefore, we have 
+
+τβi
+
+log X
+
+> ℓ∈A ti
+
+exp  ¯utiℓ (P)/τ  ≥ ¯utim ti
+
+βi
+
+. (31) For each i ∈ J t, choose k ∈ arg min ℓ∈M t Pℓ. The log-sum-exp is at least as large as any one of its terms, so 
+
+τβi
+
+log X
+
+> ℓ∈M t
+
+exp  ¯vtiℓ (P)/τ  ≥ ηQ k
+
+βi
+
+− Pk ≥ min 
+
+> ℓ∈M t
+
+ηQ ℓ
+
+βi
+
+− min  
+
+> ℓ∈M t
+
+Pℓ. (32) Consequently, there exists a finite constant Ct, independent of P, such that 
+
+Φt(P) ≥ Ct + X
+
+> m∈M t
+
+V tmPm − |J t| min  
+
+> m∈M t
+
+Pm. (33) The lower bound in (33) diverges as prices become unbounded. To see this, let 
+
+P− = min  
+
+> m∈M t
+
+Pm, P+ = max  
+
+> m∈M t
+
+Pm, a = X
+
+> m∈M t
+
+V tm − |J t| > 0, V = min  
+
+> m∈M t
+
+V tm > 0.
+
+Then we have X
+
+> m
+
+V tmPm − |J t|P− = aP − + X
+
+> m
+
+V tm(Pm − P−)
+
+≥ aP min + min {a, V }(P+ − Pmin ).
+
+Since the number of communities is finite and prices are bounded below by Pmin , ∥P∥2 → ∞ implies P+ → ∞ . Hence, (33) implies Φt(P) → +∞ as ∥P∥2 → ∞ within the constraint set. Thus, Φt is coercive. Since it is continuous and the constraint set is nonempty and closed, the convex program (20) has a minimizer. Finally, we prove the stated sufficient condition for uniqueness. For i ∈ I t, define the vector of priced-move probabilities 
+
+eσti(P) =  σtim (P; rt)1(m̸ = mti) 
+
+> m∈M t
+
+.
+
+For i ∈ J t, let 
+
+μti(P) =  μtim (P) 
+
+> m∈M t
+
+.
+
+Differentiating (26) again gives 
+
+∇2Φt(P) = X
+
+> i∈I t
+
+βi
+
+τ
+
+
+
+Diag 
+
+eσti
+
+
+
+− eσti
+
+eσti
+
+⊤
+
++ X 
+
+> i∈J t
+
+βi
+
+τ
+
+h
+
+Diag  μti
+
+ − μti
+
+ μti
+
+⊤i
+
+. (34) All probabilities in the relevant choice sets are strictly positive because τ > 0 and utilities are finite. For any direction d ∈ R|M t|,
+
+d⊤∇2Φt(P)d = X
+
+> i∈I t
+
+βi
+
+τ
+
+ X
+
+> m∈M t
+
+eσtim d2 
+
+> m
+
+− X
+
+> m∈M t
+
+eσtim dm
+
+!2 + X 
+
+> i∈J t
+
+βi
+
+τ
+
+ X
+
+> m∈M t
+
+μtim d2 
+
+> m
+
+− X
+
+> m∈M t
+
+μtim dm
+
+!2 . (35) The bracketed expression for an in-migrant is the variance of dm under the probability distribution μti. For a school-entry household, it is also a variance after assigning the remaining probability 1 − P 
+
+> m∈M t
+
+eσtim to the staying option, whose value in the price direction is zero. Therefore, every bracketed expression is nonnegative. Suppose first that d is not constant across communities. Because every in-migrant assigns positive probability to every community in Mt, the variance in the second sum is strictly positive for any i ∈ J t. Hence, 
+
+d⊤∇2Φt(P)d > 0.
+
+Now suppose that d = c1 for some c̸ = 0 . Let i ∈ I t be a household with at least one feasible move, and define its total probability of moving by 
+
+qti (P) = X
+
+> m∈M t
+> m̸=mti
+
+σtim (P; rt).
+
+Because both staying and at least one moving option have positive probability, 
+
+0 < q ti (P) < 1.
+
+The contribution of this household to (35) is 
+
+βi
+
+τ c2qti (P) 1 − qti (P) > 0.
+
+Thus, 
+
+d⊤∇2Φt(P)d > 0 for every d̸ = 0.
+
+The Hessian is positive definite, so Φt is strictly convex. Therefore, its minimizer is unique. 
+
+B.3 Projected Gradient Method For Equilibrium Computation 
+
+We denote the constraint set in (20) as C = {P : P ≥ Pmin 1}. Given its simplicity, we can use projected gradient descent method to compute the minimizer of (20) (i.e., the equilibrium price vector). Projection onto this set can be computed componentwise: 
+
+ΠC (x) = max {Pmin 1, x}.
+
+Using (26), one projected-gradient step is 
+
+P(s+1) = Π C
+
+
+
+P(s) − ζ∇Φt(P(s))
+
+
+
+= max 
+
+n
+
+Pmin 1, P(s) + ζ
+
+h
+
+Dt(P(s); rt) − Vtio 
+
+, (36) where ζ > 0 is the step size. The update raises the price of a community when demand exceeds its vacancies. It lowers the price when vacancies exceed demand, subject to the price floor. Define the projected-gradient residual as 
+
+res ζ (P) = 1
+
+ζ
+
+P − ΠC
+
+ P − ζ∇Φt(P) . (37) The residual satisfies res ζ (P) = 0 if and only if P satisfies the KKT conditions and hence the market-clearing conditions. Thus, we propose Algorithm 1 to compute the sorting equilibrium. The convergence result is established in Proposition 2 . Algorithm 1: Compute the lower-level sorting equilibrium 
+
+Require: School quality rt, vacancies Vt, groups It and J t, feasible initial prices P(0) , price floor Pmin , fixed step size ζ,and tolerance εtol  
+
+> 1:
+
+Set s ← 0 
+
+> 2:
+
+repeat  
+
+> 3:
+
+for m ∈ M t do  
+
+> 4:
+
+Compute Dtm(P(s); rt) using (7)–(9)  
+
+> 5:
+
+end for  
+
+> 6:
+
+Update P(s+1) using (36)  
+
+> 7:
+
+Set res (s) ← ∥ P(s+1) − P(s)∥∞/ζ  
+
+> 8:
+
+Set s ← s + 1  
+
+> 9:
+
+until res (s−1) ≤ εtol  
+
+> 10:
+
+Set Pt⋆ ← P(s) 
+
+> 11:
+
+Compute σt⋆ and μt⋆ using (7)–(8)  
+
+> 12:
+
+return Pt⋆ , σt⋆ , μt⋆ Proposition 2 (Convergence of projected gradient descent) . Suppose that the convex program (20) has a minimizer and that 
+
+∇Φt is L-Lipschitz continuous on C for some L > 0. Starting from any P(0) ∈ C , let the fixed step size satisfy 
+
+0 < ζ ≤ 1
+
+L .
+
+Then the sequence generated by (36) converges to a minimizer of (20) . Moreover, for any minimizer Pt⋆ and any S ≥ 1,
+
+Φt(P(S)) − Φt(Pt⋆ ) ≤ ∥P(0) − Pt⋆ ∥22
+
+2ζS . (38) 
+
+If the minimizer is unique, then 
+
+P(S) −→ Pt⋆ .
+
+Proof. We first give an explicit Lipschitz bound for the gradient. For any nonnegative vector p satisfying 
+
+q := X
+
+> m
+
+pm ≤ 1
+
+and any vector d, the Cauchy–Schwarz inequality gives 
+
+X
+
+> m
+
+pmdm
+
+!2
+
+≤ X
+
+> m
+
+pm
+
+! X
+
+> m
+
+pmd2
+
+> m
+
+!
+
+= q X
+
+> m
+
+pmd2 
+
+> m
+
+≤ X
+
+> m
+
+pmd2
+
+> m
+
+.
+
+Therefore, 
+
+0 ≤ d⊤ Diag( p) − pp ⊤ d ≤ X
+
+> m
+
+pmd2 
+
+> m
+
+≤ ∥ d∥22.
+
+For every i ∈ I t, the vector eσti in (34) is a sub-probability vector, while for every i ∈ J t, the vector μti is a probability vector. Hence, every matrix appearing in (34) is positive semidefinite and has spectral norm at most one. It follows that 
+
+∥∇ 2Φt(P)∥2 ≤ 1
+
+τ
+
+X
+
+> i∈I t
+
+βi + X 
+
+> i∈J t
+
+βi
+
+!
+
+=: L0.
+
+Thus, ∇Φt is globally Lipschitz continuous. In particular, when L0 > 0, one may take 
+
+L = L0 = 1
+
+τ
+
+X
+
+> i∈I t
+
+βi + X 
+
+> i∈J t
+
+βi
+
+!
+
+. (39) If L0 = 0 , then ∇Φt is constant, and any L > 0 is a valid Lipschitz constant. Let Pt⋆ be any minimizer. Since P(0) ∈ C and every update is a projection onto C, all iterates belong to C. The optimality condition for projection onto the closed convex set C gives, for every P ∈ C ,
+
+D
+
+P(s+1) −
+
+h
+
+P(s) − ζ∇Φt(P(s))
+
+i
+
+, P − P(s+1) E
+
+≥ 0. (40) Setting P = Pt⋆ and using the identity 
+
+2⟨a − b, c − a⟩ = ∥b − c∥22 − ∥ a − c∥22 − ∥ a − b∥22
+
+gives 
+
+D
+
+∇Φt(P(s)), P(s+1) − Pt⋆ E
+
+≤ 12ζ
+
+h
+
+∥P(s) − Pt⋆ ∥22 − ∥ P(s+1) − Pt⋆ ∥22 − ∥ P(s+1) − P(s)∥22
+
+i
+
+. (41) Also by convexity, we have 
+
+Φt(P(s)) − Φt(Pt⋆ ) ≤
+
+D
+
+∇Φt(P(s)), P(s) − Pt⋆ E
+
+.
+
+Combining this inequality with the descent lemma yields 
+
+Φt(P(s+1) ) − Φt(Pt⋆ ) ≤
+
+D
+
+∇Φt(P(s)), P(s+1) − Pt⋆ E
+
++ L
+
+2 ∥P(s+1) − P(s)∥22. (42) Combining (41) and (42) gives 
+
+Φt(P(s+1) ) − Φt(Pt⋆ ) ≤ 12ζ
+
+h
+
+∥P(s) − Pt⋆ ∥22 − ∥ P(s+1) − Pt⋆ ∥22
+
+i
+
+−
+
+ 12ζ − L
+
+2
+
+
+
+∥P(s+1) − P(s)∥22. (43) Since ζ ≤ 1/L , the final term is nonpositive and can be removed from the upper bound. Summing over s = 0 , . . . , S − 1 yields 
+
+> S−1
+
+X
+
+> s=0
+
+h
+
+Φt(P(s+1) ) − Φt(Pt⋆ )
+
+i
+
+≤ ∥P(0) − Pt⋆ ∥22
+
+2ζ .
+
+Next, we show that the objective values are nonincreasing. Setting P = P(s) in (40) gives 
+
+D
+
+∇Φt(P(s)), P(s+1) − P(s)E
+
+≤ − 1
+
+ζ ∥P(s+1) − P(s)∥22,
+
+which implies 
+
+Φt(P(s+1) ) ≤ Φt(P(s)) −
+
+ 1
+
+ζ − L
+
+2
+
+
+
+∥P(s+1) − P(s)∥22.
+
+Since ζ ≤ 1/L , the coefficient is nonnegative. Thus, {Φt(P(s))} is nonincreasing. Consequently, 
+
+S
+
+h
+
+Φt(P(S)) − Φt(Pt⋆ )
+
+i
+
+≤
+
+> S−1
+
+X
+
+> s=0
+
+h
+
+Φt(P(s+1) ) − Φt(Pt⋆ )
+
+i
+
+≤ ∥P(0) − Pt⋆ ∥22
+
+2ζ ,
+
+which proves (38). Finally, we show convergence of the iterates. Rearranging (43) gives 
+
+∥P(s+1) − Pt⋆ ∥22 ≤ ∥ P(s) − Pt⋆ ∥22 − 2ζ
+
+h
+
+Φt(P(s+1) ) − Φt(Pt⋆ )
+
+i
+
+− (1 − ζL )∥P(s+1) − P(s)∥22.
+
+Since ζ ≤ 1/L and Φt(P) ≥ Φt(P∗) ∀P ∈ C , both subtracted terms are nonnegative and we have 
+
+∥P(s+1) − Pt⋆ ∥2 ≤ ∥ P(s) − Pt⋆ ∥2.
+
+Thus, the sequence {P (s)} is Fejér monotone with respect to the set of minimizers and is therefore bounded and has a convergent subsequence that belongs to C since C is closed. Moreover, by (38) we have 
+
+Φt(P(S)) −→ min  
+
+> P∈C
+
+Φt(P).
+
+Then, the limit of any convergent subsequence converges to the minimum of Φt since Φt is continuous. The standard convergence theorem for Fejér-monotone sequences in finite-dimensional spaces then implies that the full sequence P(s) converges to a minimizer. If the minimizer is unique, the limit is Pt⋆ .
+
+B.4 From Equilibrium Probabilities to Assignments 
+
+The sorting equilibrium (Pt⋆ , σt⋆ , μt⋆ ) specifies household choice probabilities and clears the vacancy market in expectation. We apply a capacity-feasible realization procedure to determine a discrete residential assignment for every household in each period. The enrollment and school composition are computed based on the assignment result. Throughout the procedure, the prices Pt⋆ remain fixed. 
+
+Step 1: Initial Realization. Each household in group I and J independently sample a tentative destination from its equilibrium probabilities: 
+
+at, 0 
+
+> i
+
+∼ Categorical 
+
+
+
+{σt⋆ im }m∈A ti
+
+
+
+, i ∈ I t, at, 0 
+
+> j
+
+∼ Categorical  {μt⋆ jm }m∈M t
+
+ , j ∈ J t.
+
+They form an assignment profile at.
+
+Step 2: Local Overflow Rationing For an assignment profile at, define the fresh-arrival set of community m as 
+
+Ftm(at) = {i ∈ I t : ati = m, m ̸ = mti} ∪ { j ∈ J t : atj = m}.
+
+For each community m, let xtm = |F tm(at)| denote its realized fresh demand, and define its overflow by ξtm = ( xtm − V tm)+. If 
+
+ξtm = 0 , all tentative fresh arrivals to m are accepted. If ξtm > 0, the procedure selects a subset 
+
+Rtm ⊆ F tm(at), |R tm| = ξtm
+
+uniformly among all subsets of this size. The selected households lose their tentative assignments and enter a pending pool. We denote the sets of displaced households as 
+
+eIt = [
+
+> m
+
+Rtm
+
+!
+
+∩ I t, eJ t = [
+
+> m
+
+Rtm
+
+!
+
+∩ J t.
+
+After placing the households in Ftm(at)\R tm for all m, the residual vacancies in community becomes 
+
+eV tm = V tm − |F tm(at)\R tm|.Step 3: Reassigning Displaced Households. The procedure processes households in eIt and eJt in uniformly random order. For a pending household i ∈ eIt, define the currently available community set eAti = {mti} ∪ { m ∈ M t : eV tm > 0}. The household draws a new destination using its equilibrium probabilities conditioned on current availability: 
+
+Pr( ati = m) = σt⋆ im 
+
+P 
+
+> ℓ∈eAti
+
+σt⋆ iℓ 
+
+, m ∈ eAti. (44) If ati̸ = mti, the procedure decreases eV tati
+
+by one. If ati = mti, no vacancy is consumed. Thus, every displaced mover either reaches another community with available capacity or remains in its origin. Similarly, for a pending household j ∈ eJt, define the currently available community set fMtj = {m ∈ M t : eV tm > 0}. The household draws a new destination using its equilibrium probabilities conditioned on current availability: 
+
+Pr( atj = m) = μt⋆ jm 
+
+P 
+
+> ℓ∈fMtj
+
+μt⋆ jℓ 
+
+, m ∈ fMtj . (45) After assigning j, the procedure decreases eV tatj
+
+by one. Availability is recomputed before assigning the next household. The procedure satisfies capacity-feasible and discrete place-ment for every realization. The resulting assignment result update household locations and further determines the enrolled sets 
+
+Ltk, enrollment N tk, and peer composition Stk.
+
+# C Government Decision Process and Algorithms 
+
+C.1 Partially Observed Decision Process 
+
+Let 
+
+G = ⟨X , ∆K , p, R, Q, O, γ ⟩
+
+denote the government decision process. The full state xt ∈ X contains household types, ages and locations; school quality; housing occupancy and vacancies; the active groups; and the previous allocation required to evaluate the smoothing penalty. Given action bt, the transition kernel p(xt+1 |xt, bt) includes sorting, assignment, school production, and demographic turnover. The government observes qt = O(xt) as defined in (13). In the implementation, this observation contains school quality, community occupancy relative to capacity, community mean income and ability, and entry-group features. It does not expose the full household microstate. The policy is therefore observation-based, with Dirichlet concentration parameters κϕ(qt) > 0.The reward is 
+
+Rt = Wϵ(ρt, +) − λ∥bt − bt−1∥22. (46) The expectation in (12) is over demographic transitions, household taste shocks and realized assignments, and stochastic policy actions. 
+
+C.2 Training Procedure 
+
+We summarize the complete training procedure in Algorithm 2. Algorithm 2: Dynamic system and government-policy training 
+
+Require: Initial population H0, quality r0, horizon T , budgets {Bt}, and parameters γ, ϵ, λ  
+
+> 1:
+
+Initialize policy πϕ, value function Vω , and b−1 = 0 
+
+> 2:
+
+for each training episode do  
+
+> 3:
+
+Reset the population and school qualities  
+
+> 4:
+
+for t = 0 , . . . , T − 1 do  
+
+> 5:
+
+Construct qt = O(xt) from school and community summaries  
+
+> 6:
+
+Sample bt ∼ πϕ(· | qt) and set gtk = btkBt 
+
+> 7:
+
+Call Algorithm 1 using inherited quality rt 
+
+> 8:
+
+Compute enrollment N tk and composition Stk 
+
+> 9:
+
+Apply (15) and set htk = gtk/ eN tk 
+
+> 10:
+
+Update quality to rt+1 using (5)  
+
+> 11:
+
+Compute ρt, +, ot, +, and reward (46)  
+
+> 12:
+
+Process turnover to form xt+1  
+
+> 13:
+
+Store (qt, bt, R t, q t+1 ) 
+
+> 14:
+
+end for  
+
+> 15:
+
+Update πϕ, V ω with PPO using discounted episode returns  
+
+> 16:
+
+end for  
+
+> 17:
+
+return Trained policy πϕD Experiment Setting 
+
+D.1 Data Source 
+
+We use the China Education Panel Survey (CEPS) to discipline the joint distribution of household characteristics in the simulation (National Survey Research Center 2015). The processed calibration sample contains 16,880 observations. For each observation, the calibration artifact records household income, bthe child’s ability, parental education level. Thus, the survey is not used as a static set of transitions for reinforcement learning. Instead, it determines the population distribution from which households are generated, while the state–action–next-state transitions used for policy learning are produced online by the dynamic simulator. The empirical joint probability array has dimensions 37 income levels × 5 ability levels × 9 parental-education levels. Let Y , E and Ldenote the corresponding discrete random variables. The normalized empirical frequency distribution is denoted by bp(y, e, z ) and satisfies X
+
+> y,e,z,j,a
+
+bp(y, e, z ) = 1 . (47) Occupation and assets are retained in the calibration artifact but do not enter the current household state. We therefore integrate out these two dimensions: 
+
+pyez = Pr( Y = y, E = e, Z = z) = X
+
+> j∈J
+
+X
+
+> a∈A
+
+bp(y, e, z, j, a ). (48) The resulting model type space contains 37 × 5 × 9 = 1665 joint income–ability–education types. Drawing types jointly from (48), rather than drawing the three characteristics from independent marginals, preserves their empirical dependence and, in particular, the income–ability sorting present in the survey. Table 4 summarizes the variables entering the model. Income has 37 observed support points ranging from 1 to 20 in the units of the processed survey variable. The five academic-performance categories are mapped to the normalized ability scores 
+
+e ∈ { 0.0430 , 0.1828 , 0.4528 , 0.7801 , 0.9670 }. (49) Parental education consists, in ascending order, of no schooling, primary school, junior high school, technical secondary/voca-tional school, vocational high school, senior high school, junior college, university, and postgraduate education or above. These nine ordered categories are mapped linearly onto 
+
+z ∈ { 0, 0.125 , 0.25 , . . . , 1}. (50) Variable Symbol Support Role in the model Household income yi 37 levels, [1 , 20] Price sensitivity βi = β0/y i
+
+Child ability ei 5 normalized levels in [0 , 1] Peer composition and learning output Parental education zi 9 ordered levels in [0 , 1] School-quality preference αi = α(1 + ξz i)
+
+Table 4: CEPS variables used to construct the simulated household population. 
+
+D.2 Metric Definitions 
+
+This section provides the definitions of all evaluation metrics used in Section 8. These metrics quantify educational efficiency, equity, and socioeconomic sorting in the simulated education resource allocation environment. All metrics are computed based on the realized educational outcomes after household decisions and school quality evolution. 
+
+Mean Access(MA): The mean educational access measures the average quality received by students: 
+
+¯ρt = 1
+
+N t
+
+X
+
+> i
+
+ρti =
+
+PKk=1 N tkrtk
+
+N t . (51) Higher values indicate better average educational access. This metric is equivalent to W0(ρt).
+
+Gini Access(GA): Educational inequality is measured using the Gini coefficient of accessed quality: 
+
+Gtρ =
+
+PKk=1 
+
+PKℓ=1 N tkN tℓ |rtk − rtℓ|
+
+2( N t)2 ¯ρt . (52) The value satisfies Gtρ ∈ [0 , 1] . A value of zero indicates that all students access the same educational quality, while larger values indicate greater inequality. When ¯ρt = 0 , the implementation returns zero. Income Access Gap(IA): To measure socioeconomic differences in educational access, students are ranked according to their income yi. The lowest and highest income quartiles are denoted as ItQ1 and ItQ4 , respectively. The mean accessed quality of each quartile group is: 
+
+¯ρtQq = 4
+
+N t
+
+X
+
+> i∈I tQq
+
+ρti, q ∈ { 1, 4}. (53) The income-based access gap is defined as: 
+
+∆tρ,y = ¯ ρtQ4 − ¯ρtQ1 . (54) A positive value indicates that high-income students access higher-quality schools, while a value close to zero indicates similar educational access between income groups. The implementation handles discrete income types by splitting weights when a quartile boundary falls inside an income category. The metric is undefined only when no students are enrolled. 
+
+Dissimilarity Income: Income segregation across schools is measured using the Duncan dissimilarity index. Let Ltk and Htk
+
+denote the numbers of low- and high-income students enrolled in school k, respectively. The index is defined as: 
+
+Dty = 12
+
+> K
+
+X
+
+> k=1
+
+Ltk
+
+Lt − Htk
+
+Ht . (55) The index satisfies Dty ∈ [0 , 1] . A value of zero indicates identical distributions of income groups across schools, while larger values indicate stronger income segregation. 
+
+Income–Quality Correlation(IQ): To quantify the relationship between socioeconomic status and educational quality, we compute the population-weighted Pearson correlation between community income and assigned school quality. For community m, let ntm denote the realized population, ¯ytm denote the average income, and rtd(m) denote the quality of the assigned school. The population weight is defined as: 
+
+ωtm = ntm
+
+P 
+
+> j
+
+ntj
+
+. (56) The weighted correlation coefficient is: 
+
+Corr ty =
+
+P 
+
+> m
+
+ωtm(¯ ytm − μty )( rtd(m) − μtr )
+
+qP 
+
+> m
+
+ωtm(¯ ytm − μty )2
+
+qP 
+
+> m
+
+ωtm(rtd(m) − μtr )2
+
+. (57) A positive value indicates that higher-income communities tend to access higher-quality schools, while a value close to zero indicates a weaker relationship between income and educational quality. 
+
+Human Capital(HC): Following Eq. (11) of the paper, individual educational output is defined as: 
+
+oti = ρtieψi . (58) The aggregate human capital is calculated as: 
+
+Ht = X 
+
+> i:ciis of school age
+
+ρtieψi . (59) Equivalently, when aggregated by ability type and school: 
+
+Ht = X
+
+> eK
+
+X
+
+> k=1
+
+N tek rtkeψ . (60) A larger value indicates higher aggregate educational output. Since this is a total measure, it depends jointly on enrollment size, school quality, and the matching between student ability and educational resources. D.3 Sensitivity Analysis Experiments 
+
+To examine the robustness of the proposed framework, we conduct a series of one-factor-at-a-time sensitivity analyses. In each experiment, one parameter is varied while keeping all other parameters fixed at their baseline values. The selected parameters cover different aspects of the proposed model, including government preference, household residential behavior, and school quality evolution. Specifically, we investigate the impact of the inequality-aversion parameter ϵ, the school-quality preference parameter α, the housing price sensitivity parameter β, the residential choice randomness parameter τ , and the peer-effect weight 
+
+ws. The sensitivity results demonstrate how these parameters influence the trade-off between educational efficiency, equity, and socioeconomic sorting. 
+
+Sensitive Analysis. 
+
+ϵ Analysis. The parameter ϵ controls the degree of inequality aversion in the Atkinson welfare function. Table 5 reports the sensitivity of the equilibrium outcomes with respect to ϵ.As ϵ increases, educational inequality decreases significantly. GA decreases from 0.0512 at ϵ = 0 to 0.0261 at ϵ = 2 , while IA moves closer to zero, indicating improved equity across income groups. Meanwhile, IQ decreases from -0.5183 to values close to zero, suggesting that educational opportunities become less dependent on household socioeconomic status. However, excessively large values of ϵ provide limited additional equity benefits. When ϵ increases from 2 to 4, GA slightly increases to 0.0308 and IA becomes positive, indicating potential over-correction. In contrast, MA remains stable around 0.51 across different settings, while HC exhibits only minor fluctuations. These results suggest that moderate inequality aversion (ϵ ≈ 1–2) achieves a favorable balance between educational equity and overall performance. Metric 0 0.5 1 2 4MA 0.5088 0.5109 0.5096 0.5101 0.5092 GA 0.0512 0.0364 0.0320 0.0261 0.0308 IA -0.0181 -0.0096 0.0007 -0.0018 0.0032 ID 0.1216 0.1229 0.1366 0.1253 0.1400 IQ -0.5183 -0.3775 0.0024 -0.0606 0.0976 HC 94.4947 96.1598 94.7289 94.6490 95.4126 Table 5: Sensitivity analysis with respect to ϵ.
+
+α Analysis. The parameter α controls the sensitivity of households to school quality differences in the residential choice process. Table 6 reports the sensitivity of equilibrium outcomes with respect to different values of α.The results show that MA remains relatively stable across different values of α (0.5083–0.5137), indicating that school-quality preference has limited impact on overall accessibility. However, it affects distributional outcomes. GA decreases from 0.0381 at α = 0 .25 to 0.0213 at α = 0 .5, but slightly increases for larger values, suggesting that moderate quality preference improves equity, while excessive quality-driven sorting may increase disparities. IQ exhibits a non-monotonic pattern, decreasing from 0.4640 to negative values at intermediate α and increasing to 0.3021 at α = 4 . Meanwhile, HC remains relatively stable (94.2901–96.2011), suggesting that α mainly affects the distribution of educational opportunities rather than aggregate educational production. Overall, the sensitivity analysis shows that moderate school-quality preference achieves a better balance between educational matching and equity, whereas excessive quality-driven sorting may strengthen socioeconomic differences in school access. Metric 0.25 0.5 1 2 4MA 0.5083 0.5102 0.5101 0.5137 0.5109 GA 0.0381 0.0213 0.0261 0.0313 0.0260 IA 0.0132 -0.0006 -0.0018 -0.0037 0.0069 ID 0.1279 0.1244 0.1253 0.1359 0.1452 IQ 0.4640 0.0015 -0.0606 -0.1654 0.3021 HC 94.9945 96.2011 94.6490 94.2901 95.2680 Table 6: Sensitivity analysis with respect to α.
+
+β Analysis. The parameter β captures the sensitivity of households to housing prices in the residential sorting process. A larger β indicates that housing costs play a more important role in household location decisions, potentially strengthening the interaction between housing markets and educational access. Table 7 reports the sensitivity of equilibrium outcomes with respect to different values of β.When β ≤ 1, the equilibrium outcomes remain nearly unchanged. MA, GA, IA, and HC are identical across β = 0 .25 , 0.5,and 1, indicating that moderate variations in housing price sensitivity have limited effects on educational outcomes. As β increases beyond one, housing price sensitivity begins to affect educational distribution. GA increases from 0.0261 at β = 1 to 0.0377 at β = 4 , suggesting that stronger housing price constraints amplify inequality in educational access. Meanwhile, IA remains close to zero, indicating limited changes in income-based access differences. The impact of β on efficiency-related outcomes is limited. MA decreases only slightly from 0.5101 to 0.5093, and HC changes from 94.6490 to 94.5725. These results suggest that housing price sensitivity mainly affects the distribution of educational resources rather than aggregate performance. Overall, the sensitivity analysis indicates that moderate housing price sensitivity has limited influence on the equilibrium outcomes, whereas excessive dependence on housing costs increases educational access inequality. This highlights the role of housing markets as a potential channel through which socioeconomic differences influence educational opportunities. Metric 0.25 0.5 1 2 4MA 0.5101 0.5101 0.5101 0.5096 0.5093 GA 0.0261 0.0261 0.0261 0.0320 0.0377 IA -0.0018 -0.0018 -0.0018 0.0016 -0.0004 ID 0.1253 0.1253 0.1253 0.1345 0.1170 IQ -0.0606 -0.0606 -0.0606 -0.0007 -0.1015 HC 94.6490 94.6490 94.6490 94.5882 94.5725 Table 7: Sensitivity analysis with respect to β.
+
+τ Analysis. The parameter τ controls the degree of randomness in household school-choice behavior. deterministic utility differences and introduces more stochasticity into the residential sorting process. Table 8 reports the sensitivity of equilibrium outcomes with respect to different values of τ .As τ increases, MA decreases gradually from 0.5101 to 0.4857, indicating that stronger choice randomness reduces average accessibility. In contrast, HC increases from 94.6490 to 104.4688, suggesting that less deterministic sorting improves the utilization of educational resources. The impact of τ on socioeconomic sorting is also significant. DI decreases from 0.1253 to 0.0637, while IQ moves toward zero, indicating weaker associations between income and school quality. However, GA does not decrease monotonically, reaching its lowest value at τ = 1 and increasing slightly for larger values. Overall, the sensitivity analysis reveals an efficiency–equity trade-off associated with τ . Higher choice randomness reduces average educational access but improves aggregate human capital and weakens socioeconomic sorting. Moderate randomness (τ ≈ 1–2) achieves a better balance between educational efficiency and distributional outcomes. Metric 0.25 0.5 1 2 4MA 0.5101 0.5018 0.4959 0.4896 0.4857 GA 0.0261 0.0267 0.0121 0.0432 0.0410 IA -0.0018 -0.0006 -0.0004 0.0009 0.0002 ID 0.1253 0.0842 0.0738 0.0624 0.0637 IQ -0.0606 -0.0958 -0.0750 -0.0504 0.0348 HC 94.6490 97.6483 100.8233 101.5455 104.4688 Table 8: Sensitivity analysis with respect to τ .
+
+(ws, w v ) Analysis. The parameters (ws, w v ) determine the relative importance of student composition and government investment in the evolution of school quality. Specifically, ws captures the contribution of peer effects, while wv represents the effectiveness of financial investment in improving school quality. Table 9 reports the sensitivity of equilibrium outcomes under different combinations of these two weights. The results show that increasing ws generally improves equity. As ws increases from 0 to 1, GA decreases from 0.0726 to 0.0212, indicating that stronger peer effects reduce inequality in school-quality access. In contrast, increasing wv mainly improves efficiency-related outcomes. When the weight of government investment increases, HC rises from 94.1940 under (ws, w v ) = (1 , 0) to 95.1909 under (ws, w v ) = (0 , 1) . This occurs because a larger wv
+
+strengthens the impact of resource investment on school quality. However, prioritizing investment effectiveness may weaken equity improvements, as reflected by higher GA. Overall, the weighting parameters reveal a trade-off between efficiency and equity. Larger wv favors HC accumulation, whereas larger ws promotes more equitable access through lower GA. Metric (0,1) (0.25,0.75) (0.5,0.5) (0.75,0.25) (1,0) MA 0.5098 0.5108 0.5063 0.5016 0.4999 GA 0.0726 0.0389 0.0273 0.0294 0.0212 IA 0.0081 -0.0104 -0.0022 0.0075 0.0021 ID 0.1352 0.1088 0.1302 0.1284 0.1143 IQ 0.1295 -0.3919 -0.1130 0.3483 0.0742 HC 95.1909 93.1327 93.8852 94.2137 94.1940 Table 9: Sensitivity analysis with respect to the weighting coefficients (ws, w v ).
+
+D.4 Scalability Experiments 
+
+To evaluate the scalability of the proposed framework under different spatial and educational configurations, we conduct experiments with varying numbers of communities and schools. Specifically, we consider six configurations by changing the number of communities from 12 to 24 and the number of schools from 4 to 12. Table 10 reports the resulting performance under different environment scales. The results demonstrate that the number of communities has a more significant impact on MA than the number of schools. When the number of communities increases from 12 to 24, MA decreases substantially from approximately 0.477 to 0.368, while changing the number of schools within the same community scale has only a limited effect (e.g., 0.477, 0.477, and 0.471 under 4, 8, and 12 schools with 12 communities). This indicates that spatial expansion and household dispersion introduce greater challenges for maintaining educational accessibility than increasing the number of educational providers. In contrast, increasing the number of schools mainly affects the distributional properties of educational opportunities. As the number of schools increases, GA tends to increase. For example, under 12 communities, GA rises from 0.030 with 4 schools to 0.084 with 12 schools. Similarly, DI increases from 0.145 to 0.258, indicating stronger socioeconomic segregation across schools. These results suggest that simply increasing the number of schools does not necessarily improve educational equity. A larger number of schools may provide more differentiated educational environments, but can also intensify household sorting and amplify disparities in school access. The scalability experiments further reveal that the relationship between school quantity and educational outcomes is not monotonic. While increasing the number of schools may improve educational diversity, excessive fragmentation of educational resources can strengthen sorting mechanisms and increase inequality. Therefore, expanding school quantity alone is insufficient to guarantee improved educational outcomes, and effective resource allocation requires jointly considering spatial structure, household distribution, and school configuration. (12,4) (12,8) (12,12) (24,4) (24,8) (24,12) MA 0.477 0.477 0.471 0.368 0.367 0.367 GA 0.030 0.032 0.084 0.015 0.037 0.047 IA 0.007 -0.007 -0.026 0.002 -0.0003 0.007 DI 0.145 0.195 0.258 0.085 0.160 0.226 IQ 0.289 -0.288 -0.452 0.206 -0.030 0.228 HC 106.366 105.801 105.613 162.425 163.465 161.777 Table 10: Performance under different community and school configurations. 
+
+D.5 Comparative Experiments 
+
+In the comparative experiments, we evaluate the proposed reinforcement learning (RL)-based resource allocation policy against several representative baseline strategies, including equal-split budgeting , proportional-to-enrollment allocation , and compen-satory funding . The allocation rule for each baseline is defined as follows: 
+
+• Equal-split. The total education budget is equally distributed across all schools, 
+
+btk = 1
+
+K , k = 1 , . . . , K. (61) 
+
+• Proportional-to-enrollment. The budget is allocated according to school enrollment, 
+
+btk = N tk
+
+PKj=1 N tj
+
+, (62) corresponding to equal per-student funding and representing a common allocation rule in public education systems. • Compensatory funding. Schools with lower educational quality receive a larger budget share, 
+
+btk = exp( −λr tk)
+
+PKj=1 exp( −λr tj ) , (63) where λ controls the compensation intensity and rtk denotes the current quality of school k. This heuristic represents an equity-oriented funding strategy that prioritizes disadvantaged schools. 
+
+D.6 Parameter Setting 
+
+Component Parameter Baseline Interpretation Geography M, K 12 , 4 Communities and schools 
+
+Cm 100 Housing capacity per community 
+
+Qm U[0 , 1] Initial community amenity 
+
+r0 
+
+> k
+
+U[0 .1, 0.9] Initial school quality Household choice α 1.0 Baseline preference for school quality 
+
+ξ 1.0 Parental-education preference gradient 
+
+β0 1.0 Price-sensitivity scale 
+
+D, λ 1.0, 1.0 Relocation cost and its weight 
+
+η 1.0 Amenity weight 
+
+τ 0.25 Logit temperature 
+
+Pmin 0 Housing-price floor School dynamics δ 0.4 Quality adjustment rate 
+
+wv , w s 0.8, 0.2 Investment and peer weights 
+
+g(v) √v Concave investment technology 
+
+ψ 1.0 Ability exponent in learning output Government B 100 Annual education budget 
+
+ϵ 2.0 Atkinson inequality aversion 
+
+κ 0 Policy-stability penalty 
+
+γ 0.95 Intertemporal discount factor Population π 0.2 Annual departure probability 
+
+aentry , W 6, 6 Entry age and schooling duration 
+
+χin 1.0 Inflow-to-departure ratio 
+
+ω0 0.95 Initial occupancy rate Simulation T, B burn 50 , 10 Horizon and burn-in periods 
+
+S 100 Number of evaluation seeds Table 11: Baseline model and simulation parameters. Hyperparameter Value Description Learning rate 3 × 10 −3 Adam step size Rollout length 100 Environment steps per update Batch size 20 Minibatch size Training epochs 10 Passes over each rollout GAE coefficient 0.95 Bias–variance trade-off PPO clip range 0.2 Policy-update clipping threshold Entropy coefficient 0 Entropy regularization weight Discount factor 0.95 Inherited from the government objective Training steps 200 ,000 Total environment interactions Table 12: PPO training hyperparameters.

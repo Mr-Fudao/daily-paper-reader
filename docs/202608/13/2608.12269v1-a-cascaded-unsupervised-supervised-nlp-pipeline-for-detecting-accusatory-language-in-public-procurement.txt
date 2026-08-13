@@ -1,0 +1,374 @@
+Title: A Cascaded Unsupervised-Supervised NLP Pipeline for Detecting Accusatory Language in Public Procurement
+
+URL Source: https://arxiv.org/pdf/2608.12269v1
+
+Published Time: Thu, 13 Aug 2026 01:14:10 GMT
+
+Number of Pages: 15
+
+Markdown Content:
+> 1
+
+# A Cascaded Unsupervised–Supervised NLP Pipeline for Detecting Accusatory Language in Public Procurement 
+
+Bryan Torres, Member, IEEE , Daniel Riofr´ ıo, Member, IEEE , Jos´ e Vega-S´ anchez, Senior Member, IEEE ,Nathaly Orozco Garz´ on, Senior Member, IEEE , Carla Parra, Karen Rosero, Member, IEEE , and Felipe Grijalva, Senior Member, IEEE 
+
+Abstract —Public procurement involves the alloca-tion of substantial financial resources; therefore, contin-uous oversight through audits, controls, and monitoring mechanisms is essential. However, stakeholder com-ments and publicly available government data are often underutilized, despite their potential to reveal proce-dural irregularities. To address this gap, this paper ana-lyzes metadata from Ecuador’s Sistema Oficial de Con-trataci´ on P´ ublica (SOCE, Official Public Procurement System), with particular emphasis on participant com-ments generated during the pre-contractual phase. We propose a hybrid modeling framework that integrates unsupervised clustering and supervised classification within a natural language processing (NLP) pipeline to uncover latent patterns and detect potentially irregular procurement processes. Semantic embeddings are gen-erated using Word2Vec, LLaMA, and RoBERTa, fol-lowed by Gaussian Mixture Models (GMMs) for unsu-pervised clustering. A supervised classification stage is then applied to identify accusatory or whistleblowing-style comments. Experimental results show that the combination of domain-trained Word2Vec embeddings, GMM-based clustering, and a Random Forest clas-sifier achieves high precision and recall, even under severe class imbalance. These findings demonstrate that lightweight, domain-adapted NLP architectures can effectively support risk identification and enhance transparency in public procurement systems without requiring large-scale computational infrastructure. Re-producible Research: The simulation code is available at 
+
+<Kapak NLP Pipeline >.
+
+Index Terms —Classification, Cluster Description, Clustering, Corruption, Gaussian Mixture Model, Hy-brid Models, Machine Learning, Natural Language Processing, Random Forest, Unsupervised Learning 
+
+Manuscript received Month XX, 2026; revised Month XX. The review of this paper was coordinated by XXXX. This work was supported in part by the Universidad San Francisco de Quito through the Poli-Grants Program under Grants 41989 and 41990, and by the Universidad de Las Am´ ericas under Project 578.A.XVII.25. Corre-sponding author: Felipe Grijalva (E-mail: fgrijalva@usfq.edu.ec) B. Torres, D. Riofr´ ıo, J. Vega-S´ anchez and F. Grijalva are with the Colegio de Ciencias e Ingenier´ ıas “El Polit´ ecnico”, Universidad San Francisco de Quito (USFQ), Diego de Robles S/N, Quito 170157 (e-mail: btorres@estud.usfq.edu.ec; 
+
+{driofrioa,dvega,fgrijalva }@usfq.edu.ec). N. Orozco Garz´ on is with the Faculty of Engineering and Applied Sciences, Telecommunications Engineering, ETEL Research Group, Universidad de Las Am´ ericas (UDLA), 170503 Quito, Ecuador (e-mail: nathaly.orozco@udla.edu.ec). C. Parra is with the Departamento de Estudios Organizacionales y Desarrollo Humano, Escuela Polit´ ecnica Nacional, Quito 170525, Ecuador (e-mail: carla.parra@epn.edu.ec). K. Rosero is with the Language Technologies Institute, Carnegie Mellon University, Pittsburgh, PA, USA (e-mail: kroseroj@andrew.cmu.edu). 
+
+I. Introduction 
+
+# CORRUPTION is a pervasive phenomenon that per-sists across societies and historical periods. Ecuador is no exception: in 2024, Transparency International re-ported a Corruption Perceptions Index (CPI) score of 32 out of 100 for the country, where lower values indi-cate higher perceived corruption [1]. In parallel, public procurement processes reached 7.996 billion USD, repre-senting 24% of the national General State Budget [2]. In this context, Ecuador has introduced multiple policies to mitigate corruption in public procurement, motivated by evidence of biased procedures and limited transparency in both judicial actions and procurement processes. No-tably, the National Anti-Corruption Strategy, planned through 2025, aims to promote transparency and open data across government operations. Earlier initiatives, such as Ecuador’s first Open Government Action Plan, emphasized transparency, access to public information, and citizen participation as key elements for strengthening government accountability [3]. Although platforms such as the Sistema Oficial de Contrataci´ on P´ ublica (SOCE) provide extensive access to procurement data, effective use of this information requires technical expertise. As a result, the data remains difficult to interpret for both oversight institutions and the general public, limiting its practical impact [4]. In response to this challenge, the Universidad San Francisco de Quito (USFQ) developed the Kapak project, which aims to generate data-driven indicators for iden-tifying potential corruption risks in public procurement. Kapak focuses on two procurement modalities widely used in Ecuador: the Reverse Electronic Auction (SIE), where suppliers progressively reduce their bids, and the Specific Business Line (GEN), which groups recurrent procurement categories. The project relies on publicly available data from Ecuador’s Servicio Nacional de Contrataci´ on P´ ublica 
+
+(SERCOP), accessed through the SOCE, to produce sta-tistical analyses across all stages of the procurement cycle [5]. Specifically, Kapak employs automated web crawlers to continuously extract procurement data in its native SOCE format, enabling the preservation of historical records and reducing the risk of data loss due to irregular modifica-tions. The collected data is stored in a dedicated database, where it is cleaned and processed to support targeted anal-yses. The final outcome is a set of composite corruption risk indicators that facilitate the identification of high-risk arXiv:2608.12269v1 [cs.CL] 12 Aug 2026 2
+
+procurement processes and support more efficient auditing and oversight efforts [5]. In recent years, deep learning-based natural language analysis has gained significant momentum, demonstrating broad applicability across a wide range of domains [6]. Nevertheless, natural language processing (NLP) appli-cations have been developed for decades, supported by a wide range of frameworks addressing language-related tasks. One of the core problems in NLP is text classi-fication, where textual inputs are mapped to predefined categories, a task extensively studied in both academia and industry. A common strategy relies on keyword-based methods for sentiment analysis or topic detection [7]. For instance, sentiment prediction in social media has been achieved using keyword filtering combined with classifiers such as Complement Naive Bayes [8]. However, keyword-based approaches often struggle with ambiguity, semantic shifts, and contextual nuances, limitations that become more severe in unsupervised learning scenarios. In contrast, structured textual data—such as scientific publications—has been effectively analyzed using cluster-ing techniques and low- to medium-complexity vectoriza-tion methods, including term frequency (TF) and term frequency–inverse document frequency (TF-IDF) [9]. The syntactic regularity and well-defined structure of such documents facilitate preprocessing and clustering, often allowing sections to be analyzed independently [10]. Con-versely, user-generated text, such as public procurement comments, is typically noisy and unstructured, increasing preprocessing complexity and requiring more robust text normalization strategies. While applications of modern Large Language Mod-els (LLMs) in the field of corruption detection remain scarce, recent years have seen the emergence of methods for detecting accusatory phrases in irregular processes. These approaches employ prompting techniques, such as greedy and beam search, utilizing state-of-the-art LLMs like GPT-4o-mini, LLaMA 3.1, and Phi 3.5 mini. Although these applications have yielded promising results—with AUC values ranging from 0.88 to 0.97. The experiments themselves reveal a critical challenge regarding class imbal-ance; specifically, these models exhibit high recall but very low precision [11]. Additionally, they encounter the typical drawbacks associated with LLM deployment: high mon-etary costs per token, intensive computational resource requirements, and excessive processing time. Building upon the previous analysis, the application of machine learning techniques for detecting corruption re-mains relatively underexplored, largely due to the scarcity of large, reliable, and high-quality labeled datasets. As a result, government-issued documents are commonly used as primary data sources, despite often requiring segmen-tation into relevant sections to extract meaningful infor-mation [12]. Although their institutional origin provides a certain level of structure and formality, data quality and transparency vary significantly across institutions. In this context, the Organisation for Economic Co-operation and Development (OECD) reported that among 39 surveyed countries, 74% do not actively use artificial intelligence (AI) in anti-corruption or integrity processes, despite ongoing exploratory efforts [13]. This finding highlights the limited availability of actionable data and AI-driven practices for analyzing public processes, a challenge that is particularly pronounced in Latin American and African countries. Several studies have attempted to identify objective and quantifiable variables to analyze corruption-related phenomena using machine learning and artificial intelli-gence techniques [14]. While promising results have been reported, these approaches remain constrained by the lim-ited reliability and trustworthiness of data obtained from governmental sources. Moreover, the scarcity of labeled corruption data has led some studies to rely on proxy or complementary indices as target variables, effectively reformulating classification tasks as regression problems. However, the instability of these surrogate models often produces unreliable outcomes, particularly under condi-tions of low data transparency and severe class imbal-ance [12]. To address the limitations of institutionally generated data, a promising alternative is to leverage third-party content, such as comments submitted by procurement participants. This user-generated feedback reflects direct experiences with procurement processes and can reveal irregularities not captured in official reporting, particu-larly in low-transparency settings. Building on this insight, the present study is conducted within the framework of the Kapak initiative, leveraging its infrastructure for large-scale data collection and analysis to enhance cor-ruption risk indicators in public procurement. This work focuses on detecting accusatory or whistleblowing-style comments expressed during the pre-contractual phase using NLP techniques tailored to noisy, user-generated text. We propose a cascaded hybrid learning strategy that integrates unsupervised clustering and supervised classification. Domain-specific embeddings generated us-ing Word2Vec, RoBERTa, and LLaMA are used to cluster unlabeled data via Gaussian Mixture Models (GMMs), followed by supervised classification to identify accusatory content. In summary, the main contributions of this paper are as follows:  
+
+> •
+
+A hybrid architecture combining unsupervised clus-tering and supervised classification for detecting ac-cusatory comments in Ecuador’s public procurement system.  
+
+> •
+
+A comparative evaluation of embedding strategies (LLaMA, RoBERTa, and Word2Vec), showing that a customized Word2Vec model performs best on noisy, Spanish-language, user-generated text.  
+
+> •
+
+An effective GMM-based clustering strategy, val-idated using Silhouette Score and keyword-based heuristics to identify clusters enriched with ac-cusatory content.  
+
+> •
+
+A lightweight Random Forest classifier achieving high performance, with a precision of 0.84 and recall of 0.91 under severe class imbalance. 3  
+
+> Fig. 1. Block diagram of the proposed approach.
+> •
+
+A computationally efficient, semi-supervised pipeline that can be deployed without large-scale infrastruc-ture for real-time auditing and large-scale monitoring. The remainder of this paper is organized as follows. Sec-tion II describes the datasets, preprocessing steps, and the proposed NLP pipeline. Section III presents and dis-cusses the experimental results. Section IV analyzes cross-country generalizability and data availability in Latin America. Section V concludes the paper and outlines future research directions. 
+
+II. Materials and Methods 
+
+This section describes the datasets and their sources, the preprocessing steps applied to the raw data, the models and algorithms employed, and the relevant implementa-tion details. An overview of the complete methodologi-cal workflow is shown in Fig. 1, which summarizes the proposed end-to-end pipeline. The methodology is orga-nized into the following stages: data wrangling, embedding generation, clustering, cluster identification, classification, and model testing. The proposed workflow is tailored to the problem of detecting accusatory content in public procurement data. Although prior studies have addressed corruption detection, no standardized pipeline exists for handling this type of information. Methodological choices at each stage were informed by related work and de-signed to support efficient semi-supervised learning under large-scale unlabeled data and highly imbalanced labeled datasets. 
+
+A. Data Wrangling 
+
+The datasets used in this study were obtained through the Kapak framework, which automates the collection of public procurement data from Ecuador’s SOCE. The extracted information is stored in the Kapak database and organized into two subsets: a labeled dataset with ground-truth annotations and a substantially larger unlabeled dataset. In particular, the supervised dataset was manu-ally reviewed by three annotators from the Kapak project team using a task-specific binary annotation guideline. A question or comment was labeled as accusatory only when it explicitly denoted corruption, bid manipulation, directed procurement, illegality, prohibited conditions, or intentional procedural irregularities within a public pro-curement process. Conversely, generic complaints, admin-istrative questions, expressions of dissatisfaction without an explicit accusation, or ambiguous statements were la-beled as non-accusatory. The final label for each sample was assigned using a majority-vote criterion among the three annotators. Therefore, a sentence was labeled as accusatory when at least two annotators agreed on the accusatory label. This annotation procedure resulted in a final supervised dataset of 5,005 questions, of which 143 were labeled as accusatory. To assess the consistency of the annotation process, inter-annotator agreement (IAA) [15] was measured using Fleiss’ Kappa, which is suitable for nominal labels assigned by more than two annotators. The obtained value was κ = 0 .72, indicating a substantial level of agreement among the three annotators. Fleiss’ Kappa was computed as κ = ¯P − ¯Pe 
+
+> 1−¯Pe
+
+, where ¯P denotes the observed agreement and ¯Pe denotes the agreement expected by chance. For this study, accusatory language was operationally defined as a question or comment that explicitly attributes or strongly implies irregular conduct within a public procurement process. This operational definition was used to distinguish accusatory language from general dissatisfaction, complaints, administrative questions, or strong negative opinions. The inclusion and exclusion criteria applied during the annotation process are summarized in Table I. These datasets support the supervised and unsupervised learning stages of the proposed pipeline and were sub-jected to an initial preprocessing stage prior to analysis. Overall, the datasets were relatively clean 1, requiring only                                          
+
+> 1In this context, “clean” refers to the absence of empty records, entries composed solely of special characters, or encoding-related corruption (e.g., malformed diacritics). 4
+> TABLE I
+> Operational Criteria for Accusatory Language Annotation
+> Category Annotation Criterion Accusatory A question or comment was labeled as accusatory when it explicitly at-tributed or strongly implied irreg-ular conduct within a public pro-curement process, including corrup-tion, bid manipulation, directed pro-curement, illegality, prohibited con-ditions, intentional procedural bias, or unfair influence over the process.
+> Non-accusatory Aquestion or comment was labeled as non-accusatory when it expressed general dissatisfaction, disagreement, frustration, urgency, criticism of technical specifications, administrative uncertainty, requests for clarification, or strong negative opinions without an explicit allegation or clear implication of corruption or procedural manipulation.
+> TABLE II
+> Summary of Dataset Characteristics
+> Type Rows Col. Num. Min Ch. Max Ch.
+> Unsupervised 100,000 31990 Supervised 5,005 46990 TABLE III
+> Summary of Data Cleaning Results
+> Dataset Initial Rows Cleaned Rows Data Loss
+> Unsupervised 100,000 92,579 7.42% Supervised 5,005 4,841 3.28%
+
+minimal preprocessing to ensure consistency and rele-vance. Beyond the basic metrics reported in Table II, the datasets exhibit several relevant characteristics. Question lengths range from 1 to 990 characters, reflecting high variability in textual content. The supervised dataset is strongly imbalanced, with accusatory questions account-ing for approximately 3% of the samples (143 out of 5,005). Additionally, some metadata and transactional fields were excluded, as they were not informative for the NLP tasks considered. To prepare the data for modeling, several preprocessing and transformation steps were applied. Questions shorter than 10 characters were removed due to their limited informational value, and entries composed solely of stop-words, articles, or short words were discarded. Duplicate questions were eliminated to prevent training bias, and only relevant columns were retained; for the supervised dataset, this included the question text and its correspond-ing accusatory label. These preprocessing steps resulted in only minor data reduction, with no loss of accusatory instances. By removing low-value and noisy content, the overall quality of the training data was improved. Asummary of the data retention and filtering process is presented in Table III.  
+
+> Fig. 2. General overview of the mean pooling operation applied across all models.
+
+B. Embedding Generation 
+
+Textual data must be transformed into numerical rep-resentations to enable computational analysis. Text em-beddings encode sentences or documents as dense vec-tors in an n-dimensional space, allowing machine learn-ing models to operate on linguistic content [16]. In this study, we evaluate three embedding strategies: two Transformer-based large language models (i.e., LLaMA 3.2 (1B parameters) [17] and RoBERTa [18]) and a classical Word2Vec architecture. These embedding techniques are widely adopted in NLP tasks and have demonstrated strong performance in text classification problems based on both semantic and structural features [19]–[23]. In this study, the fine-tuned RoBERTa and LLaMA models were considered as adapted Transformer-based baselines for evaluating whether domain-specific fine-tuning could improve sentence-level embedding quality for downstream clustering. Therefore, these models were not intended to represent fully optimized large-scale LLM embedding sys-tems, but rather controlled Transformer-based alternatives within the proposed end-to-end pipeline. This distinction is important because obtaining highly effective sentence embeddings from Transformer-based models often requires additional adaptation strategies, such as larger domain-specific corpora, contrastive learning objectives, or ar-chitectures explicitly designed for sentence representation learning. Before being used in downstream tasks, text embeddings must be extracted in a consistent manner across models. For this purpose, a unified embedding extraction strategy was adopted for all language models. 
+
+Embedding Extraction Strategy: Mean pooling was applied to generate fixed-length sentence representa-tions by averaging token-level embeddings while excluding padding tokens. This approach provides a simple and effective aggregation mechanism and is widely used in downstream NLP tasks [24]. As illustrated in Fig. 2, each input phrase is tokenized and encoded by the correspond-ing language model (RoBERTa, LLaMA, or Word2Vec), 5
+
+producing token-level embeddings that are subsequently aggregated via mean pooling. The dimensionality of the resulting sentence embeddings depends on the hidden size of each model and is accounted for in subsequent clustering and classification stages. 
+
+C. Clustering 
+
+After generating embeddings for both the supervised and unsupervised datasets (Table III), the next step is to uncover latent structures in the textual data. The objective of clustering is to identify regions in the unla-beled dataset that are likely to contain accusatory content, thereby guiding subsequent classification. Given the strong class imbalance in the labeled data, a similar imbalance is assumed in the unlabeled corpus, motivating a tar-geted clustering strategy. Accordingly, two widely used clustering algorithms were evaluated: k-means, a hard-assignment method [25], and Gaussian Mixture Models (GMMs), which provide soft assignments [26]. To determine the most suitable clustering configuration, a structured model selection strategy was employed. 
+
+Model Selection Strategy: Two complementary cri-teria were used to select both the clustering method and the number of clusters:  
+
+> •
+
+Elbow Method: Clustering performance was evaluated as a function of the number of clusters k using met-rics such as inertia and silhouette score, identifying diminishing performance gains beyond an optimal k
+
+[27].  
+
+> •
+
+Supervised Evaluation: The labeled dataset was used to assess whether accusatory phrases were concen-trated within specific clusters, considering factors such as cluster density, purity, and the distribution of positive samples. Clustering performance was quantified using the follow-ing evaluation metrics:  
+
+> •
+
+Silhouette Score: Measures intra-cluster similarity rel-ative to inter-cluster separation [28].  
+
+> •
+
+MNAPK: Maximum number of accusatory phrases contained in a single cluster.  
+
+> •
+
+TNCK: Total number of samples assigned to cluster 
+
+K. 
+
+> •
+
+Relative accusatory frequency (cluster-level): Propor-tion of accusatory samples within cluster K. 
+
+> •
+
+Relative accusatory frequency (dataset-level): Propor-tion of all accusatory samples captured by cluster K.
+
+D. Cluster Identification 
+
+After clustering, it is necessary to identify which cluster is most likely to contain accusatory content in order to prioritize data segments for further analysis. To this end, we adopt a keyword-based identification strategy applied to both the labeled and unlabeled datasets. Keyword-based methods have shown strong performance in topic and intent identification, particularly in short and noisy text scenarios and under limited supervision or class im-balance [29].  
+
+> Fig. 3. Strategy for identifying the most accusatory cluster.
+
+The proposed strategy assumes that accusatory ques-tions exhibit specific lexical cues. Based on domain exper-tise and exploratory analysis, the following set of high-impact keywords was selected:  
+
+> •
+
+Direccionado (Directed procurement)  
+
+> •
+
+Imposible (Impossible)  
+
+> •
+
+Corrupci´ on (Corruption)  
+
+> •
+
+Ilegal (Illegal)  
+
+> •
+
+Prohibido (Prohibited) The cluster with the highest cumulative frequency of at least four of these five keywords is identified as the most accusatory cluster. This procedure is performed in-dependently on both datasets to ensure robustness and scalability. Fig. 3 summarizes the identification process. 
+
+E. Classification 
+
+This stage evaluates the effectiveness of different classi-fiers for detecting accusatory content. Since labeled data is required, classification is performed exclusively on the supervised dataset. The classification pipeline consists of the following steps: 1) Cluster Filtering: Records belonging to the clus-ter identified as the most accusatory are extracted, concentrating positive samples and reducing noise. 2) Model Training and Evaluation: Classification models are trained and evaluated using the filtered dataset, mitigating class imbalance and enabling a scalable semi-supervised setup. Despite filtering, class imbalance may persist. To reduce its impact and limit classification bias, the following tech-niques are applied:  
+
+> •
+
+SMOTE: Synthetic minority samples are generated through interpolation, improving class balance with-out data duplication [30].  
+
+> •
+
+Stratified K-Fold Cross-Validation: The dataset is partitioned into k folds while preserving class pro-portions, ensuring robust and unbiased evaluation [31]. For the binary classification task, three classifiers repre-senting different methodological paradigms were selected 6 
+
+> Fig. 4. t-SNE projection of LLaMA embeddings for accusatory phrases.
+
+based on prior success in text classification: Random For-est [32], Gaussian Naive Bayes (GNB) [33], and Support Vector Machine (SVM) [34]. 
+
+F. Model Testing 
+
+The final stage of the proposed pipeline applies the trained classifier to the unlabeled dataset in order to evalu-ate its practical usefulness in scenarios where labeled data is scarce or unavailable. Model testing follows a structured workflow to ensure consistency and reproducibility: 1) Cluster Identification: Identify the most ac-cusatory cluster within the unlabeled dataset us-ing the keyword-based method described in Sec-tion III-C. 2) Data Filtering: Extract records belonging to the selected cluster, which is expected to concentrate a higher proportion of accusatory content. 3) Classification: Apply the pre-trained classifier ob-tained during the supervised phase to generate pre-dictions on the filtered data. 4) Information Extraction: Collect predicted posi-tive samples to support validation, reporting, and feedback processes within the Kapak framework. This stage enables the detection of potentially irregular or accusatory comments without manual labeling, sup-porting a semi-automated auditing workflow and provid-ing early warning signals for procurement oversight. Ad-ditional details on training, testing, and implementation are available in the project repository at <Kapak NLP Pipeline >.
+
+III. Results and Discussion 
+
+This section analyzes the results obtained from the proposed hybrid methodology, focusing on the perfor-mance of its main components: embedding generation,  
+
+> Fig. 5. t-SNE projection of RoBERTa embeddings for accusatory phrases.
+
+clustering of unlabeled data, identification of accusatory clusters, supervised classification, and large-scale testing. The discussion emphasizes the impact of different embed-ding strategies, clustering configurations, keyword-based cluster identification, and classification performance under class imbalance, as well as the robustness of the framework in unsupervised settings. 
+
+A. Word Embeddings 
+
+Sentence embeddings were generated for both super-vised and unsupervised datasets using three techniques: LLaMA, RoBERTa, and Word2Vec. These models differ in architecture, dimensionality, and semantic represen-tation capacity. To examine the latent structure of the embeddings and assess semantic separability, dimension-ality reduction was performed using t-SNE, enabling a qualitative analysis of clustering tendencies, particularly for accusatory phrases. 
+
+1) LLaMA: The LLaMA 3.2-1B model produced 2048-dimensional embeddings per phrase. As observed in Fig. 4, LLaMA embeddings exhibit a scattered distribution across the projection space. While some localized groupings emerge, the majority of accusatory phrases remain widely dispersed. The fine-tuned version of the model slightly al-ters the spatial layout, suggesting some degree of semantic adaptation to the domain-specific dataset. However, the presence of compact accusatory clusters is limited. 
+
+2) RoBERTa: RoBERTa generated 768-dimensional embeddings per sentence. As shown in Fig. 5, the em-beddings produced by RoBERTa form several clusters with slightly more compactness than those observed with LLaMA. The impact of fine-tuning is evident, as the spatial configuration becomes more structured and ex-hibits better separation. This is likely a result of adapting 7                                                                     
+
+> TABLE IV
+> Clustering Evaluation Results – Most Promising Models
+> Clustering Method NLP Method Cluster Number Silhouette Score MNAPK TNCK Rel. Freq. Acu. Phrases Over TNCK Rel. Freq. Acu. Phrases Over TNAP
+> LLaMA 3.2-1B Fine Tune 6-0.023 47 1498 3.14% 32.87% LLaMA 3.2-1B Base 60.108 44 782 5.63% 30.77% GMM RoBERTa Fine Tune 50.079 64 1149 5.57% 44.76% RoBERTa Base 50.112 50 866 5.77% 34.97%
+> Word2Vec 50.273 122 962 12.68% 85.31% LLaMA 3.2-1B Fine Tune 40.075 45 1150 3.91% 31.47% LLaMA 3.2-1B Base 40.149 45 1106 4.07% 31.47% KMeans RoBERTa Fine Tune 50.105 73 1391 5.25% 51.05% RoBERTa Base 40.198 58 440 13.18% 40.56%
+> Word2Vec 50.059 129 1276 10.11% 90.21%
+> TNAP : Total number of accusatory phrases in the labeled dataset. TNCK : Total number of comments in the cluster. MNAPK :Number of accusatory phrases in the cluster. Rel. Freq. Over TNCK : Proportion of accusatory phrases within the cluster. Rel. Freq. Over TNAP : Proportion of all accusatory phrases captured by the cluster.
+> Fig. 6. t-SNE projection of Word2Vec embeddings for accusatory phrases.
+
+the model, originally pre-trained on English text, to the Spanish domain of the Kapak corpus. 
+
+3) Word2Vec: Using Word2Vec, we obtained 1000-dimensional embeddings for each phrase. Unlike the transformer-based methods, Word2Vec was trained di-rectly on the Kapak corpus, incorporating a custom to-kenizer to handle domain-specific characteristics such as misspellings and colloquialisms. Fig. 6 reveals a denser concentration of embeddings in specific regions of the space. Unlike LLaMA and RoBERTa, which exhibit broader semantic dispersion, Word2Vec shows a localized accumulation of accusatory phrases, indicating its po-tential utility in downstream clustering and classification tasks. These results reveal meaningful insights:  
+
+> •
+
+Transformer-based embeddings (LLaMA and RoBERTa) are more dispersed, reflecting their richer contextual representations.  
+
+> •
+
+RoBERTa shows considerable spatial reorganization post fine-tuning, likely due to its monolingual pre-training in English.  
+
+> •
+
+Word2Vec, although less expressive, generates com-pact regions that facilitate cluster formation and labeling of accusatory content. These structural differences in embedding space have di-rect implications for clustering strategy, influencing the segmentation and classification of accusatory phrases in subsequent stages of the pipeline. 
+
+B. Clustering 
+
+Clustering plays a pivotal role in this study, as it allows the grouping of similar questions based on their semantic representations, without relying on class labels. This process is especially valuable in a semi-supervised context, as it helps identify dense regions of accusatory content that can be prioritized for further classification. Here, we evaluate different clustering strategies across var-ious embedding methods to determine the most effective approach for isolating accusatory phrases. 
+
+Model Selection Strategy. As outlined in previous sections, a hybrid approach was employed to determine the optimal clustering model. This strategy combined unsu-pervised validation metrics with domain-specific criteria, particularly focusing on the enrichment of accusatory phrases within identified clusters. Table IV presents a detailed summary of the top-performing models according to metrics such as Silhouette Score, Maximum Number of Accusatory Phrases in a Cluster (MNAPK), and their relative frequencies. Although Silhouette scores were gen-erally low, this is consistent with the behavior of high-dimensional word embeddings, which tend to produce overlapping and complex data structures. Literature in the field has noted similar behavior when applying clustering to embeddings [35], [36]. Although the Silhouette scores obtained in this study are below the values typically expected for well-separated low-dimensional datasets, this behavior is consistent with the characteristics of high-dimensional text embedding spaces. In such spaces, semantic representations often exhibit overlapping structures, anisotropy, and complex non-spherical distributions. Consequently, distance-based compactness and separation metrics may underestimate the practical usefulness of a clustering solution. The low performance observed in metrics such as the Silhouette score is also attributed to a phenomenon known as dis-tance concentration. This principle establishes that, as the dimensionality of a vector space increases, the distances between any given points tend to converge to a nearly 8
+
+> Fig. 7. Inertia and Silhouette metrics for KMeans using LLaMA 3.2-1B Base embeddings.
+
+identical value [37]. Consequently, algorithms such as K-Means may struggle to assign distinct samples to specific clusters, as the distance from a data point to multiple competing centroids becomes practically indistinguish-able. Similarly, probabilistic models such as GMM may fail to decisively determine cluster membership when posterior probabilities become less differentiated across clusters. For this reason, the Silhouette score was not used as the sole criterion for selecting the best clustering configura-tion. Instead, complementary internal metrics were con-sidered, including Inertia for K-Means and the Bayesian Information Criterion (BIC) for GMM. In addition, task-oriented metrics were incorporated, such as the maximum number of accusatory phrases in a cluster (MNAPK), the relative frequency of accusatory phrases within the selected cluster, and the proportion of total accusatory phrases captured by that cluster. This evaluation strategy is aligned with the objective of the clustering stage, which is not to generate a perfectly separated taxonomy of all comments, but to identify a semantically meaningful region enriched with accusatory content for subsequent classification. Therefore, the low Silhouette scores do not invalidate the utility of the clustering stage; rather, they reflect the limitations of distance-based validation metrics in high-dimensional embedding spaces. 
+
+1) Clustering over LLaMA embeddings: Clustering based on LLaMA embeddings exhibited high dispersion across the embedding space. Although one cluster cap-tured a non-negligible number of accusatory phrases, their relative frequency within the cluster remained low, indicat-ing limited precision in isolating accusatory content. As shown in Fig. 7, increasing the number of clusters did not lead to meaningful improvements in clustering quality, as reflected by consistently low Silhouette scores. The t-SNE visualization in Fig. 8 further illustrates that, although cluster 2 contained the highest number of accusatory phrases, these instances were widely dispersed, limiting the effectiveness of LLaMA-based clustering for downstream classification tasks. 
+
+2) Clustering over RoBERTa embeddings: RoBERTa-based embeddings showed improved clustering perfor-mance compared to LLaMA, with several configurations concentrating more than 50% of the accusatory phrases within a single cluster, indicating stronger semantic cohe-sion. As observed in Fig. 9, the highest Silhouette score was obtained at k = 3, beyond which semantic cohesion    
+
+> Fig. 8. t-SNE projection of the supervised dataset clustered with KMeans using LLaMA 3.2-1B Base embeddings.
+> Fig. 9. Inertia and Silhouette metrics for KMeans using RoBERTa fine-tuned embeddings.
+> Fig. 10. t-SNE projection of the supervised dataset clustered with KMeans using RoBERTa fine-tuned embeddings.
+
+degraded despite continued reductions in inertia. The t-SNE visualization in Fig. 10 shows that cluster 0 captured most accusatory instances with significantly less disper-sion than LLaMA, suggesting that fine-tuning enhanced 9  
+
+> Fig. 11. BIC and Silhouette metrics for GMM using Word2Vec embeddings.
+> Fig. 12. t-SNE projection of the supervised dataset clustered with GMM using Word2Vec embeddings.
+
+RoBERTa’s suitability for accusatory content detection. 
+
+3) Clustering over Word2Vec embeddings: Among all evaluated methods, the combination of Word2Vec embeddings and GMM achieved the best clustering performance, yielding the highest Silhouette score and the greatest concentration of accusatory phrases within a single cluster. As illustrated in Fig. 11, the optimal number of clusters lies between k = 3 and k = 5, as indicated by consistent elbows in both the BIC and Silhouette curves. Compared to KMeans, GMM provided a better fit to the underlying data distribution, particularly for capturing nuanced semantic substructures. The t-SNE visualization in Fig. 12 shows that cluster 0 concentrates the highest proportion of accusatory phrases, exhibiting substantially tighter grouping than Transformer-based models. 
+
+Embedding behavior over clustering: 
+
+Several studies have evaluated the performance of Transformer-based embeddings across various environ-ments, revealing that their effectiveness often varies de-pending on the nature of the text. However, the rep-resentations derived from models such as LLaMA and RoBERTa can be markedly deficient in similarity analysis tasks, such as clustering [38] [39] [24]. Under certain conditions, the embeddings generated by the Transformer-based models evaluated in this project suffer from anisotropy. This phenomenon implies that the generated embeddings are confined to a narrow cone within their high-dimensional vector space [40] [41]. Con-sequently, semantically distinct texts are mapped to highly similar vector representations, which severely degrades the performance of distance-based clustering algorithms. This limitation stems from the inherent nature of their training objectives; therefore, their suitability for a clustering task remains highly dependent on the specific underlying data. Table V presents the average cosine similarity within the vector spaces produced by the different algorithms. The data reveals an excessively high average similarity for the RoBERTa and LLaMA vector spaces.          
+
+> TABLE V
+> Average Cosine Similarity by Embedding Technique and Dataset
+> Dataset Type Word2Vec LLaMA RoBERTa Supervised 0.36 0.79 0.91 Unsupervised 0.36 0.79 0.91
+
+In contrast, the space generated by Word2Vec exhibits a significantly lower average cosine similarity. This indi-cates that Word2Vec embeddings naturally approximate a more isotropic space, where vectors are more uniformly distributed, thereby better capturing the semantic re-lationships of the data and enabling the definition of clearer and more accurate boundaries between clusters. Beyond anisotropy, the superior performance of Word2Vec in this setting can also be explained by tokenization and domain adaptation factors. Unlike RoBERTa and LLaMA, which rely on native pre-trained tokenizers and repre-sentations learned from broad-domain corpora, Word2Vec was trained directly on the Kapak corpus using a cus-tom tokenizer tailored to Spanish public procurement comments. This allowed the model to better preserve domain-specific terminology, informal expressions, spelling variations, and recurrent lexical patterns associated with accusatory language. In contrast, the Transformer-based models were affected by pre-training domain mismatch, since their tokenization and representation spaces were not specifically optimized for noisy, short, and highly specialized procurement-related questions. As a result, even after fine-tuning, their sentence embeddings remained less suitable for distance-based clustering in this particular task. Based on these results, the Word2Vec+GMM config-uration was selected for subsequent stages due to its superior clustering performance, semantic alignment, and scalability. 
+
+C. Cluster Identification 
+
+Although clustering techniques are effective for reveal-ing latent structures in high-dimensional spaces, they do not directly convey the semantic meaning of each cluster. Consequently, identifying the cluster most representative 10                                     
+
+> TABLE VI
+> Clusters with Higher Incidence of Key Words – Labeled Dataset
+> Key Word Most Frequent Cluster Frequency Relative Frequency
+> Direccionado Cluster 0 16 84.21% Imposible Cluster 0 16 61.54% Ilegal Cluster 0 583.33% Corrupci´ on Cluster 0 4100.00% Prohibido Cluster 0 969.23%
+> TABLE VII
+> Clusters with Higher Incidence of Key Words – Unlabeled Dataset
+> Key Word Most Frequent Cluster Frequency Relative Frequency
+> Direccionado Cluster 0 198 75.00% Imposible Cluster 0 358 66.42% Ilegal Cluster 0 49 73.13% Corrupci´ on Cluster 0 80 94.12% Prohibido Cluster 0 151 75.50%
+
+of accusatory language is critical for enabling robust downstream classification. To this end, a keyword-based identification strategy was adopted, an approach that has proven effective in short-text topic identification under limited supervision [29]. The method evaluates the distri-bution of predefined accusatory keywords across clusters to identify the most relevant one. Following clustering with the Word2Vec+GMM configuration, the occurrence of five domain-specific keywords— Direccionado , Imposible ,
+
+Ilegal , Corrupci´ on , and Prohibido —was analyzed across all clusters. Table VI 2 summarizes their distribution in the labeled dataset. Table VI indicates a strong concentration of all tar-get keywords in Cluster 0, which is consistent with its previously identified high number of accusatory phrases (122 samples). Notably, even the least specific term, Im-posible , appears in Cluster 0 in more than 61% of its total occurrences, reinforcing the semantic coherence of this cluster. To assess whether this pattern generalizes beyond labeled data, the same analysis was applied to the unlabeled dataset. The corresponding results are reported in Table VII. The results in Table VII confirm that the dominance of Cluster 0 persists in the unlabeled dataset, supporting the robustness and scalability of the proposed keyword-based cluster identification strategy. Table VII confirms that Cluster 0 consistently exhibits the highest concentration of accusatory keywords, with each term occurring more frequently in this cluster than in any other. This consistency supports the reliability of the proposed cluster identification strategy across both labeled and unlabeled datasets. Although Cluster 0 is specific to the current experimental setup and may vary with different initializations or datasets, the keyword-based approach re-
+
+> 2Note: Keywords translated from Spanish to English as follows: Direccionado (Directed procurement), Imposible (Impossible), Cor-rupci´ on (Corruption), Ilegal (Illegal), and Prohibido (Prohibited).
+
+mains independent of cluster indexing, providing a scalable and interpretable mechanism for identifying accusatory content. 
+
+D. Classification 
+
+Here, to explicitly evaluate the effectiveness of the proposed cascaded pipeline, several baseline and abla-tion configurations were considered. At the classification stage, GNB and SVM were used as classical supervised learning baselines, while Random Forest was evaluated as the final selected classifier. In addition, two ablation-style scenarios were included: a no-cluster-filter scenario, which evaluates classification over the complete supervised dataset, and a no-SMOTE scenario, which assesses the effect of class imbalance mitigation. Therefore, classifi-cation performance was evaluated under two main data scenarios: i) the full supervised dataset without cluster filtering, and ii) the filtered supervised dataset containing only samples from the most accusatory cluster identi-fied through Word2Vec+GMM. Each scenario was further evaluated with and without SMOTE across all classifiers. These baselines allow us to quantify the contribution of both the cluster-based pre-filtering stage and the SMOTE balancing strategy.  
+
+> •
+
+Full supervised dataset (4841 samples, 143 accusatory phrases).  
+
+> •
+
+Filtered supervised dataset - only data from most accusatory cluster (962 samples, 122 accusatory phrases). Three widely used classifiers were evaluated: Random Forest, GNB, and SVM. To further mitigate class imbal-ance, SMOTE was applied to oversample the minority class, and Stratified K-Fold Cross-Validation was used to ensure balanced training and validation splits. The result-ing classification metrics are summarized in Table VIII. Table VIII indicates that the Random Forest classi-fier with SMOTE achieved the best overall performance, maintaining a strong balance between precision and re-call and yielding an F1-score of 0.87 for the positive (accusatory) class. The Precision–Recall curve in Fig. 13 further demonstrates the robustness of the Random Forest model across decision thresholds. An Average Precision (AP) score of 0.93 confirms its effectiveness under severe class imbalance. On the other hand, as anticipated, the SMOTE strategy significantly improved classification performance across all classifiers. Furthermore, the filtering strategy based on the most accusatory cluster identified via Word2Vec+GMM proved to be extremely robust compared to the other scenarios. It was observed that reducing data imbalance through cluster-based filtering not only yielded more ef-ficient results but also considerably decreased execution time due to the substantial reduction in the training set size. Finally, Fig. 14 shows the proportion of accusatory phrases contained in the most accusatory cluster relative to the total size of each dataset, for both supervised and 11                                                                                   
+
+> TABLE VIII
+> Overall Classification Results With and Without Cluster Filter and SMOTE comparisson
+> Scenario Rows Evaluated Total No. Acu. Phrases Algorithm Metric with SMOTE without SMOTE Negative Class (0) Positive Class (1) Negative Class (0) Positive Class (1) Cluster Filter 962 122 Random Forest
+> Precision 0.99 0.84 0.98 0.91 Recall 0.97 0.91 0.99 0.48 F1-Score 0.98 0.87 0.99 0.62 GNB Precision 0.96 0.41 0.99 0.33 Recall 0.84 0.74 0.96 0.71 F1-Score 0.9 0.52 0.97 0.46 SVM Precision 0.98 0.61 0.99 0.44 Recall 0.92 0.88 0.97 0.68 F1-Score 0.95 0.72 0.98 0.53 No Cluster Filter 4841 143 Random Forest Precision 1.00 0.58 0.98 1.00 Recall 0.98 0.95 1.00 0.28 F1-Score 0.99 0.70 0.99 0.44 GNB Precision 0.99 0.18 1.00 0.13 Recall 0.88 0.83 0.81 0.90 F1-Score 0.94 0.3 0.90 0.22 SVM Precision 0.99 0.38 0.99 0.28 Recall 0.96 0.83 0.95 0.70 F1-Score 0.98 0.52 0.97 0.40
+> Fig. 13. Precision–Recall curve for the Best Classifier Model (Ran-dom Forest + SMOTE).
+
+unsupervised cases. In both distributions, non-accusatory samples account for more than 97% of the data, high-lighting the ability of the clustering strategy to effectively isolate semantically accusatory content. The near-identical proportions across datasets indicate strong semantic align-ment between clustering and classification objectives, fur-ther validating the consistency of the proposed pipeline when applied to unlabeled data. 
+
+E. Unsupervised Testing 
+
+After selecting the Random Forest + SMOTE classifier as the best-performing model in the supervised phase, the pipeline was extended to the unlabeled dataset to assess its generalization capability in the absence of ground-truth labels. Following the previously described methodology,  
+
+> Fig. 14. Proportion of accusatory phrases in the most accusatory cluster relative to the full dataset. TABLE IX
+> Final Distribution of Accusatory Samples and Model-Identified Candidates
+
+Dataset Total Rows Real Accu. Phrases Accu. Phrases in Most Accu. Cluster 
+
+Unsupervised 92,579 – 1,892 Supervised 4,841 143 122 
+
+the unsupervised evaluation consisted of two main steps: 
+
+i) filtering the unlabeled dataset to retain only records belonging to the most accusatory cluster identified via Word2Vec+GMM, and ii ) applying the pre-trained Ran-dom Forest classifier to the filtered subset to generate predictions. A summary of the resulting predictions is reported in Table IX, which compares the distribu-tion of accusatory samples or candidates between the supervised and unsupervised datasets. Since the unlabeled dataset does not contain ground-truth annotations, the reported value for this dataset corresponds to model-identified accusatory candidates obtained after applying 12 
+
+the Word2Vec+GMM filtering stage and the trained Ran-dom Forest classifier. In the supervised dataset, 122 out of 4,841 samples were retained as accusatory within the most accusatory cluster, while in the unlabeled dataset, 1,892 out of 92,579 samples were identified as accusatory candidates. These proportions are of the same order of magnitude, suggesting that the model behaves consis-tently when extended to unlabeled data and supporting the reliability of the clustering stage as a pre-filtering mechanism. To further assess the reliability of the model beyond the controlled supervised evaluation, a manual validation step was conducted over a random subset of positive predictions obtained from the unlabeled dataset. This review aimed to estimate the real-world precision of the proposed pipeline when applied to previously unseen procurement comments. The manual inspection confirmed that most predicted accusatory samples corresponded to comments explicitly suggesting corruption, bid manipula-tion, directed procurement, illegality, or procedural irregu-larity. The observed empirical precision was approximately 0.84, which is consistent with the supervised evaluation and supports the practical usefulness of the proposed model in real-world monitoring scenarios. These results also reveal an important limitation of the current pipeline. Indirect, ironic, or sarcastic accusations may be difficult to detect because they often lack explicit lexical markers of corruption, bid manipulation, or proce-dural irregularity. Similarly, strongly negative comments may resemble accusatory language even when they do not contain a clear allegation. Future work should address these failure modes by expanding the annotation scheme to include indirect and sarcastic accusations, incorporating process-level contextual information, and exploring con-trastive or sentence-level Transformer architectures specif-ically optimized for nuanced semantic similarity. Human-in-the-loop validation could also be incorporated to re-view ambiguous cases and progressively enrich the labeled dataset. 
+
+F. Final Performance Metrics 
+
+The proposed workflow involves multiple training and processing stages with varying computational demands. To evaluate its efficiency and reproducibility, a performance assessment was conducted across the main stages of the pipeline. The following considerations summarize the most relevant aspects.  
+
+> •
+
+Word Embedding Generation. Embeddings were generated for both supervised and unsupervised datasets. For RoBERTa and LLaMA, both base and fine-tuned models were evaluated.  
+
+> •
+
+Clustering. K-Means and Gaussian Mixture Models were applied to assess clustering efficiency and stabil-ity.  
+
+> •
+
+Classification. Performance was evaluated using Random Forest, GNB, and SVM classifiers. The iden-tification of the most accusatory cluster was per-formed prior to classification.             
+
+> TABLE X
+> Training Time for Best Parameters (W2V + GMM + Random Forest)
+> Step Dataset Size Time
+> W2V Training 92,579 3 min W2V Embedding Generation 92,579 4 min GMM Clustering ( k= 5) 92,579 3 min Random Forest Classification 4,841 1 min
+> Total 11 min
+
+Overall, the complete pipeline based on Word2Vec re-quired approximately 157 minutes for full training. This configuration demonstrated conservative CPU and RAM usage and did not require GPU resources, making it suitable for environments with limited computational in-frastructure. 
+
+1) Near Real-Time Application: Experimental results indicate that, when using pre-trained models, predict-ing whether an unlabeled sentence is accusatory re-quires approximately 1 to 3 seconds. Consequently, the Word2Vec+GMM+Random Forest pipeline is suitable for near real-time deployment. Model enrichment through retraining can be performed efficiently when leveraging the optimal parameters identified in this study. Training times remain modest, as summarized in Table X for the best-performing configuration. These results indicate that adapting the pipeline to new domains or enriching it with additional data can be achieved efficiently, with low computational cost and short retraining times. 
+
+IV. Cross-Country Generalizability and Data Availability in Latin America 
+
+Although the proposed NLP pipeline was developed using data from Ecuador’s SOCE platform, an important question is whether the methodology can be generalized to other public procurement systems in Latin America. To explore this, a comparative review of major procurement portals in the region was conducted, focusing on: (i)the existence of clarification or Q&A mechanisms during the pre-contractual stage, ( ii ) the availability of these interactions in machine-readable formats, and ( iii ) the presence of open data portals supporting bulk access. Overall, most countries publish supplier questions or clar-ification records as part of their procurement processes. However, in the majority of cases, these interactions are available only as embedded HTML pages or PDF doc-uments intended for human consumption, with limited or no support for large-scale automated extraction. In several jurisdictions, additional legal or technical barriers further restrict web scraping or bulk access to Q&A data. For instance, Colombia’s SECOP II provides rich interaction content but does not allow exporting complete Q&A histories through its open data portal. Similar lim-itations are observed in Argentina, Mexico, Brazil, and Peru. By contrast, Ecuador’s SOCE platform stands out as one of the few systems in the region that systematically records Q&A interactions as structured, time-stamped 13                                                                      
+
+> TABLE XI
+> Availability of Clarifications, Official Portals, and Open Data in Major Latin American Procurement Systems (2019–2024)
+> Country Official Portal Clarification Q&A Mechanism? How to Access Q&A Data
+> Chile Mercado P´ ublico (Chile-Compra) Yes – Clarification Forum Exportable per tender via Excel; structured and accessible. Colombia SECOP II –Colombia Compra Eficiente Yes – Observations Mod-ule Accessible per process; no bulk or machine-readable Q&A export. Brazil Compras.gov.br /Portal Nacional de Contrata¸ c˜ oes P´ ublicas (PNCP) Yes – Esclarecimentos Published as documents; no dedi-cated Q&A dataset. Mexico CompraNet Yes – Clarification Meet-ings Clarification acts downloadable as PDF documents. Argentina COMPR.AR Yes –Consultations and Clarifications Available only as PDFs; unstruc-tured. Peru SEACE – OSCE Yes –Consultations and Observations Consultation acts downloadable as PDFs. Ecuador SOCE – SERCOP Yes – Aclaraciones (struc-tured) Structured HTML; fully extractable at scale. Costa Rica SICOP Yes – Aclaraciones Open Data portal allows CSV/Excel download. Uruguay ARCE – SICE Yes – Inquiry Reports Reports downloadable; Q&A text not included in Open Contracting Data Standard (OCDS). Panama PanamaCompra Yes – Homologation Con-sultations Clarification acts included in tender documents (PDF). Dominican Republic DGCP –Transactional Portal (SECP) Yes –Communications and Meetings Acts downloadable from process files; no Q&A dataset. Guatemala GUATECOMPRAS Yes – Clarification Meet-ings Clarification acts downloadable as PDFs; unstructured.
+
+HTML components, without explicit regulatory restric-tions on automated extraction. This unique combination of accessibility and structure made Ecuador an appropri-ate pilot case for this study. Nevertheless, the proposed pipeline is model-agnostic and embedding-based, and can be readily adapted to other national contexts provided that structured or semi-structured textual data becomes available. Table XI summarizes a representative subset of major Latin American procurement systems, highlighting the practical constraints and opportunities for extending the proposed approach beyond Ecuador. Sources: official national public-procurement and open-data portals of the corresponding countries, accessed in 2026. In summary, while the proposed methodological framework is broadly generalizable, its practical deployment across Latin America is currently constrained primarily by data accessibility rather than by modeling limitations. These findings motivate future collaboration with regional open contracting and trans-parency initiatives to promote standardized, machine-readable publication of supplier–buyer interactions. From Table XI, although Chile and Costa Rica provide comparatively more structured access to procurement-related information, a direct zero-shot evaluation of the proposed pipeline on these countries was not included in the present study. Such an experiment would require con-structing a comparable out-of-distribution dataset, includ-ing data extraction, normalization, and manual validation under the same operational definition of accusatory lan-guage used for the SOCE corpus. In addition, differences in procurement terminology, portal structure, and country-specific administrative language may affect both embed-ding generation and cluster identification. Therefore, while the proposed pipeline is portable at the methodological level, its empirical validation in other national contexts requires country-specific dataset construction and anno-tation. 
+
+V. Conclusions and Future Research Directions 
+
+This study highlighted the importance of strategic cus-tomization in NLP workflows for real-world governance and auditing applications. By regularizing textual data and employing a domain-specific tokenizer, a compara-tively simple embedding model such as Word2Vec was shown to outperform more complex alternatives, demon-strating that effective semantic extraction did not neces-sarily require resource-intensive architectures. This result supported the development of efficient, scalable, and acces-sible ML/NLP systems suitable for environments with lim-ited computational infrastructure. The proposed pipeline further demonstrated that keyword-based cluster identi-fication constituted a robust and cost-effective strategy when dealing with sentiment-laden or strongly opinionated language, as commonly observed in procurement-related complaints and allegations. The integration of supervised and unsupervised learning stages was shown to be essen-tial for improving both performance and generalizability. In particular, the combination of Word2Vec embeddings, GMM-based clustering, and a Random Forest classifier 14 
+
+yielded strong classification results under severe class im-balance, provided that appropriate validation strategies (i.e., SMOTE, Stratified K-Fold cross-validation, and Av-erage Precision metrics) were applied. These findings em-phasized the importance of balanced evaluation practices, as reliance on classical metrics alone could have led to misleading conclusions in applied scenarios. Overall, this work demonstrated that transparent and effective NLP pipelines for corruption risk detection could be built with modest computational cost. Beyond public procurement auditing, the proposed approach was found to be appli-cable to related domains such as user recommendation systems or social networks, where semantic relationships, informal language, and noisy text were prevalent. Addi-tionally, the implemented pipeline proved to be tolerant to spelling mistakes, grammatical inconsistencies, and syn-tactic variations, further supporting its robustness. Based on the results obtained, several directions were identified for future research: i) a fully operational semi-supervised workflow could be developed, enabling contin-uous model updates at predefined time intervals as new data becomes available; ii ) further comparative analyses of word embedding models could be conducted by incor-porating additional architectures such as ALBERT, T5, and more recent or larger LLaMA variants, particularly in combination with clustering-based pre-filtering strategies; 
+
+iii ) alternative unsupervised learning techniques, includ-ing HDBSCAN and hierarchical clustering, could be ex-plored to further improve the identification of semantically coherent and accusatory clusters. iv ) Although the initial embeddings generated by RoBERTa and LLaMA did not yield the best results for this specific clustering task, their underlying potential remains significant. Future work should therefore not discard these architectures, but rather strengthen their adaptation strategies. In particular, con-tinuous fine-tuning with larger domain-specific corpora, contrastive learning objectives, or sentence-embedding ar-chitectures such as Siamese BERT-Networks (Sentence-BERT) could substantially improve their performance. Similarly, recent frameworks such as LLM2Vec, which employ multi-stage adaptation strategies to improve the isotropy and semantic quality of LLM-based embeddings, represent a promising direction for future research. v) Fu-ture work should conduct a cross-country empirical valida-tion of the proposed pipeline using structured procurement data from countries such as Chile or Costa Rica. This would allow the evaluation of zero-shot, lightly fine-tuned, and country-adapted configurations, providing stronger evidence of the regional portability of the methodology. vi) Another important future direction involves moving from the current modular cascaded pipeline toward partially joint or end-to-end optimization strategies. In this study, clustering and classification were intentionally decoupled to preserve interpretability, modularity, and independent validation under limited labeled data. However, future work could explore semi-supervised architectures in which cluster assignments and classification objectives are op-timized jointly, while incorporating regularization mech-anisms to avoid overfitting and preserve the semantic interpretability of the discovered clusters. [24] [42]. 
+
+Acknowledgments 
+
+The authors gratefully acknowledge the Sigma AI Lab at Universidad San Francisco de Quito (USFQ) for pro-viding the computational resources and AI infrastructure that enabled this research, and the Deutsche Gesellschaft f¨ ur Internationale Zusammenarbeit (GIZ) GmbH for its support in the development of Kapak. 
+
+References                                                                          
+
+> [1] Transparency International, “Corruption perceptions index 2024 –ecuador,” 2024. [Online]. Available: https://www. transparency.org/en/cpi/2024. Accessed: May 20, 2025. [2] Servicio Nacional de Contratacion Publica, “Informe de Rendi-cion de Cuentas 2024,” tech. rep., Servicio Nacional de Con-tratacion Publica (SERCOP), Quito, Ecuador, 2025. [On-line]. Available: https://portal.compraspublicas.gob.ec/sercop/ rendicion-de-cuentas-2024/. Accessed: June 3, 2025. [3] Open Government Partnership, “Ecuador design report 2019– 2021,” tech. rep., Open Government Partnership, Sept. 2021. [4] I. S. Ulloa Miranda, “Towards a methodology for analyzing pub-lic procurement data from kapak’s database,” Master’s thesis, Universidad San Francisco de Quito, Quito, Ecuador, 2024. [5] Universidad San Francisco de Quito, “Kapak: Transparency in Public Procurement – Methodology.” [Online]. Available: https: //kapak.usfq.edu.ec/#/metodologia. Accessed: May 15, 2025. [6] S. Minaee, N. Kalchbrenner, E. Cambria, N. Nikzad, M. Chenaghlu, and J. Gao, “Deep learning based text classification: Acomprehensive review,” ACM Computing Surveys (CSUR) , vol. 54, no. 3, pp. 1–40, 2021. [7] E. Cambria, D. Olsher, and D. Rajagopal, “Senticnet 3: A common and common-sense knowledge base for cognition-driven sentiment analysis,” in Proceedings of the 28th AAAI Confer-ence on Artificial Intelligence , pp. 1515–1521, 2014. [8] A. Fernandez Anta, L. Nunez Chiroque, P. Morere, and A. San-tos, “Sentiment analysis and topic detection of spanish tweets: A comparative study of nlp techniques,” Procesamiento del Lenguaje Natural , no. 50, pp. 45–52, 2013. [9] B. Probierz, J. Kozak, and A. Hrabia, “Clustering of scientific articles using natural language processing,” Procedia Computer Science , vol. 207, pp. 3449–3458, 2022. [10] C. Yau, A. Porter, N. Newman, and A. Suominen, “Cluster-ing scientific documents with topic modeling,” Scientometrics ,vol. 100, no. 3, pp. 767–786, 2014. [11] B. P. N´ u˜ nez Alverca, “Smart citizen control of public procure-ment in ecuador: Classification of accusatory comments from “sistema oficial de contrataci´ on p´ ublica del ecuador (soce)” using llms,” m.s. thesis, Universidad San Francisco de Quito, Quito, Ecuador, 2024. Accessed: May 12, 2026. [12] K. Rabuzin and N. Modruˇ san, “Prediction of public procure-ment corruption indices using machine learning methods,” in
+> Proceedings of the 11th International Joint Conference on Knowledge Discovery, Knowledge Engineering and Knowledge Management (IC3K 2019), Volume 3: KMIS ,pp. 333–340, INSTICC, SciTePress, 2019. [13] G. Ugale and C. Hall, “Generative ai for anti-corruption and integrity in government: Taking stock of promise, perils and practice,” Tech. Rep. No. 12, OECD Publishing, Paris, 2024. [14] A. Aldana, A. Falc´ on-Cort´ es, and H. Larralde, “A machine learning model to identify corruption in m´ exico’s public pro-curement contracts,” 2022. arXiv:2211.01478. [15] R. Artstein and M. Poesio, “Survey article: Inter-coder agree-ment for computational linguistics,” Computational Linguistics ,vol. 34, no. 4, pp. 555–596, 2008. [16] S. Birunda and K. Devi, “A review on word embedding tech-niques for text classification,” in Innovative Data Communi-cation Technologies and Application , pp. 267–281, Singapore: Springer, 2021. [17] Meta AI, “Llama 3.2-1b.” Model card. [Online]. Available: https: //huggingface.co/meta-llama/Llama-3.2-1B, 2024. 15
+
+[18] Y. Liu, M. Ott, N. Goyal, J. Du, M. Joshi, D. Chen, O. Levy, M. Lewis, L. Zettlemoyer, and V. Stoyanov, “Roberta: A robustly optimized bert pretraining approach,” 2019. arXiv:1907.11692. [19] M. Wang, J. Kim, and Y. Yan, “Syntactic-aware text classifi-cation method embedding the weight vectors of feature words,” 
+
+IEEE Access , vol. 13, pp. 37572–37590, 2025. [20] H. Zhao, Q. P. Chen, Y. B. Zhang, and G. Yang, “Advancing single and multi-task text classification through large language model fine-tuning,” 2025. arXiv:2412.08587. [21] L. Xiao, G. Wang, and Y. Zuo, “Research on patent text classifi-cation based on word2vec and lstm,” in 2018 11th International Symposium on Computational Intelligence and Design (ISCID) ,vol. 01, pp. 71–74, 2018. [22] J. Lilleberg, Y. Zhu, and Y. Zhang, “Support vector machines and word2vec for text classification with semantic features,” in 
+
+2015 IEEE 14th International Conference on Cognitive Infor-matics & Cognitive Computing (ICCI*CC) , pp. 136–140, 2015. [23] E. S. dos Santos, M. M. dos Santos, M. Castro, and J. T. Carvalho, “Detection of fraud in public procurement using data-driven methods: a systematic mapping study,” EPJ Data Science , vol. 14, no. 52, 2025. [24] N. Reimers and I. Gurevych, “Sentence-bert: Sentence embed-dings using siamese bert-networks,” in Proceedings of the 2019 Conference on Empirical Methods in Natural Language Pro-cessing and the 9th International Joint Conference on Natural Language Processing , pp. 3982–3992, 2019. [25] S. Lloyd, “Least squares quantization in pcm,” IEEE Transac-tions on Information Theory , vol. 28, no. 2, pp. 129–137, 1982. [26] Scikit-learn Development Team, “Gaussian mixture models — scikit-learn 1.4.2 documentation.” [Online]. Available: https:// scikit-learn.org/stable/modules/mixture.html, 2024. Accessed: May 26, 2025. [27] P. Bholowalia and A. Kumar, “Ebk-means: A clustering tech-nique based on elbow method and k-means in wsn,” Interna-tional Journal of Computer Applications , vol. 105, no. 9, pp. 17– 24, 2014. [28] P. J. Rousseeuw, “Silhouettes: A graphical aid to the interpre-tation and validation of cluster analysis,” Journal of Computa-tional and Applied Mathematics , vol. 20, pp. 53–65, 1987. [29] C. Comito, A. Forestiero, and C. Pizzuti, “Word embedding based clustering to detect topics in social media,” in Proceedings of the 2019 IEEE/WIC/ACM International Conference on Web Intelligence , pp. 192–199, ACM, 2019. [30] N. V. Chawla, K. W. Bowyer, L. O. Hall, and W. P. Kegelmeyer, “Smote: Synthetic minority over-sampling technique,” Journal of Artificial Intelligence Research , vol. 16, pp. 321–357, 2002. [31] Scikit-learn Development Team, “Stratifiedkfold — scikit-learn 1.6.1 documentation,” 2025. Accessed: 2025-05-27. [32] L. Breiman, “Random forests,” Machine Learning , vol. 45, pp. 5–32, 2001. [33] G. Singh, B. Kumar, L. Gaur, and A. Tyagi, “Comparison between multinomial and bernoulli na¨ ıve bayes for text classifi-cation,” in 2019 International Conference on Automation, Com-putational and Technology Management (ICACTM) , pp. 593– 596, 2019. [34] W. Zhang, T. Yoshida, and X. Tang, “Text classification based on multi-word with support vector machine,” Knowledge-Based Systems , vol. 21, no. 8, pp. 879–886, 2008. [35] R. Saha, “Influence of various text embeddings on clustering performance in nlp,” arXiv preprint arXiv:2305.03144 , 2023. [36] S. M. Mohammed, K. Jacksi, and S. R. M. Zeebaree, “Glove word embedding and dbscan algorithms for semantic document clustering,” in Proceedings of the 2020 International Conference on Advanced Science and Engineering (ICOASE) , pp. 211–216, IEEE, 2020. [37] D. Peng, Z. Gui, and H. Wu, “Interpreting the curse of dimen-sionality from distance concentration and manifold effect,” 2024. arXiv:2401.00422. [38] I. Keraghel, S. Morbieu, and M. Nadif, “Beyond words: Acomparative analysis of llm embeddings for effective clustering,” in Advances in Intelligent Data Analysis XXII (I. Miliou, N. Pi-atkowski, and P. Papapetrou, eds.), vol. 14641 of Lecture Notes in Computer Science , (Cham), pp. 205–216, Springer Nature Switzerland, 2024. [39] A. Petukhova, J. P. Matos-Carvalho, and N. Fachada, “Text clustering with large language model embeddings,” Interna-tional Journal of Cognitive Computing in Engineering , vol. 6, pp. 100–108, 2025. [40] B. Li, H. Zhou, J. He, M. Wang, Y. Yang, and L. Li, “On the sentence embeddings from pre-trained language models,” in 
+
+Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing , pp. 9119–9130, 2020. [41] N. Muennighoff, “Sgpt: Gpt sentence embeddings for semantic search,” 2022. arXiv:2202.08904. [42] P. BehnamGhader, V. Adlakha, M. Mosbach, D. Bahdanau, N. Chapados, and S. Reddy, “Llm2vec: Large language mod-els are secretly powerful text encoders,” in Proceedings of the Conference on Language Modeling , 2024. arXiv:2404.05961.

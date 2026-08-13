@@ -1,0 +1,41 @@
+{
+  "date": "20260813",
+  "date_label": "",
+  "generated_at": "2026-08-13 20:34:34 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2608.04547v1",
+      "route": "202608/13/2608.04547v1-attributing-differences-between-forecast-runs-to-input-changes-with-applications-to-ccar-and-cecl-exercises",
+      "title": "Attributing Differences Between Forecast Runs to Input Changes, With Applications to CCAR and CECL Exercises",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "基于Shapley值的预测差异归因方法可迁移至预算执行偏差分析与财政管理。",
+      "first_seen_at": "2026-08-13 20:34:34 UTC",
+      "updated_at": "2026-08-13 20:34:34 UTC"
+    },
+    {
+      "paper_id": "2608.12269v1",
+      "route": "202608/13/2608.12269v1-a-cascaded-unsupervised-supervised-nlp-pipeline-for-detecting-accusatory-language-in-public-procurement",
+      "title": "A Cascaded Unsupervised-Supervised NLP Pipeline for Detecting Accusatory Language in Public Procurement",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "利用NLP分析政府采购评论，服务于公共采购监督与违规检测",
+      "first_seen_at": "2026-08-13 20:34:34 UTC",
+      "updated_at": "2026-08-13 20:34:34 UTC"
+    }
+  ]
+}

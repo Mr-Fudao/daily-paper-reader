@@ -1,0 +1,934 @@
+Title: Attributing Differences Between Forecast Runs to Input Changes, With Applications to CCAR and CECL Exercises
+
+URL Source: https://arxiv.org/pdf/2608.04547v1
+
+Published Time: Thu, 06 Aug 2026 00:36:24 GMT
+
+Number of Pages: 14
+
+Markdown Content:
+# Attributing Di ff erences Between Forecast Runs to Input Changes: Applications to CCAR and CECL 
+
+Xuan Mei a,1 , Junze Lin a,1   
+
+> aJPMorgan Chase &Co., 545 Washington Blvd. Jersey City, NJ, 07310, USA
+
+Abstract 
+
+Forecasting systems used in the Comprehensive Capital Analysis and Review (CCAR) and Current Expected Credit Losses (CECL) processes combine portfolio data, macroeconomic scenarios, model specifications, business assump-tions, and management adjustments. When the forecast changes from one run to the next, practitioners need an attribu-tion that reconciles to the total change without depending on an arbitrary sequence of input replacements. This paper formulates forecast-gap attribution as a cooperative game and examines several approaches: the exact Shapley value, hierarchical or nested Shapley values, Integrated Gradients, Gradient SHAP, Permutation SHAP, and Kernel SHAP. We compare their allocation rules, computational costs, implementation requirements, and limitations in production forecasting systems. The analysis provides a practical framework for choosing an attribution method according to the number and type of inputs, the feasibility of hybrid forecast runs, and the need for interpretability, reproducibility, and governance. 
+
+Keywords: forecast attribution, Shapley value, CCAR, CECL, credit risk 
+
+1. Introduction 
+
+U.S. banks rely on forward-looking forecasting frameworks for regulatory capital planning and financial report-ing. The Comprehensive Capital Analysis and Review (CCAR) is the Federal Reserve’s assessment of the capital adequacy and capital-planning practices of large banking organizations [1]. Under this process, projected revenues, credit losses, expenses, and capital ratios are evaluated under baseline and severely adverse macroeconomic scenarios to assess whether a bank could absorb losses while continuing to lend. The Current Expected Credit Losses (CECL) framework, by contrast, is a U.S. GAAP accounting standard that requires institutions to recognize an allowance for expected credit losses over the contractual life of financial assets measured at amortized cost. The estimate incorpo-rates historical experience, current conditions, and reasonable and supportable forecasts [2]. Although CCAR and CECL di ff er in purpose, horizon, and governing requirements, both typically rely on complex forecasting systems that combine multiple models and data sources to estimate future credit losses. When two runs— for example, CCAR 2025 and CCAR 2026, or the February and May 2026 CECL runs—produce di ff erent forecasts, risk managers need to understand how much of the di ff erence is attributable to each change in the inputs. The precise configuration varies across institutions, but the principal inputs to these systems generally include: 
+
+• a portfolio launch-point (LP) file containing account- or loan-level data, such as balances, borrower character-istics, collateral values, and credit ratings; 
+
+• hypothetical scenarios expressed through macroeconomic variables (MEVs), including paths for the unemploy-ment rate (UER), gross domestic product (GDP), the housing price index (HPI), interest rates, and commercial-property net operating income (NOI) and price indices;     
+
+> Email addresses: xuan.mei@chase.com (Xuan Mei), junze.lin@jpmorgan.com (Junze Lin)
+> 1The authors work in the Wholesale Credit QR group at JPMorgan Chase & Co. This article was prepared in their personal capacities. The views expressed are solely those of the authors and do not represent those of JPMorgan Chase & Co. arXiv:2608.04547v1 [q-fin.RM] 5 Aug 2026
+
+• the specifications, parameters, and production-code versions of models for probability of default (PD), loss given default (LGD), exposure at default (EAD), prepayment, and rating migration (RM); 
+
+• business assumptions, including planned originations, repayments, line utilization, and portfolio growth; and 
+
+• expert judgments, management overlays, and other post-model adjustments. Each of these inputs may change between runs. Consider two consecutive annual CCAR exercises. The earlier exercise may use a launch-point portfolio dated December 31, 2024, whereas the later exercise uses a portfolio dated December 31, 2025. Over that year, the portfolio changes through prepayments, defaults, maturities, and new orig-inations; collateral values also move with market conditions. The macroeconomic scenario reflects a new economic outlook, models may be updated, and business assumptions or management overlays may be revised. Because several changes occur at once, a defensible method is needed to separate their e ff ects on the forecast. To formulate this problem mathematically, let F(x1, . . . , xk) denote the forecasting system, where the xi are its individual inputs. Let ( x(0) 1 , . . . , x(0)  
+
+> k
+
+) and ( x(1) 1 , . . . , x(1)  
+
+> k
+
+) denote the inputs to the first and second runs, respectively. The total forecast gap is defined as 
+
+∆ ≜ F(x(1) 1 , . . . , x(1)  
+
+> k
+
+) − F(x(0) 1 , . . . , x(0)  
+
+> k
+
+). (1) The problem is to attribute ∆ to the changes in the individual inputs. Because the forecasting system F is typically complex (see, for example, Mei and Lin [3] for an expected-loss framework), practitioners often use walk analysis. Starting with the first-run inputs, the analyst replaces one input at a time with its second-run value and reruns the system after each replacement. The contribution assigned to an input is the change in the forecast at the step when that input is replaced. These increments telescope, so their sum equals the total forecast gap ∆. The procedure can be formalized as follows. Let π = (π1, . . . , π k) be a permutation of {1, . . . , k} specifying the order in which the inputs are changed. For 
+
+j = 0, . . . , k, define the hybrid input vector xπ, j componentwise by 
+
+xπ, ji ≜
+
+
+
+x(1)  
+
+> i
+
+, i ∈ { π1, . . . , π j},
+
+x(0)  
+
+> i
+
+, i < {π1, . . . , π j}. (2) Thus, xπ, 0 = x(0) and xπ, k = x(1) . The contribution assigned to the input changed at step j is 
+
+Cππ j ≜ Fxπ, j − Fxπ, j−1 , j = 1, . . . , k. (3) Figure 1 illustrates this sequential replacement process. At each underlying step, exactly one input is changed and the resulting forecast change is assigned to that input; intermediate hybrid runs are suppressed in the diagram for compactness. Summing the contributions yields the telescoping identity 
+
+First run (baseline) 
+
+xπ, 0 = x(0) 
+
+F(xπ, 0)
+
+Hybrid run 1 
+
+xπ, 1
+
+F(xπ, 1)
+
+Hybrid run j
+
+xπ, j
+
+F(xπ, j)
+
+Second run 
+
+xπ, k = x(1) 
+
+F(xπ, k)          
+
+> Cππ1Cππ2, . . . , CππjCππj+1, . . . , Cππk
+> kX
+> r=1
+> Cππr= ∆
+> Figure 1: Walk analysis for an ordering π. Starting from the first-run inputs, one input is replaced at each underlying step. The resulting forecast changes telescope to the total gap between the two runs.
+> k
+
+X
+
+> j=1
+
+Cππ j =
+
+> k
+
+X
+
+> j=1
+
+hFxπ, j − Fxπ, j−1i 
+
+= Fx(1)  − Fx(0)  = ∆ . (4) 2Thus, every ordering π gives an exact decomposition of the total gap. However, CCAR and CECL systems are nonlinear and contain interactions among their inputs, so Cπ 
+
+> i
+
+generally varies with π. A conventional walk is exact along the selected path but is not order invariant: changing the sequence of replacements can materially change the amount attributed to each input xi.The remainder of this paper examines attribution methods that remove this order or path dependence. 
+
+2. Methods 
+
+2.1. Exact Shapley Value Approach 2.1.1. Methodology 
+
+A single walk allocates interaction e ff ects according to its chosen order. An order-independent alternative is to consider all k! permutations and average the marginal contribution of each input across them. The resulting allocation is the Shapley value, introduced by Shapley [4] as a principled allocation rule in cooperative game theory. To express the problem using the traditional cooperative-game convention, let N = {1, . . . , k} be the set of players, where player i represents input xi. A coalition S ⊆ N is interpreted as the set of players that have already played. When player i plays, the value of its corresponding input is switched from x(0)  
+
+> i
+
+to x(1)  
+
+> i
+
+. Thus, for each coalition S ,define the hybrid input vector xS by 
+
+xSi ≜
+
+
+
+x(1)  
+
+> i
+
+, i ∈ S ,
+
+x(0)  
+
+> i
+
+, i < S . (5) The value of coalition S is the change in the forecast produced by the players in S relative to the first-run baseline: 
+
+v(S ) ≜ FxS  − Fx∅ . (6) Consequently, v(∅) = 0 and v(N) = ∆ .Let Sk denote the set of all permutations of the players. For a permutation π ∈ S k, define the predecessor coalition of player i as 
+
+Pπ 
+
+> i
+
+≜ n j ∈ N : π−1( j) < π −1(i)o , (7) which contains all players that appear before player i in the ordering π. The marginal contribution of player i when it joins this coalition is 
+
+mπ 
+
+> i
+
+≜ vPπ 
+
+> i
+
+∪ { i} − vPπ
+
+> i
+
+ . (8) This quantity is identical to the walk contribution Cπ 
+
+> i
+
+in Equation (3). For player i (equivalently, input i), the Shapley attribution is the average marginal contribution over all possible orders: 
+
+ϕi ≜ 1
+
+k!
+
+X
+
+> π∈S k
+
+mπ 
+
+> i
+
+= 1
+
+k!
+
+X
+
+> π∈S k
+
+Cπ 
+
+> i
+
+, i = 1, . . . , k. (9) Equivalently, the Shapley value can be written in its more familiar coalition-set form: 
+
+ϕi =
+
+X 
+
+> S⊆N\{ i}
+
+|S |! ( k − | S | − 1)! 
+
+k! [v(S ∪ { i}) − v(S )] . (10) For a given coalition S , there are |S |! ways to order its members before player i and ( k − | S | − 1)! ways to order the remaining players after player i. Hence, the coe ffi cient in Equation (10) is the fraction of all k! permutations for which S is exactly the predecessor coalition of player i, establishing the equivalence between the set and permutation formulations. Figure 2 makes this calculation explicit for three inputs. Each node is one coalition, and an edge from S to S ∪ { i}
+
+is the marginal contribution obtained by switching input i. The highlighted edges are the four possible marginal contributions of input 2. Their weights depend only on the size of its predecessor coalition and sum to one. 3∅
+
+v(∅) = 0
+
+{1}
+
+v({1})
+
+{2}
+
+v({2})
+
+{3}
+
+v({3})
+
+{1, 2}
+
+v({1, 2})
+
+{1, 3}
+
+v({1, 3})
+
+{2, 3}
+
+v({2, 3})
+
+{1, 2, 3}
+
+v(N) = ∆ 
+
+v({2}) − v(∅)
+
+v({1, 2}) − v({1})
+
+v({2, 3}) − v({3})
+
+v(N) − v({1, 3})For input 2: ϕ2 = 13
+
+v({2}) − v(∅) + 16
+
+v({1, 2}) − v({1})
+
++ 16
+
+v({2, 3}) − v({3}) + 13
+
+v(N) − v({1, 3}). 
+
+> Figure 2: Exact Shapley calculation for a three-input forecasting system. Gray edges complete the coalition lattice; red edges are the marginal contributions from adding input 2. Averaging these contributions with the Shapley weights shown gives ϕ2. The same calculation applies to each other input.
+
+In other words, ϕi is the average value added when player i switches its input from x(0)  
+
+> i
+
+to x(1)  
+
+> i
+
+. The average covers every coalition that player i could join and every ordering of the other players. Because each permutation produces the exact decomposition in Equation (4), the Shapley attributions satisfy the e ffi ciency property 
+
+> k
+
+X
+
+> i=1
+
+ϕi = 1
+
+k!
+
+X
+
+> π∈S k
+> k
+
+X
+
+> i=1
+
+Cπ
+
+> i
+
+= 1
+
+k!
+
+X
+
+> π∈S k
+
+∆ = ∆ . (11) Thus, the Shapley value preserves the full forecast gap while removing the dependence on any single, arbitrarily selected walk order. 
+
+2.1.2. Computational cost 
+
+The coalition formulation also clarifies the computational cost of an exact Shapley calculation. For a fixed player 
+
+i, the summation in Equation (10) ranges over every subset of N \ { i}. Because this set contains k − 1 players, it has 
+
+2N\{ i} = 2k−1 (12) possible coalitions. Each term compares v(S ) with v(S ∪ { i}). Across all players, these terms involve coalition values 
+
+v(T ) for every subset T ⊆ N. There are 
+
+2N = 2k (13) distinct coalitions, so an exact implementation that caches and reuses each coalition value requires at most 2 k distinct evaluations of the forecasting system. Since the baseline F(x∅) and the second-run forecast F(xN ) are typically already available, only 2 k − 2 additional hybrid runs may be needed. After these values are cached, forming all player-level marginal di ff erences requires k2k−1 arithmetic comparisons but no additional evaluations of F. Thus, the set formulation reduces the naive k! permutation enumeration to an exponential calculation, but the cost can still become prohibitive when k is large or when each forecast run is expensive. More explicitly, let TF denote the computational cost of one complete evaluation of the forecasting system F, and let TA denote the cost of one arithmetic operation used to form and aggregate a marginal contribution. If the first- and second-run forecasts are already available, the total computational work of the exact Shapley calculation is 
+
+TShapley (k) = (2 k − 2) TF + Ok2k−1TA
+
+ . (14) 4If the two endpoint forecasts must also be computed, the first term becomes 2 kTF . In CCAR and CECL applications, a full evaluation of F generally dominates the arithmetic required to combine cached coalition values, so Equation (14) is typically well approximated by 
+
+TShapley (k) ≈ (2 k − 2) TF . (15) This expression measures total computational work. Parallel execution can reduce elapsed wall-clock time, but it does not reduce the total number of forecasting-system evaluations. As the number of inputs k grows, the exponential number of coalition evaluations quickly becomes infeasible. 
+
+2.1.3. Limitations 
+
+Exact Shapley attribution requires every coalition-defined hybrid input to be both executable and economically meaningful. This condition may fail when a model version depends on a particular data schema, when portfolio records cannot be aligned across launch points, or when an overlay is valid only under a specified scenario. Such dependent inputs should be combined into a single player or represented through a justified hierarchy. Even when all hybrids are valid, the exponential run count limits exact enumeration to a relatively small number of input blocks. Finally, the allocation is only as informative as the player definition: grouping heterogeneous changes into one player can hide material within-block interactions, whereas excessive granularity can make the calculation operationally infeasible. 
+
+2.2. Hierarchical /Nested Shapley 2.2.1. Methodology 
+
+Inputs to a CCAR or CECL forecasting system often fall into economically meaningful groups. As discussed in Section 1, the player set N may be partitioned into launch-point data, macroeconomic scenarios, model specifications, business assumptions, and management overlays. A hierarchical Shapley approach incorporates this structure instead of treating all k inputs as an unstructured set of interchangeable players. For a two-level hierarchy, the resulting allocation is the Owen value for games with a priori unions [5]. Let 
+
+G = {G1, . . . , Gm} (16) be a partition of N, so that the groups are mutually disjoint and Smg=1 Gg = N. Write kg = |Gg|. The hierarchy permits two kinds of orderings: an outer permutation σ of the m groups and, for each group Gg, an inner permutation τg of its 
+
+kg players. The resulting structured walk completes all players in one group before moving to the next group. For player i ∈ Gg, define its predecessor coalition under the structured ordering ( σ, τ) as 
+
+Pσ, τ 
+
+> i
+
+≜
+
+[ 
+
+> h:σ−1(h)<σ −1(g)
+
+Gh
+
+∪ n j ∈ Gg : τ−1 
+
+> g
+
+( j) < τ −1 
+
+> g
+
+(i)o , (17) where τ = (τ1, . . . , τ m). Thus, all groups preceding Gg have fully played, no group following Gg has played, and only the players preceding i within Gg have played. The corresponding marginal contribution is 
+
+dσ, τ 
+
+> i
+
+≜ vPσ, τ 
+
+> i
+
+∪ { i} − vPσ, τ
+
+> i
+
+ . (18) The hierarchical, or Owen, attribution to player i averages this marginal contribution over every group ordering and every within-group ordering: 
+
+ψi ≜ 1
+
+m! Qmh=1 kh!
+
+X
+
+> σ∈S m
+
+X
+
+> τ1∈S k1
+
+· · · 
+
+X
+
+> τm∈S km
+
+dσ, τ 
+
+> i
+
+. (19) Because every structured ordering is still a complete walk from x(0) to x(1) , the individual attributions remain e ffi cient: 
+
+X
+
+> i∈N
+
+ψi = ∆ . (20) 5The method also produces a coherent attribution at the group level. Define the quotient game on the group index set M = {1, . . . , m} by 
+
+V(A) ≜ v
+
+[
+
+> g∈A
+
+Gg
+
+ , A ⊆ M. (21) The Shapley value Φg of group g in this outer game equals the sum of the hierarchical attributions of its members, 
+
+Φg =
+
+X
+
+> i∈Gg
+
+ψi,
+
+> m
+
+X
+
+> g=1
+
+Φg = ∆ . (22) This property provides both a high-level attribution among major input blocks and a detailed attribution among the inputs within each block, while ensuring that the detailed results reconcile to the reported group totals. For a deeper hierarchy, each group can be partitioned further. The same construction is then applied recursively: the value assigned to a parent node is distributed among its children, whose attributions sum to the parent total. For example, the model group may be divided into PD, LGD, EAD, prepayment, and rating-migration models, while the scenario group may be divided into general economic conditions, the labor market, real estate, and interest rates. Figure 3 illustrates a possible hierarchy for the CCAR and CECL attribution problem. 
+
+Total forecast gap 
+
+∆
+
+Launch-point data 
+
+ΦLP Balances Borrower characteristics Collateral values Credit ratings 
+
+Macroeconomic scenarios 
+
+ΦMEV General economy Labor market Real estate Interest rates 
+
+Model suite 
+
+ΦModel PD and LGD EAD Prepayment Rating migration 
+
+Business as-sumptions 
+
+ΦBA Originations Repayments Line utilization Portfolio growth 
+
+Management overlays 
+
+ΦMO Expert judgment Qualitative adjustments Post-model adjustments 
+
+Group reconciliation: 
+
+> m
+
+X
+
+> g=1
+
+Φg = ∆ Within-group reconciliation: 
+
+X
+
+> i∈Gg
+
+ψi = Φ g
+
+> Figure 3: Illustrative nested grouping for CCAR and CECL forecast-gap attribution. The total gap is first allocated among major input groups; each group attribution is then allocated among its nested inputs or subgroups.
+
+2.2.2. Computational cost 
+
+The hierarchy may also reduce the number of distinct hybrid forecast runs. A two-level structured walk visits only coalitions consisting of several fully activated groups and, at most, one partially activated group. With caching, the number of distinct hierarchy-respecting coalition values is bounded by 
+
+QG ≤ 2m + 2m−1
+
+> m
+
+X
+
+> g=1
+
+2kg − 2 . (23) Accordingly, if the endpoint forecasts are already available, the dominant computational work is approximately 
+
+Thier (G) ≈  QG − 2 TF , (24) which can be substantially smaller than (2 k − 2) TF when the hierarchy is balanced. As with exact Shapley attribution, caching avoids repeated coalition evaluations and parallel execution can reduce elapsed time without reducing the total computational work. 62.2.3. Limitations 
+
+The computational reduction is obtained by changing the allocation rule: the Owen value averages only over orders that respect the specified group structure, not over all unrestricted player orders. Therefore, the resulting attribution depends on the economic validity of the chosen hierarchy. Groups should be defined before examining attribution results and should reflect genuine operational, modeling, or governance relationships among the inputs. It is important to distinguish the hierarchical attribution ψi from the unrestricted exact Shapley attribution ϕi in Equation (9). Both allocations are exact in the e ffi ciency sense: their player-level contributions sum to the full forecast gap ∆. In general, however, 
+
+ψi , ϕi, (25) because the Shapley value averages over all k! player permutations, whereas the Owen value averages only over per-mutations in which the members of each prespecified group remain together. The hierarchical attribution therefore incorporates the chosen group structure into the allocation of interaction e ff ects. It coincides with the unrestricted Shapley value only in special cases, such as when the grouping restrictions do not alter the relevant marginal con-tributions. The computational saving therefore does not come from calculating the same unrestricted Shapley values more e ffi ciently. It comes from adopting a di ff erent, group-structured allocation rule, which must be justified by the economics and governance of the forecasting system. 
+
+2.3. Integrated Gradients 
+
+The exact Shapley and Owen-value methods above treat the forecasting system as a black box and require only evaluations of F. When F is di ff erentiable with respect to a continuous representation of its inputs, gradient-based path methods provide a substantially cheaper alternative. Integrated Gradients was introduced by Sundararajan et al. [6]. 
+
+2.3.1. Methodology 
+
+Integrated Gradients connects the first- and second-run inputs by the straight-line path 
+
+x(α) ≜ x(0) + α x(1) − x(0)  , α ∈ [0 , 1] . (26) The attribution to input i is the accumulated sensitivity of the forecast along this path, multiplied by the observed change in that input: IG i ≜ x(1)  
+
+> i
+
+− x(0) 
+
+> i
+
+ Z 10
+
+∂F(x(α)) 
+
+∂xi
+
+dα. (27) If F is di ff erentiable along the path, the fundamental theorem of calculus gives the completeness property 
+
+> k
+
+X
+
+> i=1
+
+IG i =
+
+Z 10
+
+∇F(x(α)) T x(1) − x(0)  dα
+
+= Fx(1)  − Fx(0)  = ∆ . (28) Integrated Gradients therefore provides an order-independent, gap-preserving allocation for the selected continuous path. It remains path dependent, however, because a di ff erent interpolation path may produce a di ff erent allocation. In practice, the integral is approximated using M points 0 < α 1 < · · · < α M ≤ 1: 
+
+cIG i = x(1)  
+
+> i
+
+− x(0) 
+
+> i
+
+ 1
+
+M
+
+> M
+
+X
+
+> r=1
+
+∂F(x(αr)) 
+
+∂xi
+
+. (29) Figure 4 illustrates this numerical calculation. The same interpolation points are used for every input, a gradient is evaluated at each point, and the resulting average sensitivity is scaled by the observed input change. 7First-run input           
+
+> x(0)
+> x(α1)
+> ∇F(x(α1))
+> x(αr)
+> ∇F(x(αr))
+> x(αM)
+> ∇F(x(αM))
+> Second-run input
+> x(1)
+> α1· · · · · ·
+> Average gradients and scale by the input change
+> cIG i=(x(1)
+> i−x(0)
+> i) 1
+> M
+> MX
+> r=1
+> ∂F(x(αr))
+> ∂xi
+> Figure 4: Integrated Gradients calculation. Points are selected along the straight-line path from the first-run input to the second-run input. The forecasting-system gradient is evaluated at each point, averaged, and multiplied componentwise by the change between the two runs. With exact integration, the input attributions sum to the forecast gap ∆.
+
+2.3.2. Computational cost 
+
+Let T∇F denote the cost of evaluating the gradient of F. The dominant computational work is approximately 
+
+TIG (M) ≈ MT ∇F , (30) which does not grow exponentially with k. The numerical completeness error 
+
+εIG ≜ ∆ −
+
+> k
+
+X
+
+> i=1
+
+cIG i (31) can be monitored and reduced by increasing M or using a more accurate quadrature rule. 
+
+2.3.3. Limitations 
+
+Integrated Gradients requires both forecast runs to be represented as vectors of di ff erentiable inputs and requires the straight-line interpolation between them to be meaningful. These conditions are restrictive in CCAR and CECL systems. A launch-point file may contain di ff erent loans across runs, a model update may replace code or architecture, and a qualitative overlay may be a discrete governance decision. Interpolating between such objects can create invalid intermediate states, while production components may not expose the derivatives needed by the method. Even continuous quantities such as balances, MEV paths, and loan attributes are often transformed into dis-crete buckets. The resulting step functions have derivatives that are zero almost everywhere and undefined at bucket boundaries. In addition, Integrated Gradients is a straight-path Aumann–Shapley allocation rather than the exact discrete Shapley value, and a di ff erent valid interpolation path may produce a di ff erent attribution. Discrete or non-di ff erentiable changes should therefore be retained as Shapley or Owen players, potentially within a hybrid attribution framework. 
+
+2.4. Gradient SHAP and Expected Gradients 
+
+Gradient SHAP combines the SHAP framework [7] with the expected-gradients construction [8]. It extends Integrated Gradients by averaging over reference inputs and locations on the paths from those references to the second-run input. 
+
+2.4.1. Methodology 
+
+Integrated Gradients uses one fixed baseline x(0) and one deterministic path. Gradient SHAP instead samples a reference input b from a baseline distribution B and samples a random point on the path from b to x(1) . Its population attribution can be written as GS i ≜ E b∼B 
+
+> α∼Unif(0 ,1)
+
+x(1)  
+
+> i
+
+− bi
+
+ ∂Fb + α(x(1) − b)
+
+∂xi
+
+ . (32) 8With R independent draws ( b(r), α r), a Monte Carlo estimator is 
+
+cGS i = 1
+
+R
+
+> R
+
+X
+
+> r=1
+
+x(1)  
+
+> i
+
+− b(r)
+
+> i
+
+ ∂Fb(r) + αr(x(1) − b(r))
+
+∂xi
+
+. (33) Figure 5 illustrates the Monte Carlo calculation. Each draw selects both a baseline and a point on the corresponding straight-line path to the second-run input. The scaled gradients from these draws are then averaged by input.                                                  
+
+> Draw r=1:b(1) ∼ B z(1) =b(1) +α1(x(1) −b(1) )
+> ∇F(z(1) )x(1)
+> Draw r=2:b(2) ∼ B z(2) =b(2) +α2(x(1) −b(2) )
+> ∇F(z(2) )x(1)
+> ...
+> Draw r=R:b(R)∼ B z(R)=b(R)+αR(x(1) −b(R))
+> ∇F(z(R))x(1)
+> α1
+> α2
+> αR
+> Average scaled gradients by input
+> cGS i=1
+> R
+> RX
+> r=1
+> (x(1)
+> i−b(r)
+> i)∂F(z(r))
+> ∂xi
+> Figure 5: Gradient SHAP calculation. Each Monte Carlo draw samples a baseline b(r)and a path location αr, evaluates the gradient at the resulting interpolation point, and scales each gradient component by the corresponding change from the sampled baseline to the second-run input. Averaging the scaled gradients gives the Gradient SHAP attribution.
+
+Under exact integration, these attributions satisfy completeness relative to the expected baseline forecast: 
+
+> k
+
+X
+
+> i=1
+
+GS i = Fx(1)  − Eb∼B [F(b)] . (34) If B places all its mass on the first-run input x(0) , Gradient SHAP reduces to a stochastic estimator of Integrated Gradients and the right-hand side of Equation (34) becomes ∆. A broader baseline distribution can represent multiple plausible reference runs or uncertainty around the first run, but the resulting attribution then explains the gap relative to an expected reference forecast rather than the specific two-run gap in Equation (1). 
+
+2.4.2. Computational cost 
+
+With R sampled baseline–path-point pairs, the dominant computational cost is 
+
+TGS (R) ≈ RT ∇F . (35) This cost grows linearly with the number of Monte Carlo draws rather than exponentially with the number of inputs. Each gradient evaluation contributes to every input attribution, although additional draws may be needed when the baseline distribution or local gradients are highly variable. Fixed random seeds, Monte Carlo standard errors, and the completeness residual provide practical numerical and reproducibility diagnostics. 
+
+2.4.3. Limitations 
+
+To use Gradient SHAP, the target and sampled baselines must be represented as vectors of di ff erentiable inputs. Continuous quantities such as balances, MEV paths, loan attributes, model parameters, and scalar business assump-tions can be interpolated directly. Feature-level attributions may then be aggregated within the groups in Figure 3 to obtain portfolio-data, scenario, model, business-assumption, and overlay contributions. Important limitations arise because many production inputs are not naturally continuous. A launch-point file may contain di ff erent loans across runs; a model update may replace code or model architecture; and a qualitative overlay may be a discrete governance decision. Straight-line interpolation between such objects can produce economically invalid intermediate states, and a production forecasting system may not expose derivatives through every component. 9In those cases, one must use a di ff erentiable parameterization or surrogate, keep the a ff ected block as a discrete player, or combine gradient attribution for continuous inputs with Shapley or Owen attribution for discrete blocks. Even apparently continuous quantities such as balances, MEV paths, and loan attributes are often transformed into discrete buckets in risk models. Such transformations are step functions whose derivatives are zero almost everywhere and undefined at the bucket boundaries, thereby limiting the usefulness of gradient-based attribution methods. Gradient SHAP is not generally identical to the exact discrete Shapley value ϕi in Equation (10). Its result depends on the selected baseline distribution as well as the validity of the interpolation paths. Unless the distribution is concentrated on x(0) , the attributions do not reconcile to the specific two-run gap ∆, but instead to a gap measured from the expected baseline forecast. The baseline population and sampling design must therefore have a clear economic interpretation and be retained for reproducibility and governance. 
+
+2.5. Permutation SHAP 2.5.1. Methodology 
+
+Exact Shapley attribution becomes costly because it requires the evaluation of all 2 k hybrid coalitions. Permutation SHAP, based on permutation sampling [9], directly approximates Equation (9) by Monte Carlo. Instead of averaging over all k! walk orders, it samples a manageable number and averages the resulting contributions. Like the exact method, it treats the forecasting system as a black box. It therefore requires neither di ff erentiability nor a potentially artificial interpolation between the two runs. Let π(1) , . . . , π (B) be independent permutations sampled uniformly from Sk. For each sampled order, the forecasting system is run along the sequence of hybrid inputs xπ(b),0, . . . , xπ(b),k defined in Equation (2). The contribution of input i
+
+on the bth walk is 
+
+Cπ(b) 
+
+> i
+
+= Fxπ(b), jb(i) − Fxπ(b), jb(i)−1 , jb(i) ≜ (π(b))−1(i), (36) where jb(i) is the step at which input i is changed. The Permutation SHAP estimator is the sample average 
+
+bϕperm  
+
+> i
+
+≜ 1
+
+B
+
+> B
+
+X
+
+> b=1
+
+Cπ(b) 
+
+> i
+
+, i = 1, . . . , k. (37) Figure 6 illustrates the calculation. Each row is one randomly sampled walk from the first run to the second run. The marginal contribution recorded when input i is switched is then averaged vertically across the sampled walks.                              
+
+> Sample b=1:x(0)
+> F(x(0) )
+> xπ(1) ,1
+> F(xπ(1) ,1)· · · x(1)
+> F(x(1) )
+> Sample b=2:x(0)
+> F(x(0) )
+> xπ(2) ,1
+> F(xπ(2) ,1)· · · x(1)
+> F(x(1) )
+> ...
+> Sample b=B:x(0)
+> F(x(0) )
+> xπ(B),1
+> F(xπ(B),1)· · · x(1)
+> F(x(1) )
+> Cπ(1)
+> π(1) 1
+> Cπ(1)
+> π(1) 2
+> , . . . . . . , Cπ(1)
+> π(1)
+> k
+> Cπ(2)
+> π(2) 1
+> Cπ(2)
+> π(2) 2
+> , . . . . . . , Cπ(2)
+> π(2)
+> k
+> Cπ(B)
+> π(B)1
+> Cπ(B)
+> π(B)2
+> , . . . . . . , Cπ(B)
+> π(B)
+> k
+> Average by input
+> bϕperm
+> i=1
+> B
+> BX
+> b=1
+> Cπ(b)
+> i
+> i=1, . . . , k
+
+Figure 6: Permutation SHAP calculation. Each sampled permutation defines a complete walk from the first-run inputs to the second-run inputs. The contribution of each input is recorded along every walk and averaged across the B sampled orders. Each row reconciles to ∆, so the averaged attributions also reconcile exactly to the total forecast gap. 
+
+Because the permutations are sampled uniformly, E[bϕperm  
+
+> i
+
+] = ϕi; thus, the estimator is unbiased for the unrestricted Shapley value. Moreover, every sampled walk telescopes to ∆. Consequently, using the same sampled walks for all inputs gives exact sample-level reconciliation, kX
+
+> i=1
+
+bϕperm  
+
+> i
+
+= ∆ , (38) 10 apart from numerical or production-run error. The individual allocations are random estimates, but the total attributed amount is not. In this setting, each player may represent a major input block, such as launch-point data, scenario MEVs, models, business assumptions, or management overlays, or a more granular component within one of those blocks. For a sampled permutation, one begins with the first-run configuration and replaces the inputs in the sampled order, recording the forecast after every replacement. Consecutive forecast di ff erences are assigned to the input just changed. Repeating the procedure across sampled orders and averaging by input estimates the order-independent allocation of the CCAR or CECL forecast gap. A fixed random seed and a retained inventory of the sampled orders make the analysis reproducible and auditable. 
+
+2.5.2. Computational cost 
+
+If the two endpoint forecasts are already available, a single sampled walk requires at most k − 1 additional hybrid evaluations. Without reuse across walks, the dominant computational work is therefore approximately 
+
+Tperm (B, k) ≈ B(k − 1) TF , (39) which grows linearly in the number of sampled permutations rather than exponentially in k. Caching a hybrid coalition encountered in more than one walk can reduce the actual number of evaluations. The walks can also be run in parallel, subject to the operational capacity of the forecasting platform. 
+
+2.5.3. Limitations 
+
+Sampling uncertainty should be reported because a finite collection of walks does not remove order e ff ects com-pletely. For each input, an estimated Monte Carlo standard error is 
+
+bse i =
+
+vut 1
+
+B(B − 1) 
+
+> B
+
+X
+
+> b=1
+
+Cπ(b) 
+
+> i
+
+− bϕperm 
+
+> i
+
+2
+
+. (40) Sampling may be continued until these standard errors, or corresponding confidence-interval widths, fall below pre-specified materiality thresholds. Using a sampled order together with its reverse is a simple variance-reduction device because it exposes each input to complementary predecessor coalitions. Stratifying the samples by the position of each input can further improve coverage of early, middle, and late walk positions. Permutation SHAP approximates the unrestricted exact Shapley value without changing the underlying allocation rule, unlike a hierarchy-restricted Owen value. Its main limitation is that a stable estimate may still require many expensive hybrid runs when interactions are strong. In addition, every hybrid configuration must be operationally executable and economically interpretable. These requirements are particularly important when launch-point popu-lations, model versions, or overlays cannot be switched independently. In such cases, the a ff ected inputs should be combined into a single player or handled through an economically justified hierarchy before permutation sampling is applied. 
+
+2.6. Kernel SHAP 2.6.1. Methodology 
+
+Kernel SHAP is another model-agnostic approximation to the exact Shapley value [7]. Instead of sampling com-plete walks, it samples coalitions, evaluates the corresponding hybrid forecasts, and estimates the input attributions through a specially weighted linear regression. The method is therefore applicable when the forecasting system is available only as a black box and its derivatives are unavailable. For a coalition S ⊆ N, define the binary indicator vector zS ∈ { 0, 1}k by zSi = 1 if i ∈ S and zSi = 0 otherwise. Kernel SHAP approximates the coalition-value function by the additive explanation model 
+
+g(zS ) ≜ ϕ0 +
+
+> k
+
+X
+
+> i=1
+
+ϕizSi , (41) 11 where ϕi is the attribution assigned to input i. When the regression response is the forecast level F(xS ), the intercept is fixed at ϕ0 = F(x(0) ). Equivalently, using v(S ) from Equation (6) as the response fixes ϕ0 = 0. Suppose M coalitions S 1, . . . , S M are sampled and their hybrid forecasts are evaluated. The Kernel SHAP estimate solves 
+
+bϕker 
+
+≜ argmin 
+
+> ϕ
+> M
+
+X
+
+> m=1
+
+πSHAP (S m)
+
+v(S m) −
+
+> k
+
+X
+
+> i=1
+
+ϕizS m
+
+> i
+
+
+
+> 2
+
+, (42) subject to the e ffi ciency constraint kX
+
+> i=1
+
+ϕi = ∆ . (43) For a nonempty, non-full coalition, the Shapley kernel weight is 
+
+πSHAP (S ) ≜ k − 1
+
+ k 
+
+> |S|
+
+ |S | (k − | S |) , 1 ≤ | S | ≤ k − 1. (44) The empty and full coalitions are imposed as exact endpoint constraints rather than assigned finite weights. The kernel gives relatively high total influence to coalitions near the two endpoints, where the incremental e ff ect of adding or removing an input is especially informative. If every coalition is evaluated and the regression is solved without reg-ularization, its coe ffi cients equal the exact Shapley values. With a sampled subset of coalitions, the fitted coe ffi cients provide an approximation. To apply Kernel SHAP to two CCAR or CECL runs, the analyst first defines the players, such as launch-point data, scenario MEVs, model versions, business assumptions, and management overlays. For each sampled coalition 
+
+S m, inputs in S m are taken from the second run and the remaining inputs are taken from the first run, exactly as in Equation (5). The resulting hybrid configuration is run through the forecasting system to obtain v(S m). The weighted regression in Equation (42) then allocates the total forecast gap among the input changes. Coalition sampling should cover a range of coalition sizes, with probabilities aligned to the Shapley kernel; complementary pairs S and N \ S can be sampled together to improve balance. A fixed sample, retained hybrid-run specifications, and the fitted regression design make the analysis reproducible and auditable. Figure 7 summarizes this procedure. Unlike a sampled walk, each coalition evaluation is independent of the others; the evaluated coalition values are combined only at the final weighted-regression stage.                              
+
+> Sample coalitions
+> S1, . . . , SM⊆N
+> indicators zSm
+> Construct hybrids
+> xSm
+> i=x(1)
+> iif i∈Sm
+> xSm
+> i=x(0)
+> iotherwise
+> Evaluate forecasts
+> F(xSm)obtain v(Sm)
+> Fit weighted model
+> weights πSHAP (Sm)
+> Piϕi= ∆
+> Kernel SHAP attribution
+> bϕker
+> Pibϕker
+> i= ∆
+> Figure 7: Kernel SHAP workflow for attributing the gap between two forecast runs. Sampled coalitions define hybrid inputs, the forecasting system supplies coalition values, and a Shapley-kernel-weighted regression subject to e ffi ciency produces order-independent input attributions.
+
+2.6.2. Computational cost 
+
+If the two endpoint forecasts are already available, the dominant cost of M distinct sampled coalitions is approxi-mately 
+
+Tkernel (M) ≈ MT F , (45) with further savings when coalition forecasts are cached or evaluated in parallel. Kernel SHAP can thus use a flexible evaluation budget and does not require the k − 1 linked hybrid runs needed to complete each sampled permutation. 
+
+2.6.3. Limitations 
+
+A su ffi ciently large and well-balanced coalition sample is needed for a stable regression, especially when k is large or input e ff ects interact strongly. Repeated coalition samples or bootstrap resampling can be used to assess numerical and sampling variability. 12 The method has the same operational limitation as exact and Permutation SHAP: every sampled hybrid config-uration must be executable and economically meaningful. For example, a model version may require a particular data schema, or a management overlay may have been approved only for a particular scenario. Inputs with such dependencies should be combined into one player or represented through an economically justified hierarchy. In ad-dition, aggressive feature selection or penalized regression may stabilize an underdetermined fit but can change the allocation and prevent it from representing the unrestricted Shapley value. For a small number of major input blocks, exact enumeration may therefore remain preferable; Kernel SHAP is most useful when the number of players makes enumeration impractical but arbitrary hybrid coalitions can still be evaluated. 
+
+2.7. Comparison of attribution methods 
+
+Table 1 compares the allocation rule, implementation requirements, dominant computational work, and principal tradeo ff of each method. The conventional walk is included as the operational benchmark. The cost expressions assume that the two endpoint forecasts are already available. 
+
+Table 1: Comparison of methods for attributing the gap between two forecast runs.                                          
+
+> Method Allocation and order property Main requirements Dominant work Best use and principal limitation Conventional walk Exact decomposition along one selected order; generally order dependent Black-box evaluations of a sequence of executable hybrid runs (k−1) TFSimplest and easiest to communicate, but interac-tion e ff ects are assigned according to an arbitrary order. Exact Shapley value Unrestricted Shapley allocation; exact, e ffi cient, and order inde-pendent Every hybrid coalition must be exe-cutable and economically meaning-ful (2 k−2) TFPreferred benchmark for a small number of input blocks; exponential cost limits scalability. Hierarchical /Nested Shapley Owen allocation over hierarchy-respecting orders; exact and ef-ficient, but dependent on the prespecified grouping Economically justified hierarchy and executable hierarchy-respecting hybrids (QG−2) TFUseful when inputs have genuine group structure or dependencies; it is generally not the unrestricted Shapley value. Integrated Gradients Straight-path Aumann–Shapley allocation; complete under ex-act integration but dependent on the selected path Di ff erentiable system and mean-ingful continuous interpolation be-tween runs
+> MT ∇FComputationally attractive for continuous inputs; unsuitable for many discrete changes, code re-placements, and bucketed transformations. Gradient SHAP Expected-gradient allocation over sampled baselines and path points; baseline-distribution dependent Di ff erentiable system, meaningful baselines, and valid interpolation
+> RT ∇FIncorporates reference uncertainty; explains the specific two-run gap only when the baseline dis-tribution is concentrated on the first run. Permutation SHAP Monte Carlo estimate of the un-restricted Shapley value; effi -ciency holds for the sampled-walk average Executable linked hybrid runs for each sampled order
+> B(k−1) TFFlexible, transparent, and auditable; strong interac-tions may require many walks, so sampling uncer-tainty must be reported. Kernel SHAP Shapley-kernel weighted-regression estimate; effi ciency imposed as a constraint Executable arbitrary hybrid coali-tions and a well-balanced regression design
+> MT FSupports independent, parallel coalition evalua-tions and a flexible budget; inadequate sampling can yield an unstable or design-sensitive fit.
+
+The cost expressions in Table 1 separate expensive forecast or gradient evaluations from lower-cost aggregation. Exact Shapley has exponential cost in the number of players, whereas Permutation SHAP, Kernel SHAP, Integrated Gradients, and Gradient SHAP permit an adjustable evaluation budget. Hierarchical Shapley can reduce the coalition count when a valid grouping is available, but the reduction reflects a restricted allocation rule rather than a faster calculation of the unrestricted Shapley value. Caching and parallel execution can reduce repeated work and elapsed time for all coalition-based methods. No method dominates across all CCAR and CECL applications. The comparison depends on whether hybrid configurations are valid, whether di ff erentiable paths exist, how many input blocks are material, and whether the governance objective requires the unrestricted Shapley value. The reported cost formulas are leading-order approxi-mations and exclude data preparation, model validation, failed-run remediation, storage, and review. Method selection should therefore consider operational feasibility and attribution semantics in addition to the nominal number of fore-cast evaluations. 13 3. Results 4. Discussion 5. Conclusion Declaration of competing interest 
+
+The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper. 
+
+Data availability 
+
+Data availability information will be added here. 
+
+References 
+
+[1] Board of Governors of the Federal Reserve System, Comprehensive capital analysis and review and dodd-frank act stress tests: Questions and answers, updated through July 30, 2026; accessed August 3, 2026 (2026). URL https://www.federalreserve.gov/publications/ccar-qas/comprehensive-capital-analy sis-and-review-questions-and-answers.htm 
+
+[2] O ffi ce of the Comptroller of the Currency, Allowances for credit losses: Revised comptroller’s handbook booklet and rescissions, OCC Bulletin 2026-33, accessed August 3, 2026 (Jul. 2026). URL https://www.occ.treas.gov/news-issuances/bulletins/2026/bulletin-2026-33.html 
+
+[3] X. Mei, J. Lin, Attributing forecast gaps to component models in complex model suites, arXiv preprint arXiv:2606.21539 (2026). [4] L. S. Shapley, A value for n-person games, in: H. W. Kuhn, A. W. Tucker (Eds.), Contributions to the Theory of Games II, Vol. 28 of Annals of Mathematics Studies, Princeton University Press, Princeton, NJ, 1953, pp. 307–317. doi:10.1515/9781400881970-018 .[5] G. Owen, Values of games with a priori unions, in: R. Henn, O. Moeschlin (Eds.), Mathematical Economics and Game Theory, Vol. 141 of Lecture Notes in Economics and Mathematical Systems, Springer, Berlin, Heidelberg, 1977, pp. 76–88. doi:10.1007/978-3-642-45494-3_7 .[6] M. Sundararajan, A. Taly, Q. Yan, Axiomatic attribution for deep networks, in: Proceedings of the 34th Interna-tional Conference on Machine Learning, Vol. 70 of Proceedings of Machine Learning Research, PMLR, 2017, pp. 3319–3328. [7] S. M. Lundberg, S.-I. Lee, A unified approach to interpreting model predictions, in: Advances in Neural Informa-tion Processing Systems, Vol. 30, 2017. [8] G. Erion, J. D. Janizek, P. Sturmfels, S. M. Lundberg, S.-I. Lee, Improving performance of deep learning models with axiomatic attribution priors and expected gradients, Nature Machine Intelligence 3 (2021) 620–631. doi: 10.1038/s42256-021-00343-w .[9] J. Castro, D. Gómez, J. Tejada, Polynomial calculation of the Shapley value based on sampling, Computers & Operations Research 36 (5) (2009) 1726–1730. doi:10.1016/j.cor.2008.04.004 .14

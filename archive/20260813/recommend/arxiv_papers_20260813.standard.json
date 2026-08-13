@@ -1,0 +1,94 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-13T20:33:16.635687+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 2,
+    "quick_skim_target": 11,
+    "quick_selected": 2
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2608.04547v1",
+      "source": "arxiv",
+      "title": "Attributing Differences Between Forecast Runs to Input Changes, With Applications to CCAR and CECL Exercises",
+      "abstract": "Forecasting systems used in the Comprehensive Capital Analysis and Review (CCAR) and Current Expected Credit Losses (CECL) processes combine portfolio data, macroeconomic scenarios, model specifications, business assump- tions, and management adjustments. When the forecast changes from one run to the next, practitioners need an attribu- tion that reconciles to the total change without depending on an arbitrary sequence of input replacements. This paper formulates forecast-gap attribution as a cooperative game and examines several approaches: the exact Shapley value, hierarchical or nested Shapley values, Integrated Gradients, Gradient SHAP, Permutation SHAP, and Kernel SHAP. We compare their allocation rules, computational costs, implementation requirements, and limitations in production forecasting systems. The analysis provides a practical framework for choosing an attribution method according to the number and type of inputs, the feasibility of hybrid forecast runs, and the need for interpretability, reproducibility, and governance.",
+      "authors": [
+        "Xuan Mei",
+        "Junze Lin"
+      ],
+      "primary_category": "q-fin.RM",
+      "categories": [
+        "q-fin.RM"
+      ],
+      "published": "2026-08-05T07:36:08+00:00",
+      "link": "https://arxiv.org/pdf/2608.04547v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Forecast-gap attribution via Shapley values is a transferable method for budget execution variance analysis and financial management.",
+      "llm_evidence_cn": "基于Shapley值的预测差异归因方法可迁移至预算执行偏差分析与财政管理。",
+      "llm_evidence": "基于Shapley值的预测差异归因方法可迁移至预算执行偏差分析与财政管理。",
+      "canonical_evidence": "基于Shapley值的预测差异归因方法可迁移至预算执行偏差分析与财政管理。",
+      "llm_tldr_en": "Formulates forecast-gap attribution as a cooperative game, comparing Shapley, Integrated Gradients, and SHAP methods; offers a methodology applicable to budget execution and financial management.",
+      "llm_tldr_cn": "在CCAR和CECL等金融监管预测中，输入变化导致预测结果改变，需要不依赖替换顺序的归因方法以解释差异。本文将预测差异归因建模为合作博弈，系统比较精确Shapley值、嵌套Shapley值及多种梯度SHAP方法的分配规则与计算代价。结果表明，这些方法能为预测变化提供可解释且一致的总量分解。该方法可迁移至政府预算执行分析，用于解释预算偏差的来源，提升财政管理透明度。",
+      "llm_tldr": "在CCAR和CECL等金融监管预测中，输入变化导致预测结果改变，需要不依赖替换顺序的归因方法以解释差异。本文将预测差异归因建模为合作博弈，系统比较精确Shapley值、嵌套Shapley值及多种梯度SHAP方法的分配规则与计算代价。结果表明，这些方法能为预测变化提供可解释且一致的总量分解。该方法可迁移至政府预算执行分析，用于解释预算偏差的来源，提升财政管理透明度。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "analysis of budget execution and financial management",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.12269v1",
+      "source": "arxiv",
+      "title": "A Cascaded Unsupervised-Supervised NLP Pipeline for Detecting Accusatory Language in Public Procurement",
+      "abstract": "Public procurement involves the allocation of substantial financial resources; therefore, continuous oversight through audits, controls, and monitoring mechanisms is essential. However, stakeholder comments and publicly available government data are often underutilized, despite their potential to reveal procedural irregularities. To address this gap, this paper analyzes metadata from Ecuador's Sistema Oficial de Contratación Pública (SOCE, Official Public Procurement System), with particular emphasis on participant comments generated during the pre-contractual phase. We propose a hybrid modeling framework that integrates unsupervised clustering and supervised classification within a natural language processing (NLP) pipeline to uncover latent patterns and detect potentially irregular procurement processes. Semantic embeddings are generated using Word2Vec, LLaMA, and RoBERTa, followed by Gaussian Mixture Models (GMMs) for unsupervised clustering. A supervised classification stage is then applied to identify accusatory or whistleblowing-style comments. Experimental results show that the combination of domain-trained Word2Vec embeddings, GMM-based clustering, and a Random Forest classifier achieves high precision and recall, even under severe class imbalance. These findings demonstrate that lightweight, domain-adapted NLP architectures can effectively support risk identification and enhance transparency in public procurement systems without requiring large-scale computational infrastructure.",
+      "authors": [
+        "Bryan Torres",
+        "Daniel Riofrío",
+        "José Vega-Sánchez",
+        "Nathaly Orozco",
+        "Carla Parra",
+        "Karen Rosero",
+        "Felipe Grijalva"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-08-12T17:09:14+00:00",
+      "link": "https://arxiv.org/pdf/2608.12269v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Public procurement oversight and irregularity detection using NLP on government procurement comments",
+      "llm_evidence_cn": "利用NLP分析政府采购评论，服务于公共采购监督与违规检测",
+      "llm_evidence": "利用NLP分析政府采购评论，服务于公共采购监督与违规检测",
+      "canonical_evidence": "利用NLP分析政府采购评论，服务于公共采购监督与违规检测",
+      "llm_tldr_en": "Proposes a cascaded unsupervised-supervised NLP pipeline to identify accusatory language in public procurement comments. Applied to Ecuador's SOCE data, it supports irregularity detection and financial oversight in budget execution.",
+      "llm_tldr_cn": "公共采购涉及大量财政资源，需要持续的审计和监测。本文利用厄瓜多尔官方采购系统（SOCE）的参与方评论元数据，提出一种结合无监督聚类与有监督分类的级联NLP流水线，以识别采购前期评论中的指控性语言。该框架能够有效利用政府公开数据，辅助发现程序违规，为预算执行监督与公共财政审计提供可迁移的分析工具。",
+      "llm_tldr": "公共采购涉及大量财政资源，需要持续的审计和监测。本文利用厄瓜多尔官方采购系统（SOCE）的参与方评论元数据，提出一种结合无监督聚类与有监督分类的级联NLP流水线，以识别采购前期评论中的指控性语言。该框架能够有效利用政府公开数据，辅助发现程序违规，为预算执行监督与公共财政审计提供可迁移的分析工具。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "analysis of budget execution and financial management",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

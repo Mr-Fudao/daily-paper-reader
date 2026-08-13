@@ -1,0 +1,39 @@
+{
+  "label": "2026-08-13",
+  "date": "2026-08-13",
+  "generated_at": "2026-08-13T20:34:41",
+  "count": 2,
+  "papers": [
+    {
+      "paper_id": "202608/13/2608.04547v1-attributing-differences-between-forecast-runs-to-input-changes-with-applications-to-ccar-and-cecl-exercises",
+      "section": "quick",
+      "title_en": "Attributing Differences Between Forecast Runs to Input Changes, With Applications to CCAR and CECL Exercises",
+      "authors": "Xuan Mei, Junze Lin",
+      "date": "2026-08-05",
+      "pdf": "https://arxiv.org/pdf/2608.04547v1",
+      "score": "7.0",
+      "evidence": "基于Shapley值的预测差异归因方法可迁移至预算执行偏差分析与财政管理。",
+      "tldr": "在CCAR与CECL压力测试中，预测系统融合宏观经济、模型参数等输入，运行期间预测变化需稳定归因，避免受替换顺序干扰。本文将预测差距归因建模为合作博弈，对比精确Shapley值、分层Shapley、Integrated Gradients、Gradient SHAP、Permutation SHAP、Kernel SHAP的分配规则与成本。结果表明，各方法在公平性、实现难度和计算开销上差异明显，且适用条件各异。为此，提出根据输入类型、混合运行可行性与监管要求选择归因方法的决策框架，提升可解释性与治理水平。",
+      "tags": "query:budget-perf",
+      "abstract_en": "Forecasting systems used in the Comprehensive Capital Analysis and Review (CCAR) and Current Expected Credit Losses (CECL) processes combine portfolio data, macroeconomic scenarios, model specifications, business assump- tions, and management adjustments. When the forecast changes from one run to the next, practitioners need an attribu- tion that reconciles to the total change without depending on an arbitrary sequence of input replacements. This paper formulates forecast-gap attribution as a cooperative game and examines several approaches: the exact Shapley value, hierarchical or nested Shapley values, Integrated Gradients, Gradient SHAP, Permutation SHAP, and Kernel SHAP. We compare their allocation rules, computational costs, implementation requirements, and limitations in production forecasting systems. The analysis provides a practical framework for choosing an attribution method according to the number and type of inputs, the feasibility of hybrid forecast runs, and the need for interpretability, reproducibility, and governance.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202608/13/2608.12269v1-a-cascaded-unsupervised-supervised-nlp-pipeline-for-detecting-accusatory-language-in-public-procurement",
+      "section": "quick",
+      "title_en": "A Cascaded Unsupervised-Supervised NLP Pipeline for Detecting Accusatory Language in Public Procurement",
+      "authors": "Bryan Torres, Daniel Riofrío, José Vega-Sánchez, Nathaly Orozco, Carla Parra, Karen Rosero, Felipe Grijalva",
+      "date": "2026-08-12",
+      "pdf": "https://arxiv.org/pdf/2608.12269v1",
+      "score": "6.0",
+      "evidence": "利用NLP分析政府采购评论，服务于公共采购监督与违规检测",
+      "tldr": "公共采购数据中的参与者评论蕴含程序违规线索，但常被忽视。本文提出级联NLP流水线，先以Word2Vec、LLaMA、RoBERTa生成语义嵌入，再用高斯混合模型无监督聚类，最后用随机森林分类器识别指控性或举报式评论。在厄瓜多尔SOCE真实数据上，领域训练Word2Vec结合GMM与随机森林在严重类别不平衡下仍获高精确率与召回率，表明轻量级领域自适应方法可有效支撑采购风险识别与透明度提升。",
+      "tags": "query:budget-perf",
+      "abstract_en": "Public procurement involves the allocation of substantial financial resources; therefore, continuous oversight through audits, controls, and monitoring mechanisms is essential. However, stakeholder comments and publicly available government data are often underutilized, despite their potential to reveal procedural irregularities. To address this gap, this paper analyzes metadata from Ecuador's Sistema Oficial de Contratación Pública (SOCE, Official Public Procurement System), with particular emphasis on participant comments generated during the pre-contractual phase. We propose a hybrid modeling framework that integrates unsupervised clustering and supervised classification within a natural language processing (NLP) pipeline to uncover latent patterns and detect potentially irregular procurement processes. Semantic embeddings are generated using Word2Vec, LLaMA, and RoBERTa, followed by Gaussian Mixture Models (GMMs) for unsupervised clustering. A supervised classification stage is then applied to identify accusatory or whistleblowing-style comments. Experimental results show that the combination of domain-trained Word2Vec embeddings, GMM-based clustering, and a Random Forest classifier achieves high precision and recall, even under severe class imbalance. These findings demonstrate that lightweight, domain-adapted NLP architectures can effectively support risk identification and enhance transparency in public procurement systems without requiring large-scale computational infrastructure.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

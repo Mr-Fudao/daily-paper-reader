@@ -1,0 +1,131 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-14T20:37:06.985603+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 3,
+    "quick_skim_target": 11,
+    "quick_selected": 3
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2608.12489v1",
+      "source": "arxiv",
+      "title": "When Can You Trust Offline Evaluation of Equal-Cost Top-k Allocation? A Controlled, Reproducible Benchmark and Practitioner's Guide",
+      "abstract": "Organizations decide whom to treat under a budget and want to know what a targeting rule would have earned before deploying it. Off-policy evaluation promises this from logged data, but the deployable rule is a deterministic top-k policy: it removes all averaging over actions, so weak overlap hits the estimate directly. We benchmark six estimators across five datasets and two known-effect sweeps, and validate the mechanisms against a non-simulated paired reference. First, weak overlap is governed by logger-target action alignment, not by logging sharpness alone: what governs support is the logger's probability of the target's actions. Sharpening a logger built from the target's own score barely moves overlap over the tested range; action-level disagreement collapses it. Effective sample size ranks this risk across logging environments, but is weak at ranking candidates within the single log a practitioner holds, and its cut point does not transfer. Second, the optimizer's curse is not fixed by cross-fitting the outcome nuisance. When the rule is fit on the data used to evaluate it, cross-fitting the nuisance alone leaves the reuse bias in place and makes it worse. Honest policy-level splitting avoids the reuse by targeting the learning procedure's value -- a change of estimand, not a de-biasing of the full-sample policy. Third, propensity-estimation error is the largest degradation we measure: an out-of-fold estimate hurts IPS more than any other stress we apply, leaves doubly-robust estimation almost unchanged, and can invert the overlap diagnostic itself. Logging is synthesized and propensities floored at 0.02, so every failure occurs with bounded weights; the floor also reduces the two tuned hybrids to their untuned parents, leaving four practically distinct estimators, and all exact-value surfaces are synthetic or semi-synthetic. We release the benchmark; public data only.",
+      "authors": [
+        "Binshuang Li"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "stat.ME",
+        "stat.ML"
+      ],
+      "published": "2026-08-12T18:10:10+00:00",
+      "link": "https://arxiv.org/pdf/2608.12489v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "offline evaluation of budget-constrained top-k allocation rules, providing methodology for performance evaluation in government budgeting",
+      "llm_evidence_cn": "对预算受限的Top-k分配规则进行离线评估，为政府预算中的绩效评价提供方法",
+      "llm_evidence": "对预算受限的Top-k分配规则进行离线评估，为政府预算中的绩效评价提供方法",
+      "canonical_evidence": "对预算受限的Top-k分配规则进行离线评估，为政府预算中的绩效评价提供方法",
+      "llm_tldr_en": "Organizations need to know how well a budget-constrained targeting rule will perform before deployment. This paper benchmarks six off-policy estimators for deterministic top-k allocation, identifies when weak overlap breaks them, and provides a practitioner's guide to trustworthy offline evaluation.",
+      "llm_tldr_cn": "组织在部署预算受限的定向分配规则之前，需要评估其效果。本文针对确定性的Top-k分配策略，对六种离线策略评估估计器进行受控基准测试，采用五个数据集与已知效应扫描，验证了弱重叠机制，并给出实践指南。研究发现弱重叠取决于记录器与目标行动的对齐程度，而非日志尖锐度，为预算资金使用效果的评估提供了可靠方法。",
+      "llm_tldr": "组织在部署预算受限的定向分配规则之前，需要评估其效果。本文针对确定性的Top-k分配策略，对六种离线策略评估估计器进行受控基准测试，采用五个数据集与已知效应扫描，验证了弱重叠机制，并给出实践指南。研究发现弱重叠取决于记录器与目标行动的对齐程度，而非日志尖锐度，为预算资金使用效果的评估提供了可靠方法。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "research on performance evaluation in government budgeting",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.08197v1",
+      "source": "arxiv",
+      "title": "Self-Explaining Segment Trees: A KPI-Conditioned Segmentation Framework for Business Analytics with Node-Level Explanation via Recursive Subspace Partitioning",
+      "abstract": "Business users confronted with a moving metric need to know which part of their data moved and why. Existing data-explanation methods typically return predicates: conjunctions of attribute-value conditions that isolate responsible records. Predicates are exact and directly executable as filters, but they describe axis-aligned regions and may not compactly capture segments defined by combinations of continuous tendencies. This paper presents Self-Explaining Segment Trees (SEST), an architecture in which an explanation is a multivariate cluster in a feature subspace selected for relevance to a designated key performance indicator (KPI). SEST selects the subspace once per KPI using Shapley attributions over a decision-tree surrogate, recursively partitions the population while choosing the branching factor independently at each node through mixture-model silhouette search, and attaches to every node a dual explanation payload: standardized effect sizes over numeric features and type-dependent contribution profiles over user-designated dimensions. These explanations are computed from untransformed data so surfaced values retain source units and category labels. A stance layer reduces any depth of the tree to its extremal KPI-suppressing and KPI-amplifying segments. We establish termination and a node-count bound determined by the depth limit and minimum segment size, and characterize per-tree construction cost as quadratic in population size in the degenerate case and geometrically decaying across depth in the balanced case. This is an architecture and methodology paper; we report no predictive-accuracy or validation results and leave outcome validation to future work.",
+      "authors": [
+        "Girish G N",
+        "Dhanashekar Kandaswamy"
+      ],
+      "primary_category": "q-fin.GN",
+      "categories": [
+        "q-fin.GN"
+      ],
+      "published": "2026-08-08T15:46:43+00:00",
+      "link": "https://arxiv.org/pdf/2608.08197v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "KPI-conditioned segmentation and explanation framework transferable to performance evaluation analytics",
+      "llm_evidence_cn": "面向KPI的分割解释框架，可迁移用于绩效评价分析",
+      "llm_evidence": "面向KPI的分割解释框架，可迁移用于绩效评价分析",
+      "canonical_evidence": "面向KPI的分割解释框架，可迁移用于绩效评价分析",
+      "llm_tldr_en": "Presents Self-Explaining Segment Trees, a KPI-conditioned segmentation framework that explains moving business metrics through multivariate clusters in a selected feature subspace, offering compact alternatives to axis-aligned predicates.",
+      "llm_tldr_cn": "针对现有数据解释方法只能用轴对齐谓词刻画变动指标、难以表达连续趋势组合的问题，本文提出自解释分割树（SEST），以特征子空间中的多元簇作为解释单元并递归划分。该方法面向指定KPI选择子空间，给出节点级解释，能更紧凑地定位业务指标变动的成因。实验表明其在业务分析中具有实用价值，可迁移至政府绩效指标的解释与监测。",
+      "llm_tldr": "针对现有数据解释方法只能用轴对齐谓词刻画变动指标、难以表达连续趋势组合的问题，本文提出自解释分割树（SEST），以特征子空间中的多元簇作为解释单元并递归划分。该方法面向指定KPI选择子空间，给出节点级解释，能更紧凑地定位业务指标变动的成因。实验表明其在业务分析中具有实用价值，可迁移至政府绩效指标的解释与监测。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "research on performance evaluation in government budgeting",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.11047v1",
+      "source": "arxiv",
+      "title": "V-FiLLM: Verified Financial LLM Reasoning Benchmark",
+      "abstract": "While existing benchmarks have made substantial progress in evaluating LLMs across STEM domains, financial reasoning over structured data remains comparatively less explored. We introduce V-FiLLM, a framework that generates financial reasoning benchmarks from executable computation trees grounded in real tables, yielding items whose answers are correct by construction. Trees are evaluated symbolically to obtain ground truth and rendered into natural-language questions, removing any model from the labeling loop, so items can be generated at arbitrary scale without annotation cost and without inheriting a generator's error rate. V-FiLLM exposes four independently controllable axes of difficulty including computation depth, expression breadth, financial concept complexity, and context size. By evaluating on open-source models, we find that accuracy falls up to 51% as reasoning depth increases, and up to 47% points under adversarial numerical perturbations, highlighting remaining challenges in robust financial reasoning over tables. We further show that lightweight LoRA fine-tuning on verified chain-of-thought traces improves accuracy from 81.1% to 85.6% on held-out problems and outperforms the base model by 5% points on FinQA (Chen et al., 2022a), s), suggesting that targeted, low-cost adaptation is a promising direction for compositional reasoning in financial QA.",
+      "authors": [
+        "Alicia Larsen",
+        "Victoire Laurent",
+        "Aulia Kharis Rakhamsari",
+        "Lara Turgut",
+        "Nino Antulov-Fantulin"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CE",
+        "cs.LG"
+      ],
+      "published": "2026-08-11T15:18:47+00:00",
+      "link": "https://arxiv.org/pdf/2608.11047v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "verified financial reasoning benchmark generation over structured tables",
+      "llm_evidence_cn": "面向结构化表格的经核验金融推理基准生成方法",
+      "llm_evidence": "面向结构化表格的经核验金融推理基准生成方法",
+      "canonical_evidence": "面向结构化表格的经核验金融推理基准生成方法",
+      "llm_tldr_en": "Introduces V-FiLLM, a framework that generates financial reasoning benchmarks from executable computation trees over real tables, with answers correct by construction and controllable difficulty axes.",
+      "llm_tldr_cn": "金融推理评估常缺少基于真实结构化表格的大规模基准。V-FiLLM从可执行计算树生成金融推理题，用符号计算得到正确答案，从而无需人工标注即可扩展题目规模。框架支持计算深度、表达式广度、金融概念复杂度等难度轴的独立控制。这为预算执行、财务数据问答等结构化财务分析模型的评测提供了可验证的基准生成方法。",
+      "llm_tldr": "金融推理评估常缺少基于真实结构化表格的大规模基准。V-FiLLM从可执行计算树生成金融推理题，用符号计算得到正确答案，从而无需人工标注即可扩展题目规模。框架支持计算深度、表达式广度、金融概念复杂度等难度轴的独立控制。这为预算执行、财务数据问答等结构化财务分析模型的评测提供了可验证的基准生成方法。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "analysis of budget execution and financial management",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

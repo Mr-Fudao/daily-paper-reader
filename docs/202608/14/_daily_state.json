@@ -1,0 +1,57 @@
+{
+  "date": "20260814",
+  "date_label": "",
+  "generated_at": "2026-08-14 20:39:10 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2608.12489v1",
+      "route": "202608/14/2608.12489v1-when-can-you-trust-offline-evaluation-of-equal-cost-top-k-allocation-a-controlled-reproducible-benchmark-and-practitioners-guide",
+      "title": "When Can You Trust Offline Evaluation of Equal-Cost Top-k Allocation? A Controlled, Reproducible Benchmark and Practitioner's Guide",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "对预算受限的Top-k分配规则进行离线评估，为政府预算中的绩效评价提供方法",
+      "first_seen_at": "2026-08-14 20:39:10 UTC",
+      "updated_at": "2026-08-14 20:39:10 UTC"
+    },
+    {
+      "paper_id": "2608.08197v1",
+      "route": "202608/14/2608.08197v1-self-explaining-segment-trees-a-kpi-conditioned-segmentation-framework-for-business-analytics-with-node-level-explanation-via-recursive-subspace-partitioning",
+      "title": "Self-Explaining Segment Trees: A KPI-Conditioned Segmentation Framework for Business Analytics with Node-Level Explanation via Recursive Subspace Partitioning",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "面向KPI的分割解释框架，可迁移用于绩效评价分析",
+      "first_seen_at": "2026-08-14 20:39:10 UTC",
+      "updated_at": "2026-08-14 20:39:10 UTC"
+    },
+    {
+      "paper_id": "2608.11047v1",
+      "route": "202608/14/2608.11047v1-v-fillm-verified-financial-llm-reasoning-benchmark",
+      "title": "V-FiLLM: Verified Financial LLM Reasoning Benchmark",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "面向结构化表格的经核验金融推理基准生成方法",
+      "first_seen_at": "2026-08-14 20:39:10 UTC",
+      "updated_at": "2026-08-14 20:39:10 UTC"
+    }
+  ]
+}

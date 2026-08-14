@@ -1,0 +1,961 @@
+Title: When Can You Trust Offline Evaluation of Equal-Cost Top-k Allocation? A Controlled, Reproducible Benchmark and Practitioner's Guide
+
+URL Source: https://arxiv.org/pdf/2608.12489v1
+
+Published Time: Fri, 14 Aug 2026 00:12:27 GMT
+
+Number of Pages: 40
+
+Markdown Content:
+# When Can You Trust Offline Evaluation of Equal-Cost Top-k
+
+# Allocation? A Controlled, Reproducible Benchmark and Practitioner’s Guide 
+
+Binshuang Li 
+
+Independent Researcher 
+
+# Abstract 
+
+Organizations routinely decide whom to treat under a budget, and want to know what a targeting rule would have earned before deploying it. Off-policy evaluation promises this from logged data. But the deployable rule is a deterministic top-k policy: it removes all averaging over actions, so weak overlap hits the estimate directly. We benchmark six estimators across five datasets and two known-effect sweeps, and validate the mechanisms against a non-simulated paired reference. First, weak overlap is governed by logger–target action alignment, not by logging sharpness alone. Temperature is not a valid overlap parameter: what governs support is the logger’s probability of the target’s actions . Over the tested range, sharpening a logger built from the target’s own score barely moves overlap; disagreement at the action level collapses it. Effective sample size, computed from logged actions and propensities, ranks this risk across 
+
+logging environments — guidance for designing logs and choosing estimator families, since it is weak at ranking candidate policies within the single fixed log a practitioner holds, and its cut point does not transfer. Second, the optimizer’s curse is not fixed by cross-fitting the outcome nuisance. When the rule is fit on the data used to evaluate it, cross-fitting the nuisance alone leaves the reuse bias in place and makes it worse. Honest policy-level splitting avoids the reuse by targeting the learning procedure’s value — a change of estimand, not a de-biasing of the full-sample policy. Third, propensity-estimation error is the largest degradation we measure. Replacing the exact propensity with an out-of-fold estimate hurts IPS more than any other stress we apply, leaves doubly-robust estimation almost unchanged, and can invert the overlap diagnostic itself. Section 4.1 states what this benchmark cannot tell you. Logging is synthesized throughout and propensities are floored at 0 .02, so every failure we document occurs with bounded weights; the floor also reduces the two tuned hybrids to their untuned parents in most cells, leaving four practically distinct estimators. All exact-value surfaces are synthetic or semi-synthetic — hence the non-simulated check. Section 6 distills the operational guidance. We release the benchmark; public data only. 
+
+# 1 Introduction 
+
+Consider a team allocating a fixed budget across a population: a retention offer to the 20% of customers most likely to respond, enrollment for the patients a treatment will help most. Each is a budget-constrained 
+
+> Large language models assisted with writing and code; the authors take full responsibility for all content (see the Use of Generative AI statement).
+
+1arXiv:2608.12489v1 [cs.LG] 12 Aug 2026 allocation : score every unit by an estimated treatment effect and treat the highest-scoring until the budget is exhausted. Before deploying a new rule the team wants to know what value it would achieve, from data already logged under the current one — off-policy evaluation (OPE) (Dudík et al., 2011; Thomas & Brunskill, 2016). 
+
+The difficulty is exposure to weak overlap, not determinism per se. The deployable rule is a 
+
+deterministic top-k policy: exactly one action per unit, so πe puts probability 1 on it. That does not by itself violate positivity — the relevant condition is πb(aπe (x) | x) > 0 for the actions πe selects. What determinism removes is all averaging over actions: weights become πe(a | x)/π b(a | x) ∈ { 0, 1/π b(a | x)}, so wherever the logger rarely took the action πe demands the weight is extreme and the effective sample collapses; wherever 
+
+πb has structural zeros, support genuinely fails. We exclude the second case by construction — propensities are floored at 0 .02, so every failure we document occurs with weights bounded by 50, arguably the more alarming finding. Practitioners feel this as estimates wildly optimistic on some campaigns and fine on others, with little guidance on which case they are in. 
+
+We treat this as an empirical, decision-facing question. Rather than propose a new estimator, we ask: 
+
+when is offline evaluation of equal-cost top-k allocation trustworthy, which estimator should a practitioner reach for, and can the danger be detected from logged data alone ? Every estimate is paired with an explicit reference value — exact ground truth where potential outcomes are known, a noisy known-propensity Horvitz–Thompson reference estimate on randomized trials — and the two categories are kept separate throughout. Existing work separately establishes weak-overlap instability, doubly-robust estimation, ESS diagnostics, sample splitting and policy-selection evaluation; our contribution is their integration under this estimand, plus new empirical evidence. We organize the results around four questions — RQ1 estimator accuracy, RQ2 overlap diagnostics, RQ3 the optimizer’s curse under policy–evaluation reuse, RQ4 policy selection — and take RQ2 and RQ3 as primary, with the estimated-propensity boundary (Contribution 3) scoping the first. Section 6 states the surviving claims at the strength the evidence supports; a reader who wants conclusions without the qualifications can read it first; Appendix A tabulates every claim against the evidence and scope supporting it, the fastest route to auditing claim–evidence alignment. 
+
+Contributions. We make three. 1. A design correction: overlap in top-k allocation is governed by logger–target misalignment, not logging sharpness alone (RQ2). The argument is analytic first, empirical second. For a deterministic target the weight is 1 /π b(aπe (x) | x), so support is governed by the logger’s probability of the target’s 
+
+actions , not by how sharply it logs. Appendix B turns that into the exact sharpening limit of Proposition 1 (Section 4): a score-aligned logger’s flat overlap is a finite-range plateau, while an action-aligned one sharpens toward full support. That is a prediction, and we tested it — re-centring the logger at the budget cutoff produces the predicted reversal — sharpening now improves overlap, and the failure gradient sharpens to 0 .0%/1 .7%/26 .7% (Appendix E). We offer this as a correction to how such benchmarks are built, not as a discovery: our own first design swept temperature on a score-aligned logger, never varying the quantity it meant to study. The empirical content is magnitude. Temperature alone moves median ESS only 0 .562 → 0.522; crossing alignment with temperature moves it 0 .56 / 0 .42 / 0 .19, with IPS failure rates of 8% / 13% / 32% at the sharpest temperature. ESS ranks that error across logging environments, though only weakly within a single log (ROC-AUC 0 .85 in-sample; 0 .83 and 0 .91 on two held-out families, the 0 .91 at a 2% error target chosen for that suite’s error scale, not selected for AUC; Table 7). One caveat here: the design and ranking claims are not independent, since misalignment depresses coverage, a factor of ESS. The estimated-propensity boundary is Contribution 3. 2. An estimand-coherent comparison of nuisance-only and policy-level splitting under policy–evaluation reuse (RQ3). Cross-fitting only the outcome nuisance does not remove reuse bias — frozen-policy cross-fitting is more optimistic than plain DR. Honest policy-level splitting evaluates the learning procedure on independent folds, with bias magnitude 58–92% smaller over eight known-effect 2regimes, seven of which share the IHDP covariate matrix (response surfaces, not populations). Honesty and sample splitting are long established (Athey & Imbens, 2016; Chernozhukov et al., 2018; Athey & Wager, 2021); the contribution is the estimand-coherent demonstration in the allocation-OPE setting. 3. An empirical boundary for the diagnostic program: propensity estimation dominates, and can invert the screen (RQ2, continued). Replacing the exact πb with an out-of-fold estimate is the largest degradation we measure — IPS failure rises from 6 .3% to 37–63% of cells, dwarfing the 2 .8–11 .7% from moving the logger regime — and a poor propensity model does not merely weaken the ESS screen but inverts it (AUC 0 .85 to a coin flip, then 0 .05). The screen’s prerequisite is a credible propensity model; Section 5.3 gives the mechanism. 
+
+What this paper establishes. Stated affirmatively: overlap risk in top-k allocation is governed by logger–target misalignment and is rankable ex ante, across logging environments rather than within one log, from logged data, conditional on a credible propensity model ; under policy–evaluation reuse, nuisance-only cross-fitting is counterproductive, and honest policy-level splitting evaluates the learning procedure without reuse, at the price of targeting a different estimand; and doubly-robust estimation is the most stable estimator across the individual stresses we apply, hence a defensible default when at least one nuisance model is credible. Three further findings are logically independent. The estimator rankings (RQ1), the negative model-adequacy-screen result (Section 5.3), and the policy-selection caution (RQ4) — candidate-aligned logs compare policy–logger pairs, not policies — all matter to anyone building an OPE selection benchmark. Supporting all of it is a released benchmark: six fixed-policy estimators over five datasets, plus two 2 ,160-configuration known-effect hardening sweeps. 
+
+# 2 Related Work 
+
+OPE estimators and weak overlap. The standard toolkit spans the direct method, inverse propensity scoring and its self-normalized variant (Swaminathan & Joachims, 2015), doubly-robust estimation (Dudík et al., 2011), and variance-controlled hybrids such as Switch-DR (Wang et al., 2017) and shrinkage-based DR (Su et al., 2020); formal definitions are in Appendix H. Their behaviour is well characterized for stochastic 
+
+targets, and effective sample size is an established weak-overlap diagnostic (Austin, 2011). Deterministic and constrained targets have received less benchmark attention (Guo et al., 2022; Nishimura et al., 2024; Yeom et al., 2025), which is the gap this paper addresses. The closest neighbour is Tanaka et al. (2026), where determinism sits on the opposite side: their logging policy is deterministic, so πb degenerates and weighting is unidentified rather than merely noisy, and they recover randomness from user-click stochasticity for slate rankings. Our determinism is in the target , with πb stochastic and floored, so positivity holds and the difficulty is variance, not identification — complementary problems, and their real logged feedback is what our synthesized logging lacks (Section 4.1). On the design side, Douglas et al. (2026) choose the logging policy, trading reward against coverage of the target’s actions — the design-side mirror of our fixed-log alignment axis. Weight-reliability constraints appear inside off-policy learning too (Liu et al., 2022); our contribution is validating ESS as an ex-ante risk ranking, not the diagnostic itself. 
+
+Cross-fitting, honesty, and the optimizer’s curse. When a policy is fit and evaluated on the same sample, its in-sample value is optimistically biased (Smith & Winkler, 2006). Cross-fitting removes nuisance overfitting in DML (Chernozhukov et al., 2018), and honesty — evaluating the learning procedure on data not used to fit it — is standard in the causal-forest and policy-learning literature (Athey & Imbens, 2016; Athey & Wager, 2021). Our contribution is not that principle but an estimand-coherent empirical demonstration in this setting, separating nuisance-only cross-fitting (frozen policy) from honest policy-level splitting (fold-specific policies, each scored against its own fold-matched reference); the former does not address the observed reuse bias — indeed it is more optimistic than plain DR (Section 5.4). 
+
+Policy selection and benchmarks. OPE is used to select among candidates, and dedicated metrics quantify selection quality (Saito & Joachims, 2021; Kiyohara et al., 2024). Semi-synthetic causal benchmarks supply known-effect data (Hill, 2011; Dorie et al., 2019), and open bandit datasets supply real logged feedback (Saito et al., 2021). In uplift modelling, Li (2026) shows within-experiment ranking metrics can invert the 3ordering ground-truth effect accuracy or policy risk would give — the selection question upstream of ours: there, which scoring rule to pick; here, whether the induced fixed policy’s value can be trusted from logged data. We combine both traditions, pair every estimate with an explicit reference value, and — as Section 5.5 shows — find that giving each candidate its own aligned log confounds selection by comparing policy–logger 
+
+pairs rather than policies. 
+
+# 3 Problem Setup 
+
+Allocation value. Each unit i has context xi, a binary action a ∈ { 0, 1} (withhold / treat), potential outcomes Yi(0) , Y i(1), and unit cost ci. A scoring rule s(·) and budget k ∈ [0 , 1] induce a deterministic allocation aπ (x): treat units in descending score order while cumulative cost stays within k ∑ 
+
+> j
+
+cj (with unit costs, “treat the top-k fraction”). The estimand is the gross expected outcome under the allocation, 
+
+V (πe) = E[ Y (aπe (X)) ] , (1) a value level (cost enters only through the budget constraint). A top-k rule is a batch policy: whether unit i
+
+is treated depends on the other units through the empirical cutoff. We therefore target the cohort-conditional 
+
+value V (πe)n(z) = 1
+
+> n
+
+∑ 
+
+> i
+
+E[Yi(zi) | X1: n] for the fixed allocation z = aπe (X1: n) — what our estimators and references compute — not a population-quantile policy with a predetermined cutoff. Uncertainty is correspondingly conditional: the bootstrap holds allocation and cutoff fixed. 
+
+Scope of the empirical study. The formalism above admits heterogeneous costs ci, but every experiment in this paper sets ci = 1, so the allocation is always “treat the top-k fraction” under a single binary action. We there-fore study equal-cost top-k allocation , not the general knapsack problem: we evaluate no heterogeneous-cost or multi-action setting, and all logged feedback is synthesized (Section 4) rather than drawn from a naturally occurring observational logging policy. Claims and practitioner guidance below should be read at that scope. 
+
+Reference values. Two explicitly separate categories. On data with known potential-outcome means (synthetic, IHDP , the ACIC-style DGPs) we compute the exact value of the allocation. On randomized trials with known constant propensity ( Hillstrom , Lenta , Jobs ) no exact value exists, so we use an unbiased but noisy known-propensity Horvitz–Thompson reference estimate on the randomized evaluation split shared with the estimators. Error against the second is not estimator MSE: it combines OPE error with reference-estimation variance. We therefore never pool the two categories in a single claim, and report cross-dataset averages separately for each. 
+
+Why standard OPE strains. Because πe is deterministic, the importance weight wi = πe(ai | xi)/π b(ai |
+
+xi) is either 0 or 1 /π b(ai | xi), and the latter blows up wherever πb seldom chose πe’s action. The strain is governed by the overlap between πe and πb, which we control explicitly and measure. 
+
+# 4 Benchmark Design 
+
+Datasets (Table 10, Appendix H). Five datasets span three regimes. Synthetic has known μ0, μ 1
+
+and a tunable effect, giving an exact value and full control. IHDP (continuous outcome) and Jobs (binary, randomized subset) are the canonical semi-synthetic causal benchmarks — IHDP supplies exact effects, Jobs 
+
+a randomized reference. Hillstrom and Lenta are real marketing RCTs with a known constant treatment probability; Hillstrom is natively three-arm and we collapse its two e-mail arms into one “treat” action (π1 = 2 /3), so it evaluates a coarsened action space. Table 10 reports sizes before logging: rejection sampling retains a subset, and on the small datasets that matters. Jobs falls to 132–203 logged units (Appendix J), so it is noise-dominated and the effective number of informative primary datasets is closer to four than five. That caveat applies to every cross-dataset mean and five-cluster bootstrap here. Large RCTs are capped at 50 ,000 rows by uniform subsampling, preserving the constant propensity. As a known-effect hardening 
+
+layer, we add six ACIC-2017-style data-generating processes over the real IHDP covariate matrix, following the competition’s “real covariates + simulated response surfaces” design (Hahn et al., 2019): three surface families (linear, nonlinear, step-subgroup effects) crossed with two noise levels. Surface coefficients are fixed 4per setting (only the factual treatment and outcome noise are redrawn per seed), noise is calibrated to the effect scale, and the baseline surface carries a positive intercept so the gross-outcome estimand is bounded away from zero at every budget — avoiding the small-denominator artifact that inflates relative-error metrics when V (πe) ≈ 0. 
+
+Logging policies and the overlap knob. For a randomized dataset we synthesize logged feedback by 
+
+rejection sampling : a logging policy πb(1 | x) = σ(˜s(x)/τ ) is a temperature-τ softmax over the standardized 
+
+candidate score ˜ s = ( s − ¯s)/sd( s), and we keep unit i with probability proportional to πb(ai | xi)/π rct (ai | xi); retained units keep their real (action, outcome). The logging treat-probability is floored at 0.02 for numerical stability — a design property with consequences worth stating up front: importance weights are bounded by 50 by construction, structural zeros never occur, and the weak-overlap failure documented in Section 5 is therefore a bounded-weight phenomenon, not an unbounded-tail one. We sweep τ ∈ { 0.5, 2.0, 5.0}.
+
+Temperature alone is not a valid overlap parameter, and the reason is specific to deterministic targets. What matters is πb on the action the target selects . Our self-aligned logger matches the candidate’s score ranking , not its action boundary: the logistic is centred at the score mean, while the top-k boundary sits at the budget cutoff. And indeed, over the tested range, sharpening barely moves overlap. That is a finite-range plateau, not a guarantee — extreme sharpening collapses overlap through the low-probability band between mean and cutoff, while a genuinely action-aligned logger sharpens toward full support. The limit is exact: 
+
+Proposition 1 (sharpening limit). For a top-k target under score s and a logistic logger floored at ε,the normalized Kish ESS satisfies ESS /n → { E[1 /q τ (X)] }−1 in the large-sample limit, where qτ (X) is the logging probability of the target’s action. Consequently, for a score-aligned logger, as τ → 0 this population ESS fraction satisfies ESS 
+
+n −→ 
+
+[ c
+
+1 − ε + 1 − cε
+
+]−1
+
+≈ ε
+
+1 − c ,
+
+where c = 1 − | F˜s(˜ q) − F˜s(0) | is the mass on which logger and target agree in the limit ( ˜q the standardized cutoff, reducing to c = k + F˜s(0) for ˜q > 0); an action-aligned logger (the same logistic centred at the top-k
+
+cutoff) has an empty mismatch band and instead sharpens toward full support, ESS /n → 1 − ε. Derivation in Appendix B. 
+
+For the benchmark’s score distributions at k=0 .1, c ≈ 0.6, so the score-aligned limit is ≈ 0.05. Extending the grid downward confirms both branches on the benchmark’s own data: at k=0 .1, τ =0 .05, median ESS is 0.061 score-aligned but 0 .960 action-aligned (Appendix B). Overlap is therefore governed by logger–target 
+
+action alignment, an explicit experimental axis crossed with τ (Section 5.2). IHDP , which has known potential-outcome means but no recorded propensity, instead draws actions from πb and rewards from the known surface, so it retains every unit at every temperature — the sole constant-n control for separating overlap from sample-size loss (Appendix J). Two properties documented in Appendix M matter downstream: the logistic is centred at the score mean , not the budget cutoff, so τ is comparable across learners but not across budgets; and rejection sampling retains fewer units at low τ . Appendix E re-runs the full sweep with the cutoff-centred logger. We keep the mean-centred sweep primary deliberately: it spans the wider overlap range that a risk-ranking study needs. Section 5.2 reports both failure gradients. In the main sweep s is the candidate’s own score ( self-aligned logging): the logger shares the candidate’s score, not its top-k action boundary, and is not the target policy. This isolates the overlap axis; Section 5.2 makes alignment itself an axis. 
+
+Estimators, metrics, and protocol. Through one interface we evaluate six estimators that all target the fixed deterministic policy V (πe) and are therefore ranked on a common estimand: DM , IPS , self-normalized 
+
+SNIPS (Swaminathan & Joachims, 2015), doubly-robust DR (Dudík et al., 2011), Switch-DR (Wang et al., 2017), and mIPS , an IPS variant whose propensity is mixed with a uniform-exploration component (retained for completeness; its median relative RMSE lands within 0 .001 of IPS on every dataset; both tuned hybrids are retained because their data-driven tuning collapsing to the untuned parents is itself a finding, Appendix B). A perturbation-smoothed DR targets a different , smoothed-policy estimand; it is reported separately, scored 5against its own matched reference (Appendix I). All model-based estimators share one LightGBM (Ke et al., 2017) outcome model per cell, and the two hybrids’ hyper-parameters (Switch-DR’s threshold, mIPS’s mixing weight) are tuned on the logged sample by an estimated-MSE proxy rather than hard-coded, so no estimator gets a hand-picked advantage. All estimators are our own implementations behind one interface (so nuisances are genuinely shared); IPS , SNIPS , DM and DR agree with Open Bandit Pipeline’s reference implementations to floating-point precision on identical inputs ( make reference-check ). Because outcome scale spans ∼ 30 ×
+
+across datasets we report relative RMSE, RMSE /|Vref |, per cell across seeds and aggregated by median (robust to the heavy IPS tail). Each dataset is split 50 /50: scoring rules are fit on train only ; logged feedback, the reference value and all estimators operate on the evaluation split. Formal definitions, aggregation formulas, leakage guards and the anomaly validator are in Appendix H. We sweep ten seeds, six budgets k ∈ { 0.1, 0.2, 0.3, 0.5, 0.7, 1.0}, three temperatures and three candidate policies ( T-learner , S-learner , random baseline). A cell is a (dataset, candidate policy, budget, temperature) tuple — the unit over which relative RMSE is computed, aggregating its ten seeds — giving 270 cells across the five datasets (2 ,700 configurations); paired comparisons and cluster bootstraps resample the unit named at each use. The full-budget point k = 1 is degenerate for selection and excluded from RQ4; it is retained for RQ1–RQ2, where excluding it leaves the ordering unchanged. The optimizer’s-curse study uses a separate protocol with the policy fit in-sample .
+
+Roadmap. Table 1 maps each sweep to the axis it varies and the section that consumes it; the rows map onto the make targets of Appendix B.1, runnable from the anonymized repository accompanying this submission; full reproduction takes roughly 17 hours on a 10-core laptop (Appendix B.1). 1
+
+Table 1: The experimental surface at a glance. Each sweep varies the named axes with everything else held fixed; Appendix B.1 lists the exact targets.                                       
+
+> sweep what it varies consumed in primary accuracy + alignment logger regime ×τ×budget §5.1, §5.2 cutoff-centred rerun logger centring (cutoff vs. score mean) §5.2, App. E propensity estimation known πb→out-of-fold ˆ πb§5.3 outcome-model ladder ˆμclass (LightGBM →ridge) §5.3 out-of-fold nuisance in-sample →honest ˆ μ§5.1 floor sensitivity propensity floor εto 0 .0002 §5.1, App. B known-effect hardening ( ×2) DGPs over real covariates §C.1 optimizer’s curse policy–evaluation reuse; splitting level §5.4 selection slate ×logging design §5.5
+> Twins non-simulated paired reference §5.6, App. N.3
+
+4.1 What this benchmark cannot tell you 
+
+Five limits bound every claim below; we state them together so the results sections can report findings at their supported strength without relitigating scope. • Which loggers are hard to estimate. Section 5.3 measures what estimated propensities cost IPS 
+
+— the largest degradation we observe — but our logger is a smooth function of a fitted uplift score, correspondingly hard to recover. A simpler real-world logger would be estimated far more accurately, so read the 37–63% failure rates as the hard case. Propensities remain floored at 0 .02. • Observational logs. All logged feedback is synthesized, never observed from a deployed logger — which buys exact propensities and a controlled alignment axis at the cost of realism, and is what Tanaka et al. (2026) have that we do not. The control is not merely cheaper, though: the RQ2 claim requires varying 
+
+logger–target alignment while target, data and truth stay fixed, and an observational log supplies one point on that axis, not the axis. That one point would test whether the diagnostics, computed on a real 
+
+> 1https://github.com/binshuangli/allocation-ope-bench .
+
+6log, rank its realized error consistently with the synthesized axis — a spot check — but could not test the alignment mechanism (no counterfactual logger exists for the same population) nor calibrate cut points (a single environment). Adding it is the concrete next step — a naturally logged bandit dataset with recorded propensities (Saito et al., 2021) — but not a drop-in: its multi-action recommendation setting is not equal-cost binary top-k allocation, so the adaptation changes the object of study and is work of its own. • Populations, and whose surfaces they are. Seven of eight known-effect regimes share the IHDP 
+
+covariate matrix, so 58–92% is variation in response surfaces, not populations; both hardening suites reuse calibration covariates, so transfer is held out at the DGP level only. The exact-value evidence therefore remains synthetic or semi-synthetic throughout; Appendix N.3 removes that reliance on simulated response surfaces with a reference read off recorded paired outcomes, where the RQ1 ordering (at a larger margin, 5.0× against 2 .0×), the RQ2 alignment mechanism and the RQ3 cross-fitting sign all replicate while the calibrated cut points do not. • Inference. Five primary datasets — one, Jobs , noise-dominated at 132–203 units — so no cluster interval carries much information, and all intervals are conditional , understating uncertainty for model-based estimators: measured coverage on exact-value cells is 0 .89 for DM against the nominal 0 .95, and IPS falls to 0 .89 in the flagged regime (Appendix L.1). • Scope. Binary action, unit costs, top-k fraction; gross value V (πe), whose relative RMSE partly rewards baseline predictability and so flatters DM — on Twins it compresses an IPS error of 62% of the achievable policy spread to a relative RMSE of 0 .016 (Appendix N.3). Clipped IPS and shrinkage-DR are both evaluated (Appendix B); perturbation-DR is scored only against its own smoothed-policy reference (Appendix I). The floor’s no-op argument is specific to tail control (clipping, switching, shrinkage); the balancing-weights family is outside the evaluated set — a stated boundary, not a finding. 
+
+# 5 Results 
+
+What survives everything below, in two sentences: overlap risk is governed by logger–target action alignment and is rankable across logging environments given credible propensities — not within one log; and under policy–evaluation reuse, only policy-level honesty addresses the optimism — nuisance-only cross-fitting makes it worse . The rest of this section states each finding at the strength its evidence supports, organized around four questions: accuracy (RQ1), overlap diagnostics (RQ2), the optimizer’s curse (RQ3), policy selection (RQ4) — with the outcome-model-quality axis between RQ2 and RQ3 and further robustness checks in Appendix C. 75.1 RQ1 — Which estimators are accurate? 
+
+Table 2: RQ1 estimator accuracy: median relative RMSE (RMSE /|Vref |, normalized by the configuration-level reference — exact where known, else the HT estimate); lower is better, best per column in bold. The last two columns re-run the benchmark with a five-fold out-of-fold ˆμ (make repro-full-oof ), all else fixed; IPS ,
+
+SNIPS and mIPS use no outcome model and are identical across the two, so the change isolates nuisance honesty: the DM /DR ordering is unchanged, the model-based advantage on exact-value data persists, and on the RCT-reference column all six fall within 0 .003, which we do not read as a ranking. Exact-value and HT-reference averages are reported separately , not pooled: they measure error against different references. Column blocks, left to right: per-dataset (in-sample ˆ μ), then cross-dataset means in two blocks — in-sample and out-of-fold — each split exact-value / HT-reference. Excluding the noise-dominated Jobs , the in-sample HT-reference average separates by only 0 .002 ( DM 0.024, IPS 0.026; Section 5.1).                                                                  
+
+> per dataset (in-sample ˆ μ)mean, in-sample mean, out-of-fold estimator hillstrom ihdp jobs lenta synthetic exact RCT-ref exact RCT-ref dm 0.022 0.014 0.066 0.026 0.044 0.029 0.038 0.030 0.041 dr 0.023 0.015 0.059 0.028 0.046 0.030 0.037 0.032 0.038 switch_dr 0.023 0.015 0.058 0.028 0.046 0.030 0.037 0.032 0.038
+> snips 0.022 0.025 0.063 0.030 0.058 0.042 0.038 0.042 0.038 ips 0.022 0.052 0.068 0.030 0.062 0.057 0.040 0.057 0.040 mIPS 0.022 0.051 0.068 0.030 0.062 0.057 0.040 0.057 0.040
+
+Table 3: The same in-sample errors under the incremental-value renormalization, |V (πe) − V (∅)|, on the exact-value datasets (Section 5.1). This is the metric that removes the baseline-predictability component gross value rewards: the family ordering persists, and the DM /DR gap closes.               
+
+> estimator ihdp synthetic dm 0.035 0.124
+> dr 0.039 0.125 switch_dr 0.038 0.125 snips 0.065 0.201 ips 0.142 0.211 mIPS 0.142 0.215
+
+Table 2 and Figure 3 report median relative RMSE for the six estimators targeting the fixed deterministic V (πe)(perturbation-DR targets a smoothed-policy estimand; Appendix I). Model-based estimators lead on four of five datasets and in aggregate; what matters is the magnitude of that lead and how much survives the checks below. 
+
+The size of the gap depends on what we can compare against. We report the cross-dataset average separately by reference type, not pooled: the two measure error against different objects. On the exact-value 
+
+datasets, where the comparison is against true potential outcomes, the gap is large: DM 0.029 and the DR family 0 .030 versus 0 .057 for the IPS family, a factor of ∼ 2. On the HT-reference datasets the ordering compresses to near-nothing: the DR family is nominally best (0 .037) against IPS /mIPS 0.040 and DM 0.038, a spread of 0 .003 we do not read as a ranking. A noisy reference adds a common error floor that shrinks measurable differences; the next paragraph shows why. The gap is widest on IHDP , where limited sample size (n = 672), treatment imbalance ( π1 = 0 .18) and weak-overlap weights let a handful of observations dominate the IPS average: relative RMSE ≈ 0.052, nearly 4 × that of DM (0 .014). SNIPS helps but does not close the gap. 
+
+RCT-reference comparisons cannot reliably resolve estimator ordering. Appendix P re-runs all three randomized datasets under a matched design varying only whether the HT reference is computed on the 
+
+same units the estimators see or on a disjoint held-out third — so the contrast isolates reference dependence. The ordering moves with the reference. Under the shared one, a weighting or DR estimator is best on all three datasets and DM on none. Under the disjoint one, DM is best on all three, and IPS falls to last on Jobs 
+
+8(0 .1628) though not worst everywhere ( DR on Hillstrom , SNIPS on Lenta ). Every estimator’s error also rises by 48–114% — several times the spread across estimators, so the reference supplies most of the measured error. That reference is itself an inverse-propensity construction, so on shared units it shares sampling noise with IPS and the two agree for reasons unrelated to accuracy — with three datasets and within-column differences of 0 .001–0 .009 on the two large RCTs, evidence consistent with that mechanism rather than an isolation of it. It is why we decline to read the IPS column of Table 2 as a ranking. 
+
+Jobs amplifies it: at 132–203 retained units all six estimators land within 0 .058–0 .068, and excluding it the HT-reference average separates by only 0 .002 ( DM 0.024, IPS 0.026) — a direction, not a ranking. 
+
+Which differences are real? Configurations share data, so we test the ordering with a paired comparison: the per-configuration signed difference in relative RMSE between two estimators, bootstrapped over dataset clusters. IPS is worse than DR by +0 .015 over all budgets (95% CI [+0 .005 , +0 .027]; +0 .013 on the k < 1grid), and worse in 72 .6% of cells. Switch-DR is statistically indistinguishable from DR (−0.0002). Two cautions attach to that number. The interval is a five-cluster bootstrap, narrow because the within-dataset gaps are similar rather than because five clusters carry much information; the same applies to every cluster interval here. And +0 .015 is a mean paired difference, against a median of +0 .007 (what Table 2 reports): the mean is larger because the right tail dominates it, and that tail is the practically important part. These are self-aligned-logger magnitudes; Section 5.2 shows the IPS penalty is several times larger once the logger disagrees with the target. Table 3 reinforces this by removing the baseline component of the gross-outcome value: accuracy is renormalized by the incremental value magnitude |V (πe) − V (∅)| (treat-none baseline) on the exact-value datasets. The model-based-vs-weighting ordering persists: the IPS family sits at 0 .142–0 .215 against 0 .035–0 .125 for DM /DR .But DM and DR become indistinguishable on synthetic (0 .124 vs. 0 .125), confirming that part of DM ’s gross-value edge reflects baseline predictability. This removes a reason to prefer DM on that renormalization; it is not itself an argument for DR , whose case rests on Section 5.3. 
+
+The family comparison does not depend on in-sample nuisance fitting. Under a five-fold out-of-fold 
+
+ˆμ the model-based family still beats IPS in 89–100% of the nuisance-cross-fitting check’s 72 configurations (four exact-value DGPs only; 62–68% over the whole benchmark’s 225, where the HT-reference datasets compress every gap), and re-running the whole benchmark that way (Table 2; a controlled comparison, since 
+
+IPS /SNIPS /mIPS are numerically identical across blocks) leaves the family gap intact and the exact-value 
+
+DM /DR ordering unchanged, though DM becomes worst of six on Jobs and Lenta , and worst of six on the HT-reference mean itself (0 .041; Table 11). The practical read is that model-based estimators are more stable than pure importance-weighting estimators 
+
+when outcome models are reasonably predictive — a condition that should be assessed with treatment-arm-specific held-out errors, calibration checks, and sensitivity across outcome-model classes, not assumed; we stress it directly in Section 5.3, where severe outcome-model misspecification can invert even the within-family ordering on the nonlinear synthetic DGP. Doubly-robust correction adds a safety margin; raw IPS is fragile precisely under the deterministic target this paper studies. 
+
+The propensity floor shapes the estimator set itself. At ε=0 .02 importance weights are capped at 50, and that ceiling — not the tuning — is why the hybrids duplicate their parents: Switch-DR is bit-for-bit identical to DR in 96 .6% of cells and mIPS reduces exactly to IPS in 75 .0%, while clipping is a no-op (Appendix B). Sweeping the floor itself to ε=0 .0002 locates where that regime ends: tail control begins to matter once weights exceed the 50 ceiling (median IPS 0.111 against clipped 0 .090 at ε=0 .005) while DR 
+
+stays flat (Appendix N). We keep ε=0 .02 primary deliberately: failures under bounded weights cannot be attributed to a few extreme weights (the more alarming case, as Section 1 argues), and the sweep bounds what changes below it. “Clipping does not help” is a property of the bounded-weight regime we chose, not of allocation OPE. 9self-aligned misaligned independent logger regime          
+
+> 0.0 0.2 0.4
+> median ESS fraction
+> self-aligned misaligned independent logger regime
+> 020 40
+> median per-cell max weight
+> logging temperature
+> τ= 0.5
+> τ= 2
+> τ= 5
+> self-aligned misaligned independent logger regime
+> 0.0 0.1 0.2 0.3
+> IPS failure rate (cells)
+> self-aligned misaligned independent logger regime
+> 0.0 0.1 0.2
+> IPS failure rate (cells), cuto ff -centred logger
+> RQ2 — the e ff ect of logging sharpness depends on logger–target action alignment
+
+Figure 1: RQ2 — overlap risk is a property of logger–target misalignment , not of logging sharpness alone. Three logger regimes crossed with τ , target fixed. Sharpening a self-aligned (score-aligned) logger barely moves overlap over this range (left) — a finite-range plateau, not a guarantee (Appendix B); once logger actions disagree with the target’s, low τ collapses the effective sample, drives the maximum weight to the 0.02-floor ceiling (centre), and raises the IPS failure rate (cells with median-over-seeds |relative bias | > 10%) from 8% to 32% (third panel). The fourth panel shows the same failure rates under budget-cutoff centring — 0.0%, 1 .7% and 26 .7% at τ =0 .5, with failure at τ ≥ 2 near zero (Appendix E): the self-aligned failures follow from score-mean centring, and the misalignment gradient survives the correction. 
+
+5.2 RQ2 — Can you tell, in advance, when to trust OPE? 
+
+Accuracy is not constant: it is governed by overlap, overlap is governed by how much the logger disagrees with the policy being evaluated, and both are observable without ground truth. 
+
+The overlap axis is alignment, not temperature. We cross three logger regimes with τ ∈ { 0.5, 2.0, 5.0}:
+
+self-aligned , built from the evaluated candidate’s score but not its top-k boundary (the main sweep’s design); 
+
+misaligned , built from the other learned candidate, a plausible incumbent; and independent , built from a candidate-independent score. Seeds, splits, fitted candidates and truth labels are held fixed, so differences are attributable to the logger alone (540 cells). Retained n is not a confound — the regimes retain near-identical medians (1 ,793 / 1 ,793 / 1 ,800 at τ =0 .5 on synthetic ), and IHDP holds n=336 in all three. Figure 1 reports the result. At τ =0 .5 the median maximum weight runs 4 .0 → 16 .2 → 50 .0 across the regimes, median ESS runs 0 .56 → 0.42 → 0.19, and IPS failure rates run 8 .3% → 13 .3% → 31 .7% (2 .8% → 4.4% → 11 .7% pooled, Table 8). Under the cutoff-centred logger the same gradient is 0 .0% / 1 .7% / 26 .7% (Appendix E; Section 4 states why the mean-centred sweep stays primary). The screen does not depend on that choice: on the cutoff-centred sweep the association replicates, ρ(ESS) = −0.32 pooled and 
+
+−0.58 under the independent logger, against −0.41 and −0.56 on the primary sweep — the centring choice moves which cells fail, not whether ESS ranks failure. Within the self-aligned regime, temperature does almost nothing. The practitioner’s question is therefore not “how smooth was my logger” but “how far is the policy I want to deploy from the one that collected my data”. Can a practitioner detect this without ground truth? Across the 540 cells the logged-data diagnostics do rank realized IPS error: ρ(ESS) = −0.41, ρ(support deficiency) = +0 .42, ρ(max weight) = +0 .35 — smaller than a temperature-only design would report. Cells share datasets, seeds and policies, so a cell-level p-value would be anti-conservative. The trustworthy evidence is consistency : within each dataset the ESS correlation ranges −0.35 to −0.71 and support deficiency +0 .46 to +0 .69, and leave-one-dataset-out values stay at |ρ| = 0 .37–0 .45. Appendix G works through the conditioning ladder in Table 8: the ranking survives conditioning on dataset (negative in 5 /5, −0.35 to −0.71) and on budget (AUC 0 .68–0 .95 across strata), and survives within the logger regime that actually produces failures ( ρ = −0.56 under an independent logger, 11 .7% of cells unsafe); but it collapses under joint regime-and-τ conditioning (median −0.01, negative in 6 of 9 strata). We read that as expected rather than damaging — regime × τ is the mechanism generating overlap variation here, so fixing both removes what ESS exists to rank — but it does narrow the claim: ESS ranks risk across the logging situations a practitioner might face, not within a fixed one. 10 The diagnostics also generalize beyond the data they were calibrated on, which is the practically useful test. A simple fragility screen — best understood as a risk-ranking heuristic, not a decision rule — is fit on this benchmark (flag a cell when ESS fraction < 0.36 or support deficiency > 0.02, targeting |relative bias | > 10%). ROC-AUCs are for the continuous ESS fraction, not the binary rule (ESS ROC-AUC 0 .85 in-sample) and applied to the two held-out hardening suites, run on the same alignment axis, whose DGPs were not used to calibrate it. On the IHDP-covariate suite it flags 21% of cells, with error rate 52% among flagged versus 7% among unflagged (base rate 17%; ESS ROC-AUC 0 .83; precision 0 .52, recall 0 .67). These quantities need only the logged actions and propensities, so the indicator is computable before believing any estimate. 
+
+The second suite reports a boundary rather than a failure. On the Hillstrom -covariate suite no 
+
+cell reaches 10% relative bias, so the AUC is undefined there. The cause is sample size, not a breakdown of the diagnostic: it retains a median 5 ,000 logged units against 336 and 2 ,072 elsewhere, with median 
+
+|relative bias | 0.012 against 0 .056 and 0 .035. At a target matched to its own error scale the screen is at its strongest anywhere in the paper (ROC-AUC 0 .91 at δ = 2%, precision 0 .58, recall 0 .84); we report the full 
+
+δ grid (Table 7, Appendix G) rather than a per-suite best, since choosing δ post hoc would fit the held-out data. The ranking transfers while the cut point does not — recalibrate on your own n. Appendix E re-runs the benchmark under the cutoff-centred logger. 
+
+Within a single log the screen is much weaker. Those correlations are across logging situations; a practitioner holds one. Fixing dataset, regime, temperature and seed and ranking the 12 candidate ×budget targets on that one log (450 logs) gives median ρ = −0.11, correct in sign in 58% of logs and no better than chance under the candidate-independent logger; it is negative only where overlap varies within the log ( −0.30 at τ =0 .5, 0 .00 at τ =5). ESS ranks which logging situation carries risk, not which candidate to trust within one. Absolute ESS ranks no better in practice (0 .858 against the fraction’s 0 .851; identical on each suite, where constant n makes them monotone transforms): what fails to transfer is the mapping from diagnostic value to error level, not the statistic. 
+
+5.3 RQ2, continued — estimated propensities are the largest degradation, and can invert the diagnostic 
+
+Everything above hands the weighting estimators the exact πb; in real observational logs propensity-estimation error is first-order. We re-run the alignment sweep with πb replaced by an out-of-fold ˆ πb (LightGBM on x,logistic on x, or the sample treat rate), floored at the same 0 .02 (Table 9). Weights and diagnostics use ˆ πb: a screen that works only on propensities you do not know would be useless. 
+
+For IPS , estimation error dominates everything else measured here. The share of cells in which IPS 
+
+exceeds 10% relative bias rises from 6 .3% to 37–63% — against 2 .8% to 11 .7% for moving the logger regime itself, on the same cell-level unit. Our logger is a smooth function of a fitted uplift score; the best ˆ πb correlates only ρ = 0 .30 with the truth (mean absolute error 0 .156; the logistic and marginal reach 0 .126/0 .129, but only the marginal loses the rank information, ρ = −0.02 against +0 .27). The degradation is not monotone in model quality. The flexible ˆ πb damages IPS most (median per-cell max weight 11 .8 against 2 .1 for the marginal model), trading bias for variance that IPS cannot absorb. The screen , by contrast, degrades monotonically, because what it loses is dispersion information. The table’s two IPS columns therefore point opposite ways, and the logistic model is least damaging by median error while still failing half its cells. DM is unchanged by construction (the pipeline check), DR and Switch-DR are essentially immune (0 .037 → 0.036–0 .042), and IPS 
+
+degrades 1 .9–4 .9×: the outcome-model term absorbs what the propensity model gets wrong. 
+
+The screen is only as good as the propensity model, and can invert. Under a flexible ˆ πb it is undamaged (ESS ROC-AUC 0 .84, matching the 0 .85 it reaches with the exact propensity); under a logistic model it is a coin flip (0 .54); under the marginal model it is actively misleading (AUC 0 .05, median IPS error rising from 0 .037 in the lowest estimated-ESS quartile to 0 .349 in the highest). The mechanism is specific: ESS factors as coverage × dispersion, and a near-constant ˆ πb carries no dispersion, so ̂ ESS collapses to coverage — which is highest exactly where the true propensity is most extreme. The inversion is systematic, not noise (Appendix F). The propensity model is a prerequisite , not a caveat. 11 The second axis: outcome-model quality. The RQ1 lead of model-based estimators is conditional on an adequate outcome model, so we degrade ˆ μ along a ladder (LightGBM → stumps → ridge). The effect is DGP-specific and, on the nonlinear synthetic surface, decisive: degrading ˆ μ makes DM worst of the four compared (0 .036 → 0.099, overtaking IPS at 0 .058) while DR degrades gracefully (0 .037 → 0.049) and never becomes worst. The crossing is beyond seed noise: seed-bootstrap intervals put the DM −IPS gap at the stump rung at [+0 .022 , +0 .063] — DM worse in 100% of 2 ,000 seed resamples — while DR ’s degradation interval, [ −0.001 , +0 .019], is consistent with graceful. On the other two DGP families DM stays best or within a whisker at every rung, so the inversion is a property of one family out of three. The practical map is therefore two-dimensional — overlap bounds weighting estimators, outcome-model quality bounds model-based ones — and DR is the safer default when adequacy is uncertain. Figure 2 draws it.    
+
+> overlap with the target’s actions outcome-model adequacy
+> model-based ( DM /DR )
+> weighting fails (RQ2)
+> both families usable; model-based leads (RQ1)
+> no estimator here is safe
+> improve the log or the model before trusting OPE
+> weighting ( IPS /SNIPS )
+> DM exposed; DR
+> degrades gracefully (§5.3)
+> DR : safer default under uncertainty on either axis
+
+Figure 2: Schematic: the two-dimensional decision map of Sections 5.1–5.3, drawn. Positions are qualitative, not calibrated coordinates. The overlap axis is rankable across logging environments by ̂ ESS given credible propensities (Section 5.2) — not within one log, and the cut points do not transfer. The adequacy axis has 
+
+no transferable screen (the negative result of Section 5.3); judge it by held-out error per arm. We also report a negative result: the obvious analogue of the ESS screen for model fragility, out-of-fold factual RMSE of ˆ μ, does not transfer ( ρ ≈ − 0.10, AUC 0 .48), because factual predictive error conflates irreducible noise with structural misfit. Full grid in Appendix N. 
+
+5.4 RQ3 — The optimizer’s curse: what addresses policy–evaluation reuse? 
+
+When the candidate policy is learned on the same data used to evaluate it , the optimizer selects units whose scores are inflated by their own estimation noise, and plain DR overstates the deployed value (Smith & Winkler, 2006). Fair comparison requires care with estimands . We compare two fixed-policy estimators — plain DR and a frozen-policy cross-fitted DR (in-sample policy fixed; only the nuisance fit out-of-fold) — each scored against the true value of that same in-sample-optimized policy. Separately we evaluate the honest fold-policy pipeline : the policy is re-learned per fold on out-of-fold data and evaluated on the held-out fold, so its estimand is the value of the learning algorithm , scored against its own fold-matched exact reference. Mixing the two would conflate curse removal with the estimand gap, so we do not; “true value” is exact on the datasets carrying the result. ( Perturbation-DR targets a third estimand; Appendix I.) 12 Table 4: RQ3 optimizer’s curse, per dataset: plain-DR |bias | (in-sample policy value); the |bias | change from nuisance-only cross-fitting (same fixed-policy estimand); and the bias reduction under honest algorithm 
+
+evaluation (a different estimand — the learning procedure’s value). “Material optimistic bias” is an explicit criterion — plain DR’s mean signed bias exceeds 2% of |Vref | (third column) — and signed on purpose: Jobs 
+
+(−0.2%) and Lenta (−3.8%) carry non-trivial |bias | but no optimism, so there is no upward reuse bias to remove; IHDP (+6 .9%) and synthetic (+23 .6%) are flagged. DR |bias | is shown raw and as a fraction of 
+
+|Vref |, since raw magnitudes are not comparable across outcome scales. Italic entries are out of scope — on those datasets there is no material upward reuse bias to remove, so a “% removed” is not comparable to the flagged rows; they are shown for completeness and nothing in the text depends on them. Jobs ’ +8 .4 is the only cell in the benchmark where nuisance-only cross-fitting helps, on the noise-dominated dataset.                                                                                  
+
+> dataset material optimistic DR bias /|V|DR |bias |DR |bias |/|V|nuis. x-fit honest-algo. bias? (signed) % removed % removed hillstrom no -0.000 0.001 0.005 −19 .011.2
+> ihdp yes 0.069 0.242 0.071 -18.3 68.5 jobs no -0.002 0.034 0.041 +8 .423.6
+> lenta no -0.038 0.007 0.038 −138 .673.3
+> synthetic yes 0.236 0.181 0.236 -36.0 91.7
+> six ACIC-style known-effect DGPs on real IHDP covariates (Section C.1):
+> acic_s1 yes 0.059 0.140 0.059 -26.7 57.8 acic_s2 yes 0.394 0.858 0.394 -16.0 77.7 acic_s3 yes 0.092 0.200 0.092 -19.3 82.2 acic_s4 yes 0.381 0.891 0.381 -16.5 79.7 acic_s5 yes 0.064 0.137 0.065 -19.3 71.1 acic_s6 yes 0.145 0.303 0.145 -17.1 77.3
+
+The central result: cross-fitting the outcome nuisance — the reflexive fix — does not remove the reuse bias but makes it worse . With the policy frozen, an out-of-fold ˆ μ makes the DR correction 
+
+honest , and that is the problem: the optimizer selected units whose scores were inflated by their own noise. 
+
+Observation (informal). For a policy selected data-adaptively on the evaluation sample, in the regimes we study the conditional residual is positive — E[y − ˆμ | selected] > 0 under an honest ˆ μ — while an in-sample ˆμ shrinks exactly that conditional residual. The DR correction averages w (y − ˆμ), so honesty adds the optimism back. The difference between the two pipelines is in fact exact algebra: by linearity of DR, ̂
+
+Vin −̂ Vhonest = 1
+
+> n
+
+∑
+
+> i
+
+(1 − wi ⊮[ai=πe(xi)] ) ( ˆμin − ˆμhonest 
+
+)(xi, π e(xi)) ,
+
+whose expectation is −Cov (w ⊮[a=πe], ˆμin 
+
+) once cross-fitting makes ˆ μhonest independent of the evaluation draw and the propensities are known, so E[w ⊮[a=πe] | x] = 1 — as they are here by construction. The sign condition is that the in-sample nuisance be elevated exactly where the estimator’s weighted observation indicator is — which own-observation fitting produces and cross-fitting removes. The identity is exact; whether the covariance is positive and material for a given learner and logging regime is empirical, and that is what the eight regimes and the ablation test. The frozen-policy cross-fit is therefore more optimistic than plain DR (+0 .25 / +0 .28 vs. +0 .18 / +0 .24; “% removed” negative, −16% to −36% across all eight known-effect regimes). A decoupled ablation confirms the sign is not an artifact of the policy and nuisance sharing a model: with an in-sample LightGBM policy and a different-class DR nuisance ( make repro-optbias-decoupled ), cross-fitting stays more optimistic on four of five datasets (pooled −32%). The exception is synthetic at +1% — essentially no effect either way — where the decoupled ridge nuisance is the class Section 5.3 shows is misspecified on that nonlinear surface, so model-class bias plausibly swamps the selection-noise channel there. Scope: for the data-adaptive top-k learners studied here , frozen-policy nuisance cross-fitting consistently increased optimism across the eight primary known-effect regimes; in the decoupled ablation it increased optimism on four of five datasets and was essentially neutral on the fifth. We do not establish when the covariance is material — and the obvious toy model illustrates why magnitude resists simple derivation: in a 13 homogeneous normal-means case with mild weights the covariance term is numerically negligible, leaving total DR optimism essentially invariant to ˆ μ there. The sign’s form is the identity above; its size in our regimes is measured, not derived. Seven of eight regimes share one covariate population. The bias lives in the policy–data dependence, not in nuisance reuse. 
+
+What the practitioner gains from honest splitting. Split at the policy level: re-learn the rule per fold on out-of-fold data, evaluate on the held-out fold. Against its own fold-matched reference that cuts |bias | by 91 .7% and 68 .5% — close to definitional. The practitioner-facing question is how much of the optimism they would oth-erwise carry is removed, measured against the true value of the full-sample in-sample policy — what plain DR was estimating. On that target the honest pipeline removes 89% and 69% of the per-cell error, and IHDP ’s 69% nearly matches the 68 .5% above: the estimand gap costs little. Seed-level bootstrap CIs [88 , 95]% and [49 , 81]%. 
+
+And the regime in which any of this matters. Material bias — plain DR’s mean signed bias above 2% of |Vref | — appears only on the two datasets with continuous, known effects where the in-sample model can overfit ( synthetic +23 .6%, IHDP +6 .9%), not on the three binary RCTs ( −0.2%, −3.8%, −0.0%), whose non-trivial |bias | is not optimistic . “% removed” uses the conservative mean per-cell absolute bias throughout (Appendix L). 
+
+The pattern is not an artifact of two generators. We re-run the same comparison on the six ACIC-style exact-value DGPs (Section C.1), which also have known potential outcomes and an overfittable in-sample model. On all six, plain DR is again optimistically biased (signed +0 .14 to +0 .89), nuisance-only cross-fitting again worsens it ( −16% to −27%), and honest policy-level splitting again reduces the bias, by 58–82% (per-setting values in Table 4; every seed-bootstrap interval excludes zero). With the two original generators the reduction spans 58–92% over all eight continuous/known-effect regimes with uniform direction. That range is over point estimates — individual intervals are wider and extend below its floor ( IHDP [49 , 81]%); Section 4.1 bounds its breadth. 
+
+The estimand distinction, stated once. The 89%/69% figures above are an estimand-gap diagnostic, not a bias measurement: against the full-sample target the honest estimate sits at +0 .017 and −0.019 versus plain DR’s signed +0 .181 and +0 .237 (Table 4 reports mean per-cell absolute bias, 0 .181/0 .242), but the honest pipeline is not an unbiased estimator of that target. We are not de-biasing a fixed data-adaptive quantity; we are honestly evaluating the policy-learning procedure , usually the deployment-relevant object anyway (Appendix L separates the signed and absolute readings). 
+
+5.5 RQ4 — Do estimators pick the right policy? 
+
+Finally: does OPE pick the best candidate under a budget? “Best” is the value-maximizing candidate on the exact-value datasets and the HT-reference-best policy on the RCT ones. We exclude the full-budget point, where every candidate treats everyone and “best” is an arbitrary tie. 
+
+The logging design is a first-order confounder, so we vary it explicitly. The main sweep logs from 
+
+each candidate’s own score. That is right for isolating the overlap axis and wrong for selection: comparing ̂ Vj
+
+across candidates then compares policy–logger pairs rather than policies, and real selection has one historical log. We therefore re-run selection with a common logger — one logged dataset per cell, identical for every candidate — either aligned with the T-learner or candidate-independent . Table 5 reports all three designs, with seeds, splits, candidates and truth labels fixed, on the three-candidate slate of Section 4 (baseline 1 /3) and a competitive seven-policy slate (six candidates on the two continuous-outcome exact-value datasets, seven on the three RCT ones; Appendix O), baseline ≈ 0.15 rather than 1 /7. 
+
+In correct-selection accuracy the model-based edge survives every design; regret is more qualified. The DM − IPS gap runs +0 .083 → +0 .105 → +0 .056 across the per-candidate, common-aligned and common-independent designs on the three-candidate slate, and +0 .044 → +0 .020 → +0 .016 on the seven-policy slate. The design therefore does not dominate the estimator comparison: the gap moves by about half its own size with no consistent direction, while a competitive slate shrinks it by 1 .9–5 .3× — a null: no detectable logging-design effect, and a slate effect larger than any we could resolve. With five datasets no single interval is authoritative, so Table 5 layers a per-dataset sign count, a leave-one-dataset-out range and two cluster bootstraps, all conditional on this benchmark. On the three-candidate slate the finer bootstrap 14 excludes zero under the common-aligned design, sits at zero to resampling resolution under the per-candidate one (its lower bound changes sign across bootstrap seeds) and includes zero under the common-independent one, while dataset-level clustering excludes it nowhere; on the competitive slate support is absent at every level. 
+
+Normalized regret agrees on the easy slate and dissents on the competitive one. Regret asks how costly the mistake was, not merely whether the top pick was right. On the three-candidate slate the 
+
+DM − IPS regret gap favours DM under every logging design ( −0.026, −0.052, −0.022; lower is better). On the seven-policy slate the sign reverses (+0 .045, +0 .012, +0 .016): IPS incurs slightly lower regret. The summary is simple: on the easy slate both criteria favour DM ; on the competitive slate they disagree, and the disagreement tracks reference type. The +0 .045 regret gap is not noise — it is the size of the winner-accuracy gap on that slate (+0 .044), pointing the other way — and it splits exactly as winner accuracy does: the two exact-value datasets favour DM (−0.206, −0.018), the RCT datasets favour IPS (Appendix O.1). The separation we can defend is therefore the one on exact-value data, and neither criterion shows the gap closing 
+
+as the logger becomes candidate-independent (Figure 4). Table 5: RQ4 selection quality by logging design: paired DM − IPS gap, per-dataset sign count, LODO range, two cluster bootstraps — all conditional on this benchmark (k=1 excluded throughout RQ4). Dataset-level clustering excludes zero nowhere; a competitive slate shrinks the gap and removes support at every level (Section 5.5).                                       
+
+> slate logger DM IPS gap pos. / LODO cluster CIs (ds ×seed; ds) 3 cand. (base 0 .33) per-candidate 0.656 0.573 +0 .083 4/5; [ .03 , . 14] [.00 , . 16]; [ −.05 , . 21] common, aligned 0.679 0.573 +0 .105 4/5; [ .06 , . 16] [.04 , . 17]; [ −.02 , . 22] common, independent 0.661 0.605 +0 .056 3/5; [ −.02 , . 12] [−.03 , . 15]; [ −.10 , . 23] 7 cand. (base ≈0.15) per-candidate 0.358 0.313 +0 .044 2/5; [ −.04 , . 12] [−.05 , . 14]; [ −.16 , . 26] common, aligned 0.344 0.324 +0 .020 3/5; [ −.07 , . 12] [−.09 , . 12]; [ −.21 , . 25] common, independent 0.338 0.322 +0 .016 2/5; [ −.06 , . 09] [−.08 , . 12]; [ −.20 , . 23]
+
+Two further readings, developed in Appendices D and O. Pooled rates hide a reference-type split: on exact-value data the model-based advantage is large even under a shared independent log (+0 .263, +0 .311), while on HT-reference data it reverses — the reference-alignment mechanism of Appendix P. And 
+
+IPS over-selects the easiest-to-evaluate candidate ( ∼ 1.8× its true-best rate on the easy slate, up to 2 .8×
+
+on the competitive one, DM the same at design-dependent strength; Table 14) — a pathology of degree. (Perturbation-DR is excluded; Appendix I.) 
+
+5.6 An external check on a non-simulated reference 
+
+One check stands apart from the robustness suite because its reference is not a surface anyone modelled. On the Twins cohort — 11 ,400 same-sex twin pairs with both siblings’ outcomes recorded, taking the pair as the unit — the RQ1 ordering replicates at a larger margin (5 .0× against 2 .0×), the RQ2 alignment mechanism replicates, and the RQ3 cross-fitting sign replicates. The calibrated cut points do not transfer. That is exactly the split Section 4.1 predicts: mechanisms travel, magnitudes do not. Appendix N.3 gives the design, the matched-pair caveat, and the full account of what fails to transfer. 
+
+# 6 A Practitioner’s Guide 
+
+1. Ask how far your target is from your logger before trusting any importance-weighted estimate. 
+
+A log whose policy broadly agrees with the rule you want to deploy supports weighting even under sharp logging; one that ignores it does not (RQ2). ESS fraction and support deficiency work at their demonstrated scope — ranking logging situations , not candidates within one log (median ρ = −0.11) — and our cut points (0 .36, 0 .02) describe this benchmark: read a low ESS as a reason to seek a better-aligned log or a model-based estimator, not a go/no-go test. Use the screen ex ante: to choose which log to collect or buy, and to judge whether an evaluation program on a given log–target pair is viable at all. It does not rank 15 candidates within the log you already hold. Fit and check a flexible propensity model first : a poor one leaves the screen uninformative or inverted without rescuing IPS accuracy (Section 5.3). 2. Prefer DR under model uncertainty; DM is competitive when adequacy is demonstrable. DM 
+
+is best or tied-best on four of five datasets under in-sample nuisances but only three of five with out-of-fold ones, where it is the worst of six on Jobs and Lenta (Table 11); it leads the exact-value cross-dataset mean under both and neither HT-reference mean. The case for DR is asymmetric risk : under a weak outcome model DM can degrade to worst-of-four while DR degrades gracefully (Section 5.3) — though that rests on one DGP family of three, although the crossing itself survives seed resampling ( DM −IPS 
+
+gap [+0 .022 , +0 .063] at the stump rung). Judge adequacy by held-out error per arm — and trust the intervals less than the points: the reported CIs are conditional on the fitted nuisance and undercover for 
+
+DM (0 .89 against nominal 0 .95), with weighting coverage degrading in exactly the flagged low-overlap regime (Appendix L.1). 3. Against the optimizer’s curse, decide by data provenance — do not try to detect the bias. If the policy was learned from the outcomes you evaluate on, use honest policy-level splitting; if trained on an independent sample, plain DR needs no policy-level split for reuse bias. Nuisance-only cross-fitting 
+
+worsened it (RQ3). 4. When selecting among candidates, rank them all on one shared log. Scoring each candidate on a log aligned with itself compares policy–logger pairs, not policies (RQ4). One robust pathology: IPS 
+
+over-selects the easiest-to-evaluate candidate — up to 2 .8× the decoy’s true-best rate, DM matching it under the common-independent logger (Table 14). 5. Always show per-dataset and per-regime results alongside any aggregate. Pooling exact-value with noisy-reference results hides mechanism. 
+
+# 7 Conclusion 
+
+Budget-constrained allocation is where naive offline evaluation misleads most. Weak overlap is governed by logger–target action alignment, not by sharpness, and is rankable in advance across logging environments — not within one log, and only with a good propensity model. Under policy–evaluation reuse, cross-fitting the nuisance alone makes the optimism worse ; honest policy-level splitting avoids the reuse by targeting the learning procedure’s value, not by de-biasing the full-sample policy’s. The mechanisms — though not the calibrated cut points — replicate against a non-simulated paired reference we did not construct (Appendix N.3). Doubly-robust estimation is the most stable across our stresses, Section 6 is the operational form, and every number regenerates from the released repository’s documented make targets (https://github.com/binshuangli/allocation-ope-bench ). 
+
+# Broader Impact Statement 
+
+This is protective methodology: offline estimates of allocation policies can be confidently wrong, and we supply diagnostics for when not to trust them and when those diagnostics fail. The main risk is reading the screen as a certificate; all data is public. Use of generative AI. Generative AI assisted with writing and code; the authors take full responsibility. 
+
+# References 
+
+Douglas Almond, Kenneth Y. Chay, and David S. Lee. The costs of low birth weight. The Quarterly Journal of Economics , 120(3):1031–1083, 2005. Susan Athey and Guido Imbens. Recursive partitioning for heterogeneous causal effects. Proceedings of the National Academy of Sciences , 113(27):7353–7360, 2016. Susan Athey and Stefan Wager. Policy learning with observational data. Econometrica , 89(1):133–161, 2021. 16 Peter C Austin. An introduction to propensity score methods for reducing the effects of confounding in observational studies. Multivariate Behavioral Research , 46(3):399–424, 2011. Victor Chernozhukov, Denis Chetverikov, Mert Demirer, Esther Duflo, Christian Hansen, Whitney Newey, and James Robins. Double/debiased machine learning for treatment and structural parameters. The Econometrics Journal , 21(1):C1–C68, 2018. Vincent Dorie, Jennifer Hill, Uri Shalit, Marc Scott, and Dan Cervone. Automated versus do-it-yourself methods for causal inference: Lessons learned from a data analysis competition. Statistical Science , 34(1): 43–68, 2019. Connor Douglas, Joel Persson, and Foster Provost. Logging policy design for off-policy evaluation. arXiv preprint arXiv:2605.15108 , 2026. Miroslav Dudík, John Langford, and Lihong Li. Doubly robust policy evaluation and learning. In International Conference on Machine Learning (ICML) , 2011. Wenshuo Guo, Michael I Jordan, and Angela Zhou. Off-policy evaluation with policy-dependent optimization response. arXiv preprint arXiv:2202.12958 , 2022. P Richard Hahn, Vincent Dorie, and Jared S Murray. Atlantic causal inference conference (acic) data analysis challenge 2017. arXiv preprint arXiv:1905.09515 , 2019. Jennifer L Hill. Bayesian nonparametric modeling for causal inference. Journal of Computational and Graphical Statistics , 20(1):217–240, 2011. Guolin Ke, Qi Meng, Thomas Finley, Taifeng Wang, Wei Chen, Weidong Ma, Qiwei Ye, and Tie-Yan Liu. Lightgbm: A highly efficient gradient boosting decision tree. In Advances in Neural Information Processing Systems (NeurIPS) , 2017. Haruka Kiyohara, Ren Kishimoto, Kosuke Kawakami, Ken Kobayashi, Kazuhide Nakata, and Yuta Saito. Scope-rl: A python library for offline reinforcement learning and off-policy evaluation. In International Conference on Learning Representations (ICLR) , 2024. B. Li. UpliftBench: Revealing outcome-regime and objective mismatch in uplift evaluation. arXiv preprint arXiv:2608.00915 , 2026. Yao Liu, Yannis Flet-Berliac, and Emma Brunskill. Offline policy optimization with eligible actions. In 
+
+Uncertainty in Artificial Intelligence (UAI) , 2022. arXiv:2207.00632. Naoki Nishimura, Ken Kobayashi, and Kazuhide Nakata. Balancing immediate revenue and future off-policy evaluation in coupon allocation. arXiv preprint arXiv:2407.11039 , 2024. Yuta Saito and Thorsten Joachims. Counterfactual learning and evaluation for recommender systems: Foundations, implementations, and recent advances. ACM Conference on Recommender Systems (RecSys) Tutorial , 2021. Yuta Saito, Shunsuke Aihara, Megumi Matsutani, and Yusuke Narita. Open bandit dataset and pipeline: Towards realistic and reproducible off-policy evaluation. Advances in Neural Information Processing Systems (NeurIPS), Datasets and Benchmarks , 2021. James E Smith and Robert L Winkler. The optimizer’s curse: Skepticism and postdecision surprise in decision analysis. Management Science , 52(3):311–322, 2006. Yi Su, Maria Dimakopoulou, Akshay Krishnamurthy, and Miroslav Dudík. Doubly robust off-policy evaluation with shrinkage. In International Conference on Machine Learning (ICML) , 2020. Adith Swaminathan and Thorsten Joachims. The self-normalized estimator for counterfactual learning. In 
+
+Advances in Neural Information Processing Systems (NeurIPS) , 2015. 17 Koichi Tanaka, Kazuki Kawamura, Takanori Muroi, Yusuke Narita, Yuki Sasamoto, Kei Tateno, Takuma Udagawa, Wei-Wei Du, and Yuta Saito. Off-policy evaluation for ranking policies under deterministic logging policies. In International Conference on Learning Representations (ICLR) , 2026. arXiv:2603.21485. Philip Thomas and Emma Brunskill. Data-efficient off-policy policy evaluation for reinforcement learning. In 
+
+International Conference on Machine Learning (ICML) , 2016. Yu-Xiang Wang, Alekh Agarwal, and Miroslav Dudík. Optimal and adaptive off-policy evaluation in contextual bandits. International Conference on Machine Learning (ICML) , 2017. Hongseon Yeom, Jaeyoul Shin, Soojin Min, Jeongmin Yoon, Seunghak Yu, and Dongyeop Kang. Break-ing determinism: Stochastic modeling for reliable off-policy evaluation in ad auctions. arXiv preprint arXiv:2512.03354 , 2025. Jinsung Yoon, James Jordon, and Mihaela van der Schaar. GANITE: Estimation of individualized treatment effects using generative adversarial nets. In International Conference on Learning Representations (ICLR) ,2018. 18 A Claims and supporting evidence 
+
+Claim Evidence Overlap is the strongest driver of weighting error among the logging-design axes (propensity error is larger) Fig. 1, §5.2 The model-based advantage over IPS is the robust effect (paired bootstrap, CI excludes 0); the DM -over-DR margin is tiny, partly baseline-driven, and not distinguishable from zero under nuisance-refit resampling §5.1 ESS fraction and support deficiency rank realized IPS error, consistently within every dataset and under leave-one-dataset-out — but across logging environments, not within one fixed log, where the median within-log correlation is −0.11 over 450 logs and no better than chance under a candidate-independent logger Fig. 5, §5.2, App. K The risk ranking transfers to held-out DGP families (ESS ROC-AUC 0 .83 at a 10% error target, and 0 .91 at the 2% target matched to the larger suite’s error scale) §5.2, §C.1 The reuse-bias sign reduces to an exact finite-sample identity whose expectation, under the benchmark’s known propensities, is 
+
+−Cov( w ⊮[a=πe], ˆμin ); whether the covariance is material is the tested content §5.4 Model-based estimators inherit outcome-model error; DM can be-come worst under severe misspecification (seed-resampled: gap [+0 .022 , +0 .063]), DR degrades gracefully Table 13, §5.3, App. N No transferable model-adequacy screen follows from factual held-out RMSE §5.3 Nuisance-only cross-fitting does not remove reuse bias; honest policy-level splitting cuts it 58–92% (8 regimes) Fig. 6, Table 4, §5.4 Material optimizer bias appears only on the continuous known-effect datasets in this benchmark Table 4, §5.4 In correct-selection accuracy the DM –IPS gap stays positive across logging designs (+0 .056 to +0 .105 on the three-candidate slate) and shrinks on the competitive slate; normalized regret agrees on the three-candidate slate but reverses on the seven-policy slate, driven by the HT-reference datasets. Selection conclusions therefore depend more on the candidate slate and the evaluation metric than on the logging design Table 5, §5.5 IPS over-selects the easiest-to-evaluate candidate under all three logging designs ( ∼ 1.8× its true-best rate on the three-candidate slate, more on the competitive one); DM shows the same tendency, generally more weakly under the aligned designs but similarly under the common-independent logger §5.5, Table 14 The estimator ordering survives misaligned logging qualitatively ; against a 
+
+disjoint RCT reference it shifts — the model-based advantage strengthens and the weighting advantage disappears — so RCT-reference comparisons cannot resolve it §C.1, App. P Findings replicate on a second, independent real covariate set §C.1 The mechanisms (RQ1 ordering, alignment-governed overlap, screen as-sociation, reuse-bias sign) replicate against a reference read off recorded paired outcomes; the failure criterion and error levels do not transfer App. N.3 
+
+Table 6: Each headline claim and the section, table, or figure that supports it. 
+
+# B Diagnostic mechanics, estimator addenda, and reproduction targets 
+
+Score alignment is not action alignment: the correct sharpening limit. Let πe be top-k under score 
+
+s with standardized cutoff ˜ q > 0, and let the score-aligned logger be πb(1 | x) = clip (σ(˜ s(x)/τ ); ε, 1 − ε),
+
+ε = 0 .02. Writing q(X) = πb(aπe (X) | X) for the logging probability of the target’s action, the weight at 19 the logged action satisfies E[W | X] = 1 and E[W 2 | X] = 1 /q (X), so ESS /n → 1/E[1 /q (X)]. As τ → 0, 
+
+q(X) → 1 − ε on the aligned mass c = k + F˜s(0) but → ε on the band 0 < ˜s < ˜q between the score mean and the budget cutoff, where the logger treats and the target does not. Hence ESS 
+
+n −→ 
+
+[ c
+
+1 − ε + 1 − cε
+
+]−1
+
+≈ ε
+
+1 − c ,
+
+which is small: with k = 0 .1 (so c ≈ 0.6) the limit is ≈ 0.05. The floor-probability draws occur with probability O(ε) but carry weight 1 /ε , an O(1 /ε ) second-moment contribution that cannot be neglected. The case ˜ q > 0 covers budgets smaller than the mass above the score mean; in general (continuous scores) the mismatch band lies between the mean and the cutoff on whichever side the cutoff falls, c = 1 − | F˜s(˜ q) − F˜s(0) |
+
+— reducing to k + F˜s(0) for ˜ q > 0 — so the same limit covers the benchmark’s full budget grid. Sharpening a score-aligned logger therefore eventually collapses overlap : the flatness of Figure 1 is a finite-range plateau, and the collapse begins just below the tested range. Extending the temperature grid downward confirms this on the benchmark’s own data, and an action-aligned logger — the same logistic centred at the target’s top-k
+
+cutoff, for which the mismatch band is empty — behaves oppositely, sharpening toward full support (limit 1 − ε):                                    
+
+> median ESS at k=0 .1 (not budget-pooled) τ=5 20.50.25 0.10.05 score-aligned 0.512 0.519 0.398 0.171 0.076 0.061 action-aligned 0.560 0.632 0.836 0.907 0.946 0.960 median |IPS rel. bias |(pooled k)score-aligned 0.026 0.026 0.028 0.029 0.049 0.065 action-aligned 0.025 0.028 0.022 0.020 0.019 0.017
+
+(make repro-sharpening-limit .) Temperature is therefore not a valid overlap parameter in either direction: what governs support is the logger’s probability of the target’s actions , and the main sweep’s temperature range happens to sit on the score-aligned plateau — one more reason the alignment axis, not sharpness, is the right design variable for benchmarks of this estimand. 
+
+What the three diagnostics measure. Write wi = πe(ai | xi)/π b(ai | xi) for the importance weight. The ESS fraction is Kish’s effective sample size normalized by the logged sample size, ( ∑  
+
+> i
+
+wi
+
+)2/( n ∑ 
+
+> i
+
+w2
+
+> i
+
+).
+
+Support deficiency is the fraction of evaluation units whose target-selected action was taken by the logger with probability below κ = 0 .05 — the share of the target policy’s decisions that the log barely covers. Max weight is max i wi, the largest realized importance weight — bounded by 50 here by the propensity floor. The quantity all three are asked to rank is IPS |relative bias |, |̂V − Vref |/|Vref |, taken per cell as the median over its ten seeds — a signed-error magnitude, as opposed to the relative RMSE of Section 5.1, which additionally averages over seed variance. The correlations above are computed over all 540 cells of the alignment sweep, 
+
+not over the main accuracy sweep. 
+
+ESS fraction is not a pure dispersion measure here, and it matters why. Under a deterministic 
+
+target wi ∈ { 0, 1/π b(ai | xi)}, so units whose logged action differs from the one the target selects contribute zeros that remain in the normalizer. Writing m for the number of matched units, the statistic factors exactly as ( m/n ) × [(∑ 
+
+> matched
+
+w)2/(m ∑ 
+
+> matched
+
+w2)] — an action-coverage term times a dispersion term on the matched set. It therefore moves with the budget and the logger’s marginal treat rate, not with weight dispersion alone. Two consequences we flag rather than paper over: the value 1 is unattainable by construction, and the numeric cut point used in Section 6 is not portable across budgets, loggers or sample sizes even within this benchmark. What the diagnostic buys is a ranking of cells within a comparable design, which is what Table 8 conditions on. 
+
+Support deficiency rests on two nested constants — κ, and then the screen’s threshold on the resulting fraction — so it deserves a sensitivity note. Recording it at κ ∈ { 0.01 , 0.05 , 0.10 }, the association is stable between 0 .05 and 0 .10 ( ρ = +0 .42 and +0 .43; all diagnostics are seed-averaged per cell, as everywhere else in this section), while κ = 0 .01 is degenerate here: the 0 .02 propensity floor (Section 4) means no unit can fall below it — the same floor that gives weight clipping no purchase (Section 5.1). The floor also makes 20 support deficiency a floor-dependent quantity (mass in [0 .02 , κ )) where ESS fraction is floor-robust, which is one reason we expect the latter to be the half of the screen that transfers. 
+
+Does weight clipping rescue IPS? Truncating importance weights is the standard practitioner response to exactly this pathology, so we added clipped IPS (min( wi, M ) for M ∈ { 5, 10 , 50 }) on the exact-value datasets (synthetic , IHDP , and one ACIC nonlinear surface, on the reduced three-budget grid of the robustness runs — absolute levels therefore differ from Table 2, as in Appendix P). Because our own Section 5.1 argument is that medians hide the tail where weighting fails, we score clipping on tail-sensitive summaries, where it would show up if it worked. It does not: the mean paired difference against raw IPS is +0 .0000 at M =50, 
+
+−0.0000 at M =10, and +0 .0005 at M =5 (slightly worse — clipping bias appearing before any variance benefit); the 90th and 99th percentiles of per-cell error are unchanged at M ≥10 and the 99th worsens at M =5 (0 .078 → 0.085); the single worst cell is untouched; and only 11% of cells are affected at all even at M =5. The reason is structural. Our logging propensities are floored at 0 .02 (Section 4), so weights are bounded by 50 by construction, and the median per-cell maximum weight is only 5 .0 at τ =0 .5 on the main accuracy sweep, against a median ESS fraction of 0 .56 in the same cells (the worst single cell reaches 0 .084, but that is a minimum, not the typical case). The failure mode is not a handful of enormous weights that truncation would catch; it is the ordinary dispersion of many moderately inflated weights, which is bounded below by the maximum weight — at W = 5 .0 no reweighting scheme that only touches the top of the distribution can lift the dispersion term materially above where it already sits. The natural objection — that this experiment, like the main sweep, uses a self-aligned logger where weights stay modest — is now closed directly: rerunning clipping under all three logger regimes on the exact-value datasets ( make repro-tail-control ), including the independent logger where maximum weights reach the 50 ceiling, the paired median change against raw IPS is 0 .0000 at every M , with M =10 helping in at most 25% of cells. Clipping is ineffective even where the tail exists under this floor — and that qualifier carries the result. Sweeping the floor itself ( make repro-floor-sensitivity ; ε to 0 .0002, ceilings to 5 ,000, crossed with τ to 0 .05), clipping is a no-op at 
+
+ε=0 .02 in 100% of cells at M =50 — the floor has already clipped — but useful once weights exceed that ceiling (median IPS 0.111 against 0 .090 at ε=0 .005), while DR stays flat (0 .038 → 0.037). “Clipping does not help” is a property of the bounded-weight regime we chose, not of allocation OPE. Large maximum weights do co-move with realized error — max weight is a valid marker, positive in all five per-dataset strata of the alignment sweep (+0 .29 to +0 .72) — but the marker is a symptom of the same dispersion that collapses ESS, not a separable cause that clipping can remove. Shrinkage-DR (Su et al., 2020), which also targets the weight tail, is now evaluated in the same rerun: with its λ tuned on the logged sample by the same estimated-MSE style as the other hybrids, it edges plain DR by a median 0 .0003–0 .0008 relative RMSE (67–74% of cells, largest under the independent logger) — a real but small improvement, consistent with the expectation that tail control buys little when the pathology is ESS collapse. Practitioners should not expect weight control to substitute for overlap when weights are already bounded ; where they are not, clipping is worth using, and the floor sweep above locates that boundary. 
+
+Why the two tuned hybrids duplicate their untuned parents. In Table 2 Switch-DR sits within 0 .0003 of DR and mIPS within 0 .001 of IPS on every dataset, which invites the suspicion that the tuning is doing nothing. Recording the selected hyper-parameter in all 2 ,700 configurations ( make repro-tuner-selection )shows that is close to right, and identifies the mechanism as a property of the selection rules rather than a coincidence. Switch-DR never selects λsw = ∞, but the λsw it does select exceeds the cell’s largest importance weight in 94 .9% of configurations: no unit is switched, so the estimator is numerically identical to DR there — close to the 96 .6% of cells in which the two estimates agree bit-for-bit. The propensity floor is again the reason. With weights bounded by 50 and a median per-cell maximum of 2 .1 (at τ =5) to 5 .0 (at τ =0 .5), the grid’s smallest candidate λsw = 5 — selected 83% of the time — already sits above most of the weight distribution. mIPS likewise selects α = 0, which reduces it to IPS exactly, in 75 .0% of configurations. The residual 25 .0% is not negligible per cell (median |∆̂ V |/|V | of 0 .006, 90th percentile 0 .080), so mIPS is not a relabelling of IPS configuration by configuration; those cells are simply too few to move any dataset’s median. The general point is that both estimated-MSE proxies collapse to the untuned estimator under precisely the conditions where tuning would have to earn its keep: neither can buy variance reduction when the weight tail is bounded by construction — the same reason clipping fails below. 21 B.1 Reproduction targets 
+
+• make repro-full — the 2 ,700-configuration accuracy run (18 ,900 estimator-level results = 16 ,200 evalu-ated outputs from the six common-estimand estimators plus 2 ,700 perturbation-DR rows excluded from the common-estimand tables; their matched-reference evaluation is make repro-perturbation-matched ;RQ1–RQ2, RQ4); • make repro-optbias — the optimization-bias study (RQ3); • make repro-acic and make repro-acic-hillstrom — the two known-effect temperature-design hard-ening sweeps (6 DGPs × 3 candidates × 4 budgets × 3 temperatures × 10 seeds = 2 ,160 config-urations each). Their alignment-axis counterparts, make repro-logger-alignment-acic and make repro-logger-alignment-acic-hillstrom , add the three logger regimes but need two learned candi-dates rather than three (each serves as the other’s misaligned logger), so they come to 4 ,320 configurations each rather than 6 ,480; • make repro-twins — the non-simulated paired-reference validation of the RQ1–RQ3 mechanisms (Ap-pendix N.3); • make reference-check — numerical agreement of IPS , SNIPS , DM and DR with Open Bandit Pipeline on identical inputs; • make repro-misspec — the outcome-model degradation study; • make repro-selection — the seven-policy selection slate; • make repro-commonlog and make repro-commonlog-3cand — the common-logger RQ4 experiment on the seven- and three-candidate slates (Table 5, Figure 4), which is the primary selection evidence; • make repro-full-cutoff — the whole accuracy sweep and alignment sweep re-run with the logistic centred at each budget’s top-k cutoff (the cutoff-centred design); • make repro-full-oof — the whole accuracy sweep re-run with out-of-fold outcome nuisances (the last two columns of Table 2); • make repro-nuisance-crossfit — the out-of-fold-nuisance robustness check behind the RQ1 family claim (Section 5.1); • make repro-tuner-selection — the selected Switch-DR λsw and mIPS α over the main grid (Section 5.1); • make repro-tail-control — clipping and shrinkage-DR under all three logger regimes; • make repro-sharpening-limit — score- vs action-aligned logging down to τ =0 .05 (the action-aligned overlap limit); • make repro-floor-sensitivity — the propensity-floor sweep ( ε down to 0 .0002) behind the scope of the tail-control finding; • make repro-optbias-decoupled — the policy/nuisance independence ablation behind the RQ3 sign; • make repro-refit-intervals — refit-aware intervals (Appendix L.1); • make repro-logger-alignment — the alignment-axis RQ2 sweep (Section 5.2); • make repro-logger-alignment-acic and make repro-logger-alignment-acic-hillstrom — the alignment-axis held-out suites that carry the screen AUCs; • make repro-rct-disjoint — the shared-vs-disjoint reference split on all three RCT datasets (Ap-pendix P); • make analyze / make analyze-acic — every figure and table in this paper, regenerated from the parquets. 
+
+# C Robustness checks and the outcome-model ladder: design and per-DGP detail 
+
+C.1 Further robustness checks 
+
+Three checks probe whether the RQ1–RQ2 conclusions depend on the benchmark’s construction; none suggests they do. Full tables are in Appendix N. 22 Known-effect hardening on real covariates. The exact-value evidence so far rests on one synthetic generator and one semi-synthetic dataset. We add six known-effect DGPs built on the real IHDP covariates, and repeat the whole sweep on a second, independent covariate source (a 10 ,000-row Hillstrom subsample) — 2 ,160 further configurations, zero anomalies. The RQ1 ordering replicates in full on both: DM most accurate, the DR family next, IPS /mIPS worst in every setting (2 .1× DM on the IHDP -covariate sweep and 3 .2× on the Hillstrom -covariate sweep). The RQ2 diagnostics replicate independently too: on the alignment-axis 
+
+hardening suites — separate reruns of the same six DGPs (4 ,320 configurations each, in addition to the two 2,160-configuration temperature-design sweeps; these reruns carry the held-out screen AUCs of 0 .83 and 0 .91), 
+
+ρ(ESS) = −0.45 and −0.58, versus −0.41 on the primary sweep; the temperature-design suites of Appendix N give −0.37 and −0.52. The separate alignment-axis suites provide the held-out validation results and AUCs reported in Section 5.2. 
+
+A non-simulated reference. Both checks above still score against simulated response surfaces. The Twins 
+
+cohort supplies an evaluation reference read directly off recorded paired outcomes instead (Appendix N.3). The RQ1 ordering holds with a larger model-based margin (5 .0× against 2 .0×), the alignment mechanism and the screen’s association replicate, and the RQ3 signs replicate; the 10% failure criterion and the absolute error levels do not transfer, which is the split Section 4.1 predicts. 
+
+Misaligned logging. The main sweep logs under a score-aligned stochastic logger. Crossing logger and target (log under the T-learner , evaluate the S-learner , and vice versa) raises every estimator’s error modestly — model-based +12 .3%, IPS family +15 .4% — and preserves the family ordering. This is a check on the 
+
+ordering , not on the size of the gap: crossing two correlated meta-learners is a weaker perturbation than the candidate-independent logger of Section 5.5, under which we did not re-score accuracy, so the RQ1–RQ2 magnitudes remain self-aligned-logger quantities (Appendix N.5). 
+
+The outcome-model ladder. Design and per-DGP detail are in Appendix N.4; the finding is stated in Section 5.3. 
+
+# D RQ4: reference-type split and decoy detail 
+
+Splitting by reference type shows the pooled null hides two opposing effects. Our own rule — never pool exact-value and HT-reference results in a single claim — applies here too. Under the common independent logger the split is reported in the last block of Table 5. On the exact-value datasets — where “correct” means recovering the genuinely value-maximizing candidate — the model-based advantage is large and intact even under a shared, candidate-independent log (+0 .263 and +0 .311). On the HT-reference 
+
+datasets it reverses: IPS matches or beats DM . We do not read the reversal as evidence that weighting selects better. The HT reference is itself an inverse-propensity construction computed on the same randomized split, so IPS and the reference share an estimator family and much of their noise; agreement between them is partly structural rather than evidence of accuracy. The pooled RQ4 null is therefore the average of a real model-based advantage where truth is exact and what we suspect is a reference-alignment artifact where it is not. The defensible statement is narrower than either half: on a competitive slate scored against a shared independent log, we can separate the families only where exact ground truth is available, and we cannot rule out that the apparent parity on RCT data is an artifact of the reference construction. One dataset drives much of the instability. Jobs has a negative DM − IPS gap in all six designs (per-dataset gaps are tabulated in Appendix O; −0.113 to −0.367). That is coherent with the accuracy results: Jobs is the one dataset where IPS is nominally best in Table 2, and Section 5.1 attributes that to its small retained sample rather than to any IPS advantage. 
+
+# E The cutoff-centred logger 
+
+The cutoff-centred design confirms the analysis. Our logistic is centred at the score mean , so the self-aligned logger matches the candidate’s score ranking, not its action boundary. Re-running the benchmark and this sweep centred at each budget’s top-k cutoff ( make repro-full-cutoff ) confirms both predictions: sharpening an action-aligned logger improves overlap (median ESS 0 .545 → 0.766 as τ falls, 23 against 0 .522 → 0.562 under mean-centring), and the gradient sharpens to 0 .0% / 1 .7% / 26 .7% failure at 
+
+τ =0 .5 (screen AUC 0 .954). That pooled AUC is higher than the primary sweep’s while the pooled ρ of Section 5.2 is lower, and the reconciliation is composition: failures here concentrate almost entirely in the independent regime (16 of 17 failing cells), so a pooled AUC partly measures regime separation — within the independent regime it is 0 .869 — which is why the comparison in Section 5.2 leads with ρ. The drop in pooled ρ (−0.41 → − 0.32) is likewise what removing the self-aligned stratum’s failures implies: fewer positives to rank, not a weaker screen. The residual self-aligned failures were an artifact of mean-centring; the estimator ordering is unchanged and every error falls ( IPS 0.065 → 0.052). We keep the mean-centred sweep primary for a substantive reason: it spans a wider overlap range , which is what a study of a risk-ranking 
+
+diagnostic needs. Under the cutoff-centred logger the self-aligned cells essentially never fail, leaving the screen little to discriminate — a better logging design makes a worse testbed for a fragility diagnostic. 
+
+# F Why the screen inverts under a constant propensity model 
+
+Section 5.3 reports that under the marginal ˆ πb the fragility screen is not merely uninformative but inverted 
+
+(AUC 0 .05). The stratum numbers show why this is systematic rather than noise. Under that model the self-aligned τ =0 .5 cells — the ones whose true propensities are most extreme, and therefore where a constant estimate is most wrong — carry simultaneously the highest estimated ESS fraction (0 .663) and the highest 
+
+IPS error (0 .467). A constant ˆ πb contributes no dispersion, so the estimated ESS reduces to a coverage measure, and coverage is maximized exactly where the sharp, score-aligned logger agrees most often with the target. The diagnostic therefore ranks the worst cells as the safest. This is the concrete sense in which fitting a flexible propensity model is a prerequisite for the screen rather than a refinement of it. 
+
+# G RQ2 conditioning ladder: table and detail 
+
+Table 7: The full δ grid behind the held-out screen validation: ROC-AUC of ̂ ESS for predicting median IPS 
+
+|relative bias | > δ on the two alignment-axis hardening suites (432 cells each), with the share of cells above each δ. Dashes mark degenerate strata (no cells, or essentially all cells, above δ). The pre-specified 10% target is scoreable only on the IHDP-covariate suite; on the Hillstrom-covariate suite no cell reaches it, which is why that suite is scored at the 2% target matched to its error scale — chosen for scale, not selected for AUC.                           
+
+> δ=1% 2% 5% 10% 20% IHDP-covariate suite: AUC –0.68 0.72 0.83 –share of cells above δ100% 97% 59% 17% 0% Hillstrom-covariate suite: AUC 0.77 0.91 –––share of cells above δ69% 15% 0% 0% 0%
+
+24 Table 8: RQ2 diagnostic association under progressively stricter conditioning ( IPS ), on the logger-alignment sweep. All quantities are computed over cells — the seed-aggregated unit of Section 4 — so repeated seeds do not inflate the sample; AUC is the screen’s discrimination for the |relative bias | > 10% target and “unsafe” the share of cells exceeding it. The ranking survives conditioning on dataset (negative in 5 /5) and on budget (AUC 0 .68–0 .95 in every stratum), and survives conditioning on the logger regime where failures actually occur (independent logger, ρ = −0.56 with 11 .7% unsafe); it does not survive conditioning on regime and τ
+
+jointly (median −0.01, negative in 6 /9). We read the last row as expected rather than damaging: regime × τ
+
+is the mechanism that generates overlap variation here, so fixing both removes the variation the diagnostic exists to rank. The defensible claim is between-situation ranking — which logging situation am I in — not within-situation discrimination.                                             
+
+> conditioning cells ρ(ESS) AUC(ESS) unsafe pooled (all cells) 540 −0.41 0.85 6.3%
+> within logger regime (3 strata of 180 cells):
+> independent (logger ignores target) 180 −0.56 0.75 11 .7% misaligned (other candidate) 180 −0.17 0.74 4.4% self-aligned (score-aligned; same candidate score) 180 −0.27 0.97 2.8%
+> within dataset (5 strata of 108 cells):
+> range over datasets 108 −0.35 to −0.71 ——leave-one-dataset-out, pooled 432 −0.37 to −0.45 ——
+> within budget k(6 strata of 90 cells):
+> range over budgets 90 −0.22 to −0.56 0.68–0 .95 2.2–15 .6%
+> within regime and τ(9 strata of 60 cells):
+> median over the 9 strata 60 −0.01 (6/9 neg.) ——
+
+How much of this is our own design? The variation the diagnostic ranks is induced by the two axes we control — the logger regime and the temperature τ — so the association could in principle be recovering nothing more than “which experimental cell am I in”, which is useless to a practitioner holding one logged dataset and no dials. Table 8 works through the conditioning ladder, and the answer is partly yes. Conditioning on dataset leaves the association intact ( −0.35 to −0.71, negative in 5 /5), as does conditioning on budget (ρ = −0.22 to −0.56, AUC 0 .68–0 .95 across strata), so the ranking is not an artifact of pooling across datasets of very different size or across budget difficulty. Conditioning on the logger regime it survives where it matters most — ρ = −0.56 under an independent logger, the regime that actually produces failures (11 .7% of cells unsafe) — and weakens where there is almost nothing left to rank ( −0.27 self-aligned and 
+
+−0.17 misaligned, with 2 .8% and 4 .4% unsafe cells). But conditioning on regime and τ jointly, the correlation collapses: median −0.01, negative in only 6 of 9 strata. We do not read this as the diagnostic failing. Regime 
+
+× τ is the mechanism that generates overlap variation in this design, so conditioning on both removes precisely the variation ESS exists to track, leaving residual within-stratum noise. It does mean the honest claim is narrower than a temperature-only design would suggest: ESS fraction ranks importance-weighting risk across the logging situations a practitioner might face, not within a single fixed one. That is still the practitioner-relevant statement — nobody knows in advance which regime their historical log came from — but it is a claim about between-situation ranking, and we make no stronger one. 25 DM DR Switch-DR SNIPS IPS mIPS 
+
+> 0.00 0.01 0.02
+> median relative RMSE  hillstrom
+> DM DR Switch-DR SNIPS IPS mIPS
+> 0.00 0.02 0.04
+> ihdp
+> DM DR Switch-DR SNIPS IPS mIPS
+> 0.000 0.025 0.050 0.075
+> jobs
+> DM DR Switch-DR SNIPS IPS mIPS
+> 0.00 0.01 0.02 0.03
+> median relative RMSE  lenta
+> DM DR Switch-DR SNIPS IPS mIPS
+> 0.00 0.02 0.04 0.06
+> synthetic
+
+RQ1 — estimator accuracy (median relative RMSE, lower is better; bars show 95% bootstrap intervals for the median over cells) Figure 3: RQ1 — median relative RMSE by estimator, per dataset (lower is better). DM and the DR family lead on four of five datasets; IPS /mIPS are worst, most dramatically on the continuous-outcome IHDP .Table 9: For IPS , propensity estimation is the dominant error source. Each row replaces the exact πb with an out-of-fold estimate and re-runs the whole alignment sweep, with weights and diagnostics computed from the estimate. Aggregation: relative RMSE is computed per cell (dataset × candidate × logger regime ×
+
+overlap × budget) as RMSE over the 10 seeds divided by |mean true value |, then averaged over the 216 exact-value cells ( IHDP , synthetic ) — a mean over cells, unlike Table 2, which takes the median. Under the median convention the levels are lower (exact control: DM 0.026, DR 0.027, IPS 0.057, SNIPS 0.040) but every comparison below is unchanged. The failure rate and AUC are over all 540 cells. DM is constant by construction (it uses no propensity) and serves as the pipeline check. DR is essentially immune while IPS 
+
+degrades several-fold, and the fragility screen degrades from useful to inverted as ˆ πb worsens. 
+
+ˆπb quality ( ρ w/ truth) DM DR IPS SNIPS IPS fail ESS AUC exact (control) — 0.036 0.037 0.072 0.052 6.3% 0.85 
+
+LightGBM (x) +0 .30 0.036 0.042 0.349 0.069 62 .8% 0.84 logistic( x) +0 .27 0.036 0.036 0.137 0.054 46 .3% 0.54 marginal (no x) −0.02 0.036 0.036 0.219 0.103 37 .2% 0.05 
+
+26 0.0 0.2 0.4 0.6 
+
+> P(selects reference-best)
+
+3-candidate slate — selection rate   
+
+> DM DR IPS 0.00 0.05 0.10 0.15 0.20
+> normalized regret
+
+3-candidate slate — regret  
+
+> per-candidate common, aligned common, independent 0.0 0.1 0.2 0.3
+> P(selects reference-best)
+
+7-policy slate — selection rate  
+
+> per-candidate common, aligned common, independent 0.00 0.05 0.10 0.15 0.20
+> normalized regret
+
+7-policy slate — regret 
+
+RQ4 — selection conclusions depend on the metric and slate more than on logging design Figure 4: RQ4 — selection quality under three logging designs, on both slates (top: three candidates; bottom: seven). Left: rate of selecting the reference-best policy (higher better). Right: mean normalized regret (lower better). Moving left to right — from a per-candidate log, to one shared log aligned with a single candidate, to a shared candidate-independent log — the bars move little, which is the point: the family ordering in correct-selection accuracy is largely insensitive to the logging design, while it weakens sharply between the top and bottom rows as the slate becomes competitive. These are pooled rates; Section 5.5 shows the pooled null averages a real model-based advantage on exact-value data with a reversal on HT-reference data, so the figure should be read together with that split. On the seven-policy slate normalized regret (right column) 
+
+reverses the pooled DM –IPS ordering, placing IPS lower; both exact-value datasets still favour DM .0.2 0.4 0.6 0.8 
+
+## ESS fraction (higher = more support) 
+
+0.0 0.2 0.4 0.6 
+
+> IPS |relative bias|
+
+## dataset 
+
+hillstrom ihdp jobs lenta synthetic 
+
+0.00 0.05 0.10 0.15 
+
+## support de fi ciency (higher = worse) 
+
+0.0 0.2 0.4 0.6 
+
+> IPS |relative bias|
+
+# RQ2 — fragility map: logged-data diagnostics track IPS error 
+
+Figure 5: RQ2 fragility map — IPS |relative bias | against two logged-data diagnostics. Lower effective sample size (left) and higher support deficiency (right) both track larger error, quantified by the Spearman correlations in the text. 27 synthetic (bias) ihdp (bias) lenta jobs hillstrom 0.0 0.1 0.2 0.3 
+
+> mean signed bias / | Vref |
+
+RQ3 — honest policy-level splitting, not nuisance cross-fi tting, addresses optimization bias 
+
+> DR Frozen-policy nuisance cross-fi tHonest fold-policy evaluation
+
+Figure 6: RQ3 — honest policy-level splitting, not nuisance cross-fitting, addresses optimization bias. Mean signed bias under in-sample policy fitting, each estimator against its own estimand’s reference. On the datasets with material detected bias ( IHDP , synthetic ) plain DR is strongly optimistic; frozen-policy nuisance cross-fit (same fixed-policy estimand) is more optimistic, not less; honest fold-policy evaluation (learning-procedure estimand) is near zero. On the datasets with no material detected bias all three are near zero. 28 H Formal estimator definitions 
+
+Symbols. Four symbol groups would otherwise be overloaded, so we fix them here. τ is always the logging temperature ; the Switch-DR threshold is λsw and the shrinkage-DR parameter λ. ε = 0 .02 is always the 
+
+propensity floor ; the support-deficiency threshold is written κ (default 0 .05; δ is reserved for the error 
+
+target of Section 5.2) and the perturbation-DR noise scale σp. M is always a clipping cap ; the number of perturbation draws is Bp = 25. The cohort-conditional estimand of Section 3 is written V (πe)n, distinct from the population V (πe). 
+
+Compute and software. All experiments run on a single 10-core Apple M-series CPU; the full reproduction chain (every make target in Appendix B.1) takes roughly 17 hours end to end, the longest single target being the propensity sweep at about 3 .3 hours. Python 3 .12, LightGBM , scikit-learn and Hydra at the versions pinned in the released pyproject.toml . Seeds run 42 , . . . , 51 throughout, except the superseded misaligned-logging check of Appendix N.5, which predates the ten-seed rerun; every result row carries its git commit hash. All six estimators are our own implementations against a common interface, so that they share one outcome model and one propensity input and differ only in the estimating equation; we do not wrap OBP or SCOPE-RL , though we verify numerical agreement against the former on identical inputs ( make reference-check ; Section 4). 
+
+Two terms used throughout. A cell is a seed-aggregated dataset × policy × budget × temperature tuple; a configuration is one seed-specific execution of a cell. Normalized regret of an estimator on a slate is (V (π⋆) − V (ˆ π))/(V (π⋆) − min j V (πj )), where ˆ π is the candidate the estimator ranks first, π⋆ the reference-best candidate and the denominator the spread of the slate; it is 0 for a correct pick and 1 for the worst, and is comparable across datasets whose value scales differ. In the released parquets the three logger regimes carry the artifact identifiers self_aligned , misaligned and independent .Logged data are tuples ( xi, a i, y i) with logging propensity ei = πb(ai | xi); in this benchmark ei is known by construction (the logging policies are synthesized; see Section 4), which favours importance-weighted estimators relative to production settings where the propensity must be estimated. The target policy contributes πei = πe(ai | xi) ∈ { 0, 1} for the deterministic top-k allocation, giving the importance weight 
+
+wi = πei /e i. The outcome model ˆ μa(x) is one LightGBM regressor per action, fit on the logged sample and shared by all model-based estimators in a cell. 
+
+DM. ̂ VDM = 1
+
+> n
+
+∑ 
+
+> i
+
+ˆμaπe (xi)(xi). 
+
+IPS. ̂ VIPS = 1
+
+> n
+
+∑ 
+
+> i
+
+wi yi (Dudík et al., 2011). Unbiased given correct propensities and support; for a deterministic target most wi are 0 and the rest 1 /e i.
+
+SNIPS. ̂ VSNIPS = ∑ 
+
+> i
+
+wiyi
+
+/ ∑  
+
+> i
+
+wi (Swaminathan & Joachims, 2015). 
+
+DR. ̂ VDR = 1
+
+> n
+
+∑
+
+> i
+
+[ˆμaπe (xi)(xi) + wi (yi − ˆμai (xi)) ] (Dudík et al., 2011). 
+
+Switch-DR. DR with the correction term dropped where wi > λ sw (we write the Switch-DR threshold as λsw to keep it distinct from the logging temperature τ ) (falling back to DM there) (Wang et al., 2017): ̂
+
+Vsw = 1
+
+> n
+
+∑
+
+> i
+
+[ˆμaπe (xi)(xi) + ⊮{wi ≤ λsw } wi (yi − ˆμai (xi)) ]. λsw is selected on the logged sample from the grid 
+
+{5, 10 , 20 , 50 , 100 , ∞} by minimizing the standard estimated-MSE bound: (dropped-correction magnitude) 2 +sample variance of the retained contributions. 
+
+Mixture-propensity IPS ( mIPS ). IPS with the propensity replaced by a mixture with uniform exploration, ̂
+
+Vα = 1
+
+> n
+
+∑  
+
+> iπei
+> (1 −α)ei+α/ 2
+
+yi, keeping weights bounded (the mixed-logging device of Nishimura et al., 2024). 
+
+α is selected on the logged sample from {0, 0.05 , 0.1, 0.2, 0.5} by the same estimated-MSE proxy (squared deviation from the IPS point value as the bias proxy, plus sample variance). Replacing the true propensity with the mixture denominator deliberately introduces bias in exchange for bounded weights, so mIPS is a 29 Table 10: Benchmark datasets: five primary (Synthetic , IHDP , Jobs , Hillstrom , Lenta ) plus two known-effect hardening suites (six ACIC-style DGPs each, over the IHDP and Hillstrom covariates; Appendix N.2). n: sample size used (large marketing RCTs capped at 50 ,000 by uniform subsampling, which preserves the constant propensity; raw size in parentheses). The Twins row is an external validation (Appendix N.3), not a sixth primary dataset: no headline average includes it. π1: treatment fraction. ¯y:outcome mean (a base rate for binary outcomes; on the outcome scale for the continuous IHDP ). Reference: exact potential-outcome means where known (ground truth in the strict sense), else an unbiased-but-noisy Horvitz–Thompson reference estimate on the randomized split. For the hardening suites, π1 describes the factual confounded-logistic assignment (clipped to [0 .15 , 0.85]); their logged feedback is drawn from the known surfaces, so factual overlap is incidental there.                                                    
+
+> Dataset Regime nπ1¯yReference value
+> Synthetic Synthetic 7,000 0.51 0.51 exact μ0, μ 1
+> IHDP Semi-synth. (cont.) 672 0.18 3.17 exact μ0, μ 1
+> Jobs Semi-synth. (RCT) 578 0.41 0.73 HT reference estimate
+> Hillstrom Marketing RCT 50,000 (64K) 0.67 0.15 HT reference estimate
+> Lenta Marketing RCT 50,000 (687K) 0.75 0.11 HT reference estimate
+> Hardening suites (Appendix N.2):
+> ACIC-style Known-effect ( ×6) 672 0.52 2.0–2.6 exact μ0, μ 1
+> ACIC-hs Known-effect ( ×6) 10,000 0.50 2.1 exact μ0, μ 1
+> External validation, not a primary dataset (Appendix N.3):
+> Twins Paired real outcomes 11,400 0.50 0.83 recorded μ0, μ 1(paired)
+
+variance-control heuristic, not an unbiased estimator of the behaviour policy’s IPS; and because the bias proxy is anchored to the raw-IPS point value, the tuning target is itself noisy under poor overlap (where IPS is unstable) — we therefore treat α-selection as a heuristic, not a guarantee. 
+
+Perturbation-DR. A smoothing heuristic inspired by Guo et al. (2022): with candidate scores s and Bp=25 draws ξm ∼ N (0 , σ 2 
+
+> p
+
+I), σp = 0 .5 sd( s), re-solve the budgeted allocation zm = alloc( s + ξm, k ) and average the DR values: ̂ Vpert = 1
+
+> Bp
+
+∑
+
+> m
+
+̂ VDR (zm). Its estimand is therefore the expected value of a perturbation-smoothed policy distribution around the deterministic allocation — not the deterministic policy itself — which is why it is excluded from the fixed-policy RQ1, RQ3, and RQ4 comparisons and discussed separately in Appendix I. 
+
+Cross-fitted DR (RQ3 only). Two modes with distinct estimands (Section 5.4): frozen-policy (the policy is fixed; only ˆ μ is fit out-of-fold, 5 folds — same estimand as DR) and fold-policy (score and allocation re-derived per fold from the out-of-fold model — estimand is the value of the learning algorithm, scored against its own fold-matched exact reference). 
+
+Aggregation. Let an experimental configuration c be a (dataset, candidate policy, budget, overlap temper-ature) tuple, evaluated over seeds s = 1 , . . . , S ; for estimator e write its estimate as ̂ Ve,c,s and the reference value as Vc,s (the reference does not depend on e). Define relRMSE e,c =
+
+√ 1
+
+> S
+
+∑
+
+> s
+
+(̂ Ve,c,s − Vc,s )2
+
+∣∣ 1
+
+> S
+
+∑ 
+
+> s
+
+Vc,s 
+
+∣∣ ,
+
+i.e. RMSE over seeds normalized by the configuration’s absolute mean reference value (configurations with near-zero mean reference would be dropped rather than inflated; none occur in the released runs). The table entry for a (dataset, estimator) cell is then median c relRMSE e,c over the configurations in that cell — the median, because IPS-family errors are heavy-tailed under poor overlap. We spell this out because the order (RMSE over seeds, then normalize, then median over configurations) is not the only reading of “median relative RMSE.” The reported bootstrap CIs are conditional contribution-level intervals: they resample the completed per-unit DR/IPS contributions on the evaluation split and do not refit the nuisance models, so they reflect sampling variation given the fitted ˆ μ, not the uncertainty of fitting it. 30 I Policy-smoothing sensitivity (perturbation-DR) 
+
+Perturbation-DR changes the target from the fixed deterministic allocation V (πe) to the expected value of a distribution of perturbed allocations, Eε[V (πs+ε)] (Appendix H). It therefore cannot be ranked directly against the fixed-policy estimators in RQ1, the fixed-policy optimization-bias estimators in RQ3, or across an RQ4 candidate slate (it perturbs each candidate’s own scores, so no two candidates share an estimand). The estimand-coherent evaluation scores it against the averaged exact values of its own perturbed policies, 
+
+Vpert ,ref = 1
+
+> M
+
+∑ 
+
+> m
+
+Vexact (zm), where the zm replicate the estimator’s own perturbation draws (same seed and noise stream, so both sides average the same M =25 allocations). We ran this on the exact-value datasets over the main grid ( Synthetic and IHDP , both candidate learners, τ ∈ { 0.5, 2, 5}, the five non-trivial budgets — at k=1 perturbation cannot change the allocation — ten seeds; 60 cells): median |relative error | is 1 .6% (1 .9% /1.4% /1.4% at τ = 0 .5/2/5), and no cell exceeds 10%. Perturbation-DR is therefore accurate on its own estimand ; its exclusion from the fixed-policy tables reflects an estimand gap, not an estimation failure. Because it evaluates a different deployment policy (a smoothed allocation, which practitioners may or may not wish to deploy), it is still reported separately ( make repro-perturbation-matched ). 
+
+# J Retained sample size by overlap regime 
+
+Rejection sampling retains fewer units under sharper logging, so the overlap knob moves both propensity concentration and logged sample size. Median retained n per temperature:                      
+
+> dataset τ=0 .5 (poor) τ=2 .0τ=5 .0 (good)
+> Hillstrom 8,470 9,225 11 ,733
+> Lenta 6,347 6,752 8,597
+> Synthetic 1,807 2,091 2,631
+> Jobs 132 168 203
+> IHDP 336 336 336
+
+Poor overlap therefore also costs ∼ 25–35% of the logged sample on the rejection-sampled datasets. The two effects can be separated using IHDP , whose surface-sampling construction retains every unit at every temperature ( n constant at 336): there the temperature sweep changes only the propensity concentration, and the IPS-family degradation under a misaligned logger persists (Figure 1) while the DR family stays flat. Propensity concentration, not the incidental sample-size reduction, is the dominant mechanism; a fully matched-n control on the rejection-sampled datasets is left to future work. 
+
+# K Cluster-bootstrap detail for the RQ2 diagnostics 
+
+Complementing the within-dataset and leave-one-dataset-out analysis in Section 5.2, a percentile bootstrap of the Spearman ρ between each diagnostic and IPS |relative bias |, resampling whole clusters (4 ,000 replicates), gives the following 95% intervals. The statistic is computed over cells (Section 4), which already aggregate the ten seeds, so seeds are not an available resampling level; the two levels we can resample are the dataset and the (dataset, candidate policy) block, of which there are 5 and 10 respectively on the alignment sweep (two learned candidates per dataset):               
+
+> diagnostic dataset clusters (5) dataset ×policy clusters (10) ESS fraction [−0.56 ,−0.33] [−0.53 ,−0.33] support deficiency [+0 .39 ,+0 .60] [+0 .34 ,+0 .54] maximum weight [+0 .26 ,+0 .59] [+0 .25 ,+0 .52]
+
+All intervals exclude zero, and the finer (dataset × policy) clustering gives the narrower intervals, as one would expect from more resampling units. We stress that the narrowness of the five-cluster intervals is not evidence of a large effective sample: with only five top-level clusters, it reflects how similar the within-dataset correlations are (Section 5.2). We therefore treat the within-dataset consistency and leave-one-dataset-out stability, not these intervals, as the primary evidence. 31 L Paired comparisons and interval coverage 
+
+L.1 Interval coverage against exact references 
+
+The title’s question is about trust, and trust in an interval is coverage. Every estimator reports a 95% percentile bootstrap CI over per-unit contributions (conditional on fitted nuisances); on the exact-value datasets of the alignment sweep we can score those intervals against the truth. Coverage confirms the two warnings the paper states about its own intervals, and localizes them:                    
+
+> pooled self-aligned misaligned independent
+> DM 0.89 0.91 0.90 0.87
+> DR 0.95 0.96 0.96 0.92
+> IPS 0.96 0.97 0.96 0.93
+> SNIPS 0.98 0.99 0.99 0.96
+
+DM undercovers everywhere (0 .89 pooled, 0 .87 on synthetic ): its conditional intervals ignore outcome-model refit variance, exactly the deficiency Section 4.1 flags, and the reason we call the model-based intervals optimistic. IPS covers near-nominally where weighting is safe but degrades to 0 .89 under the independent logger at τ =0 .5 — coverage collapses in the same cells the fragility screen flags, so the screen also marks where the intervals stop being trustworthy. SNIPS overcovers because its intervals are wide (median width 0 .20 |V |
+
+against 0 .12 |V | for DM ). None of these are population-coverage statements; they are conditional-bootstrap coverage on this benchmark’s exact-value cells (12 ,960 estimator-configuration intervals; 2 ,160 per estimator). 
+
+Mean versus median paired differences (RQ1). The IPS − DR gap of +0 .015 (+0 .013 on the k < 1grid) in Section 5.1 is a mean paired difference over cells; the corresponding median is +0 .007 on both grids. The mean is larger precisely because it is a mean: the gap between the two summaries is the right tail of IPS 
+
+relative RMSE under a misaligned logger — a minority of cells in which weighting fails badly, which a mean registers and a median does not. Both agree in sign and ordering; we report the mean because that tail is the practically important part of the distribution, and flag that it is tail-driven rather than typical. 
+
+Within-family comparisons (RQ1). Switch-DR is statistically indistinguishable from DR (−0.0002, CI [−0.0007 , +0 .0001]). The DM -over-DR margin is at most tiny : DR − DM = +0 .0007 (CI [ −0.0012 , +0 .0021], which includes zero; sign convention throughout is first-minus-second, so positive here means DM is better; DM 
+
+better in only 61% of cells) — and this interval is conditional (it resamples completed contributions without refitting the outcome model; Appendix H), so it understates uncertainty for the model-based estimators. Under a full nuisance-refit resampling (on the exact-value datasets, 5 seeds × 80 cells with ˆ μ refit inside every bootstrap resample ( make repro-refit-intervals ): DM −DR = −0.0005, 95% CI [ −0.0038 , +0 .0028]), the 
+
+DM –DR difference is not distinguishable from zero. We therefore do not claim a separation of DM from DR :the robust, practically meaningful claim is the model-based family advantage over importance weighting. 
+
+# M Logging construction: properties and retained sample size 
+
+The rejection sampler of Section 4 has two properties that bear on how the overlap sweep should be read. 
+
+Centring. Standardizing s before the logistic matters for comparability: raw score scales differ across learners, so without it a common τ would mean different degrees of logging sharpness for different candidates. But the logistic is centred at the score mean , not at the budget-dependent top-k cutoff q1−k, so the logger’s marginal treatment rate is ≈ 0.5 regardless of k. A given τ therefore does not correspond to the same overlap for a top-10% and a top-70% target: τ is comparable across learners but not across budgets. A budget-centred logger σ(( s − q1−k)/τ ) removes this, and we ran it (Appendix E). 
+
+Retained sample size co-varies with overlap. Rejection sampling retains fewer units at low τ , so the overlap sweep moves retained n as well as propensity concentration (Appendix J tabulates both). IHDP ,whose logged sample is drawn from known surfaces at constant n, is the control: the IPS-error inflation appears there too, so it is not purely a sample-size effect. We note that the differential pattern — IPS inflating while the DR family stays flat — is not itself evidence against the confound, since IPS error is variance-dominated 32 Table 11: Per-dataset accuracy under out-of-fold nuisances ( make repro-full-oof ), the per-dataset detail behind the two out-of-fold mean columns of Table 2. Median relative RMSE, same convention as Table 2; best per column in bold. Four decimals because several columns separate only in the fourth. IPS , SNIPS and 
+
+mIPS use no outcome model and are numerically identical to their in-sample counterparts. DM is best or tied-best on three of the five datasets here ( Hillstrom within 0 .0001 of mIPS , IHDP , synthetic ) against four of five in-sample, and is the worst of the six on Jobs and Lenta — both HT-reference datasets, where Section 5.1 argues the ordering is not resolvable.                                                  
+
+> estimator hillstrom ihdp jobs lenta synthetic mean (exact) mean (RCT-ref) dm 0.0222 0.0153 0.0704 0.0318 0.0456 0.0304 0.0414 dr 0.0244 0.0166 0.0600 0.0310 0.0467 0.0317 0.0384 switch_dr 0.0244 0.0166 0.0588 0.0310 0.0467 0.0317 0.0381
+> snips 0.0225 0.0248 0.0626 0.0302 0.0582 0.0415 0.0384 ips 0.0222 0.0523 0.0683 0.0300 0.0623 0.0573 0.0402 mIPS 0.0221 0.0515 0.0681 0.0300 0.0623 0.0569 0.0401
+
+Table 12: Known-effect hardening: median relative RMSE on six ACIC-2017-style DGP settings over the real 
+
+IHDP covariates (S1/S2 linear, S3/S4 nonlinear, S5/S6 step-subgroup surfaces; odd = low noise, even = high). Best per column in bold. estimator S1 S2 S3 S4 S5 S6 mean (exact) dm 0.019 0.073 0.013 0.071 0.016 0.026 0.036 
+
+dr 0.023 0.090 0.015 0.081 0.016 0.029 0.042 switch_dr 0.023 0.090 0.015 0.081 0.016 0.029 0.042 snips 0.036 0.099 0.019 0.087 0.025 0.035 0.050 ips 0.061 0.110 0.057 0.102 0.057 0.062 0.075 mIPS 0.061 0.108 0.057 0.099 0.057 0.061 0.074 (∝ E[w2]/n ) and would inflate under a shared n-loss while a bias-dominated DM would not. The constant-n
+
+IHDP control is what carries the argument. A matched-n control on the rejection-sampled datasets is left to future work. 
+
+# N Robustness checks: full results 
+
+Full tables and mechanism discussion for the outcome-model-quality ladder of Section 5.3 and the two robustness checks of Section C.1. 
+
+N.1 Per-dataset accuracy under out-of-fold nuisances 
+
+Table 2 reports the out-of-fold-nuisance rerun only as two cross-dataset means. Table 11 gives the per-dataset detail behind them, so that every per-dataset claim about out-of-fold nuisances — including item 2 of Section 6 — can be checked against the paper itself. 
+
+N.2 Known-effect hardening on real covariates 
+
+A skeptical reading of the evidence so far is that the exact-value evidence rests on one synthetic generator and one semi-synthetic dataset. The hardening sweep addresses this with six additional known-effect DGPs on the real IHDP covariates (Section 4), where the covariate joint distribution is real and the truth is exact by construction. Table 12 shows the RQ1 ordering replicates in full: DM is the most accurate (mean relative RMSE 0 .036, and lowest in every one of the six settings — its closest call is S1, 0 .019 against Switch-DR ’s 0.023), the DR family follows (0 .042), and IPS /mIPS are worst in every setting (0 .075 and 0 .074 mean, 2 .1×
+
+DM ). The margin is largest on the low-noise settings, where the outcome model is easy to fit; high noise 33 (S2, S4) compresses all estimators toward the same error, exactly as the outcome-model-quality caveat of Section 5.3 predicts. The fragility map of Section 5.2 also replicates independently on this sweep: Spearman 
+
+ρ between IPS |relative bias | and ESS fraction / support deficiency / max weight is −0.37 / +0 .29 / +0 .23 on this temperature-design sweep — distinct from the alignment-axis rerun of the same DGPs quoted in Section C.1, which gives −0.45 — against −0.41 / +0 .42 / +0 .35 on the primary alignment sweep; same signs, comparable magnitudes (the fragility-screen thresholds are validated on the alignment-axis rerun of these DGPs, not on this sweep; cf. Section 5.2). Because the IHDP covariate matrix is small ( n=672), we additionally repeat the six-DGP sweep on a second, independent real covariate set: a fixed 10 ,000-row subsample of the Hillstrom marketing covariates (another 2,160 configurations, zero anomalies). All conclusions replicate: DM is most accurate (mean relative RMSE 0.0055, and lowest in every one of the six settings), the DR family follows (0 .0062), IPS /mIPS are worst in every setting (0 .0176 and 0 .0177, 3 .2× DM ), and the diagnostics correlate with error comparably ( ρ = −0.52 / +0 .34 / +0 .37 on this sweep). Absolute errors are roughly an order of magnitude smaller than on the n=672 IHDP covariates at comparable overlap — a reminder that logged sample size and overlap both drive error, and the benchmark’s relative comparisons are the stable object, not the absolute error levels. Exact ground truth built on real covariates therefore tells the same story as both the fully synthetic and the RCT-reference evidence. 
+
+N.3 External validation on a non-simulated paired reference 
+
+The hardening sweeps answer one version of the skeptical reading. A sharper version survives them: every exact-value surface in this paper is a simulated response surface — our own synthetic generator and ACIC-style constructions, and IHDP ’s canonical simulated surfaces, which we adopt rather than build — so an estimator is ultimately scored against outcomes somebody modelled. This appendix removes that reliance using a dataset whose evaluation reference is built directly from recorded paired outcomes rather than from any modelled surface. 
+
+Design. The Twins cohort (Almond et al., 2005), in the form distributed with Yoon et al. (2018), contains 11 ,400 same-sex twin pairs born under 2 kg with 30 covariates. Taking the pair as the unit, the treatment is being the heavier twin and the outcome is survival through the first year. Both siblings’ outcomes are recorded, so the pair supplies two recorded outcome coordinates and μ0, μ 1 are read off the data. Be precise about what this buys. These are not two potential outcomes observed for one infant: the twins are different individuals, so this is a non-simulated paired reference, and it proxies a causal effect of birth weight only under co-twin exchangeability given the shared covariates — an assumption the design makes plausible but does not prove. The narrower property is the one we need and it does hold: the reference value is fixed by the data and not by any surface we chose, so scoring against it is not circular. Marginal survival is 0 .823 for the lighter twin against 0 .839 for the heavier — a paired heavier-minus-lighter survival difference of +1 .61pp, reproducing the published figures for this cohort. Because the two paired reference outcomes are recorded binary values and the factual outcome is set to the corresponding recorded one, there is no response-surface sampling noise here (the calibrated noise of Appendix H is exactly zero): logged rewards are actual recorded outcomes and the retained comparison outcome is the actual co-twin outcome. The protocol is otherwise unchanged ( make repro-twins ). 
+
+The mechanisms replicate; two of them more strongly. The RQ1 ordering holds exactly — DM 
+
+0.0031, the DR family 0 .0035, SNIPS 0.0050, IPS /mIPS 0.0157 — and the model-based margin is larger than on simulated exact-value data: 5 .0× against the 2 .0× of Table 2. The RQ2 mechanism replicates in the form Section 5.2 states it: sharpening a self-aligned logger leaves overlap flat (median ESS fraction 0 .604, 0.556, 0 .527 at τ = 0 .5, 2, 5), while the misaligned and candidate-independent loggers collapse under the same sharpening (0 .388 and 0 .173 at τ =0 .5). The screen’s association is comparable to the primary sweep: Spearman ρ between IPS |relative bias | and ESS fraction / support deficiency / max weight is −0.51 / +0 .51 / +0 .36, against −0.41 / +0 .42 / +0 .35, and its per-regime ordering is preserved, weakest under the misaligned logger ( −0.16) and strongest under the independent one ( −0.76). RQ3 replicates as well: plain DR is optimistic by 6 .0% of |Vref | — materially so by the criterion of Table 4, and close to IHDP ’s +6 .9% — nuisance-only cross-fitting makes it worse (−25 .4%), inside the −16% to −36% band of Section 5.4, and 34 Table 13: Outcome-model misspecification, per DGP : median relative RMSE by DGP and outcome-model quality (pooled over overlap and budgets). “best” ranges over the four shown estimators. The inversion is DGP-specific: on the nonlinear synthetic surface a degraded ˆ μ makes DM the worst of the four; on the smoother ACIC surfaces DM stays competitive. On the ACIC step surface the misspecified linear model slightly beats LightGBM , because the arm means there are nearly linear, so the flexible learner buys variance without reducing bias. DGP ˆμ quality DM DR SNIPS IPS best synthetic (nonlin.) strong (LightGBM) 0.036 0.037 0.049 0.058 dm weak (stumps) 0.099 0.049 0.049 0.058 snips linear (missp.) 0.061 0.043 0.049 0.058 dr ACIC nonlin. strong (LightGBM) 0.011 0.014 0.017 0.056 dm weak (stumps) 0.011 0.015 0.017 0.056 dm linear (missp.) 0.012 0.015 0.017 0.056 dm ACIC step strong (LightGBM) 0.014 0.015 0.022 0.054 dm weak (stumps) 0.016 0.018 0.022 0.054 dm linear (missp.) 0.006 0.006 0.022 0.054 dr honest policy-level splitting reduces fold-matched bias by 94 .7% on the learning-procedure estimand. We report that last figure alongside the 58–92% range rather than inside it: those eight regimes come from two simulated generator families, and Twins is evidence of a different kind. 
+
+What does not transfer is the calibration. Two of the paper’s numbers are simply inoperative here, and both are ones Section 4.1 already flags as benchmark-specific. The 10% relative-bias failure criterion is never reached — the largest IPS |relative bias | anywhere in the run is 0 .095 — so all three logger regimes record a 0 .0% failure rate, and the headline triple of Section 5.2 has no analogue. Relative RMSE compresses by roughly an order of magnitude, because it normalizes by |V | ≈ 0.83 while the spread between the best and worst candidate policy is about 2pp; this is the gross-value metric’s documented tendency to reward baseline predictability, in its most extreme form. Read on the policy-relevant scale the compression reverses the impression: IPS ’s error is 62% of the entire achievable spread it would need to resolve, against 13% for 
+
+DM and the DR family. (We did not re-run the RQ4 selection protocol here, so this is a statement about error scale, not a measured selection result.) The lesson we draw is the one Section 4.1 states in advance: the 
+
+mechanisms transfer to a non-simulated reference we did not construct, and the cut points do not. 
+
+N.4 Outcome-model quality: the other axis of the decision map 
+
+Section 5.3 states the finding; this appendix gives the design and the per-DGP detail. We re-run the protocol on the exact-truth datasets with structured surfaces (the nonlinear synthetic generator, ACIC S3 nonlinear, and ACIC S5 step) while degrading the shared ˆ μ along a quality ladder: LightGBM (well-specified), depth-2 stumps (weak), and ridge regression (misspecified: linear on non-linear/step surfaces); the candidate policies are unchanged, so only the estimators’ model quality moves. Table 13 reports median relative RMSE per DGP — pooling across DGPs would average away the effect, since the ACIC surfaces are far more learnable than the synthetic one. Per-DGP detail: on the nonlinear synthetic surface DM ’s median relative RMSE goes 0 .036 → 0.099 under stumps, overtaking even IPS (0 .058), and sits at 0 .061 under ridge; DR degrades far more gracefully (0 .037 → 0.049 / 0 .043), its correction term absorbing much of the model error — though not quite best at every rung there: DR is the only model-based estimator that never becomes worst. The Table 13 entries are per-DGP medians over the sweep. The headline crossing was subsequently seed-resampled (Section 5.3): at the stump rung on synthetic the DM −IPS gap is [+0 .022 , +0 .063], DM worse in 100% of 2,000 seed resamples, so the 0 .099-vs-0 .058 ordering is a resampling-tested separation there. The remaining rungs and the ACIC families carry point estimates only, and for those we still read the qualitative crossing rather than the precise gaps. On the smoother ACIC nonlinear and step surfaces, the degradation is mild — 35 DM remains best or within a whisker of DR even under the misspecified linear model — because a linear/stump fit still approximates those surfaces adequately. A natural question is whether model-based fragility admits a validated screen the way importance-weighting fragility does (RQ2). We attempted the obvious candidate: an out-of-fold held-out RMSE of ˆ μ on the logged sample, per arm and pooled, normalized by the logged-reward standard deviation — computable without ground truth, recorded for every cell of this sweep. The honest answer is that it does not transfer: pooled across the misspecification grid, its Spearman correlation with realized DM error is ≈ − 0.10 (flagging AUC 0.48 — uninformative), even though it carries real signal within a DGP ( ρ up to +0 .42 on the nonlinear synthetic ladder). The mechanism is instructive: held-out predictive error conflates irreducible outcome noise with structural misfit, and a high-noise DGP scores “poor model” while DM ’s estimate of the mean 
+
+remains accurate. Weighting fragility admits a useful observable risk ranking because its failure mechanism is encoded in the importance weights themselves; in our study, model-based fragility does not admit an analogous transferable screen from ordinary factual prediction error. Constructing a validated, transferable model-adequacy screen for OPE — the DM /DR analogue of ESS — is therefore an open problem, and the qualitative checks below are prudent checks supported by our analysis, not a substitute for a known quantitative rule. The lesson is not that DM generically collapses, but that model-based estimators inherit whatever error the outcome model makes, and that error is DGP-dependent. When overlap is good but the surface may defeat the model, DR ’s doubly-robust correction makes it the safer default than pure DM ;when the model is trustworthy, DM /DR lead; when both overlap and model are poor, no estimator here is dependable. Crucially, outcome-model quality for policy evaluation is not fully certified by a single global held-out residual (a model can predict factual outcomes well yet rank treatment effects poorly, or lack support in one arm over part of the covariate space); a practitioner should check held-out error per treatment arm ,calibration across the score distribution, and sensitivity across outcome-model classes. 
+
+N.5 Misaligned logging 
+
+The main sweep uses self-aligned logging (Section 4): the logger is constructed from the same candidate score used by the evaluated policy — not from its top-k action boundary — which cleanly isolates the overlap axis but does not probe the case where logging and target disagree. Since OPE is often requested precisely when a new candidate differs from the deployed logger, we cross the two: for the T- and S-learner candidates we log under one and evaluate the other ( misaligned ), and compare to the aligned case (the logger built from the evaluated candidate’s own score), holding everything else fixed. Misaligned logging modestly raises every estimator’s error but preserves the ordering. Pooled over the exact-value and RCT datasets (5 ,040 estimator rows = 4 datasets ×5 seeds ×3 budgets ×3 overlaps ×4 (logging, target) pairs ×7 estimators, the seventh being perturbation-DR, which is computed but excluded from the ordering below) on synthetic , IHDP ,
+
+Hillstrom and Lenta (the four datasets on which both a T- and an S-learner logger can be built), median cell-level relative RMSE rises from 0 .0214 to 0 .0240 for the model-based estimators ( DM , DR , Switch-DR )and from 0 .0361 to 0 .0417 for the IPS family ( IPS , mIPS ) — +12 .3% and +15 .4% respectively. The ordering is preserved at the family level ( DR 0.0239, DM 0.0240, Switch-DR 0.0243, SNIPS 0.0307, IPS 0.0408, mIPS 
+
+0.0424; DR and DM swap by 0 .0001, well inside noise, consistent with our refusal to order them), and the model-based advantage is if anything slightly widened, though the difference in degradation rates is small enough that we do not claim weighting estimators are materially more misalignment-sensitive. The RQ1–RQ2 conclusions therefore survive this perturbation. We are deliberate about its strength: logging under one meta-learner and evaluating another perturbs the logger between two correlated scoring rules, which is weaker than the candidate-independent logger that produces the RQ4 attenuation of Section 5.5. We did not re-score accuracy under that logger, so the RQ1–RQ2 magnitudes should be read as self-aligned-logger quantities; what this check supports is that the ordering is not an artifact of alignment, not that the gap size is logger-invariant. 
+
+# O RQ4: reference-type split and the superseded per-candidate design 
+
+A composition note first, since slate composition is one of this section’s own lessons. The competitive slate holds seven candidates on the three RCT datasets but six on Synthetic and IHDP : the class-transformation 36 Table 14: RQ4 decoy over-selection: how often each estimator selects the random-score candidate, against the rate at which that candidate is genuinely reference-best. A random score induces smooth, well-overlapped logging, so an estimator evaluates it unusually stably and may prefer it for reasons unrelated to its value — most strongly for weighting, but DM shows the same preference at roughly half the strength under the two aligned designs, matching or exceeding IPS under the common-independent one (16 .3% vs 16 .8%; 8 .7% vs 8.2%). The effect therefore varies with the logging design rather than being a fixed property of the estimators.                       
+
+> slate estimator per-candidate common, aligned common, independent 3 cand. (decoy best 11 .6%)
+> DM 13 .6% 10 .0% 16 .3%
+> DR 13 .9% 13 .5% 12 .9%
+> IPS 18 .1% 20 .5% 16 .8% 7 cand. (decoy best 4 .0%)
+> DM 4.2% 4.0% 8.7%
+> DR 5.6% 4.9% 7.1%
+> IPS 6.2% 11 .3% 8.2%
+
+learner requires a binary outcome and both exact-value datasets are continuous, so its failure is deterministic, and within every cell all estimators rank the identical surviving slate. Because the six-candidate cells are 
+
+exactly the exact-value datasets, slate size is perfectly confounded with reference type here — restricting to all-seven cells just reproduces the HT-reference subset, whose reversal of the pooled gap is the reference-type split reported in Appendix P, not a slate-size effect. These are the full selection tables for the per-candidate (self-aligned) logging design, in which each candidate is scored on a log built from its own score. As Section 5.5 shows, that design compares policy–logger pairs rather than policies; the common-logger results of Table 5 are the primary evidence. We retain these for completeness and because the contrast between the two designs is itself the finding. Note in particular that the “ IPS selects at or below the uniform baseline” reading suggested by these numbers does not survive the shared-log design. Correct-selection rate under the common independent logger, split by reference type (the numbers behind the reference-split discussion in Section 5.5):              
+
+> slate estimator exact-value HT-reference 3 cand. DM 0.883 0.513
+> IPS 0.620 0.596 7 cand. DM 0.550 0.196
+> IPS 0.239 0.378
+
+O.1 Per-dataset DM − IPS selection gaps 
+
+Paired per-cell DM − IPS correct-selection gap, per dataset, under all six designs (regenerated from full_run ,
+
+selection_run , commonlog_3cand and commonlog_run ). These are the numbers behind Table 5’s sign counts and behind the observation that Jobs is negative in all six designs.                                            
+
+> 3-candidate slate 7-policy slate dataset per-cand. aligned indep. per-cand. aligned indep.
+> Hillstrom +0 .080 +0 .120 +0 .007 −0.022 +0 .022 −0.111
+> IHDP +0 .300 +0 .293 +0 .373 +0 .400 +0 .389 +0 .322
+> Jobs −0.160 −0.113 −0.187 −0.244 −0.367 −0.300
+> Lenta +0 .053 +0 .040 −0.067 −0.144 −0.167 −0.133
+> Synthetic +0 .140 +0 .187 +0 .153 +0 .233 +0 .222 +0 .300 mean (= Table 5) +0 .083 +0 .105 +0 .056 +0 .044 +0 .020 +0 .016
+
+37 Table 15: RQ4 policy selection: rate of selecting the reference-best policy (the truly best on exact-value datasets, the HT-reference-best on RCT datasets; higher better), mean normalized regret (lower better), and SharpeRatio@ k≥2 (higher better; the ratio of a policy’s estimated value to the standard deviation of that estimate across seeds, restricted to slates of at least two candidates, following Kiyohara et al. (2024)). 
+
+This table uses the per-candidate (self-aligned) logging design , in which each candidate is scored on a log built from its own score, so it compares policy–logger pairs rather than policies. Section 5.5 shows the model-based-over-IPS margin is nonetheless comparable to what a shared log gives (1 .3× under the common-aligned design, 0 .7× under the common-independent one); see Table 5 for the common-logger results, which we regard as the primary selection evidence. estimator correct rate norm. regret Sharpe@ k≥2dm 0.656 0.153 11.909 dr 0.633 0.148 11.879 switch_dr 0.631 0.149 11.881 snips 0.589 0.160 11.734 mIPS 0.580 0.172 11.023 ips 0.573 0.179 11.019 Table 16: RQ4 selection quality split by reference type: rate of selecting the best candidate. On exact-value datasets ( synthetic , IHDP ) this is the truly best policy; on RCT-reference datasets ( Jobs , Hillstrom ,
+
+Lenta ) it is the policy ranked best by the noisy HT reference. Three-candidate slate; uniform-random baseline = 1 /3 ≈ 0.33. Per-candidate (self-aligned) logging design — see Table 5. estimator exact-value (truly best) RCT-reference (reference-best) dm 0.827 0.542 dr 0.777 0.538 switch_dr 0.773 0.536 snips 0.693 0.520 ips 0.607 0.551 mIPS 0.610 0.560 Cells are balanced within each column (150 per dataset on the three-candidate slate, 90 on the seven-policy slate), so each column’s mean over the five datasets is exactly the pooled gap reported in Table 5. As throughout RQ4, the full-budget point k=1 is excluded. The same paired per-cell contrast for normalized regret (DM − IPS ; negative favours DM ), which is what Section 5.5 reads as the regret gap:                                            
+
+> 3-candidate slate 7-policy slate dataset per-cand. aligned indep. per-cand. aligned indep.
+> Hillstrom −0.047 −0.085 −0.030 +0 .092 +0 .037 +0 .083
+> IHDP −0.213 −0.297 −0.330 −0.206 −0.306 −0.266
+> Jobs +0 .130 +0 .129 +0 .192 +0 .166 +0 .208 +0 .231
+> Lenta +0 .010 +0 .0007 +0 .068 +0 .192 +0 .143 +0 .054
+> Synthetic −0.009 −0.012 −0.010 −0.018 −0.020 −0.023 mean −0.026 −0.052 −0.022 +0 .045 +0 .012 +0 .016
+
+The two exact-value datasets favour DM in every design; of the three HT-reference datasets, Jobs and Lenta 
+
+favour IPS in every design and Hillstrom switches sign with the slate. That split, not the logging design, is what drives the sign reversal of the pooled regret gap between the two slates. 38 P Shared vs disjoint RCT reference split 
+
+On the RCT datasets the reported error is relative to an HT reference estimate ; in the main runs the logged data and that reference are built from the same randomized evaluation split. To check that this shared-split dependence does not drive the estimator ranking, we re-ran all three RCT datasets — Hillstrom , Lenta ,and Jobs — under a disjoint 40 /30 /30 split into policy-training, logged-feedback, and reference-estimation units, computing each estimate on the logged split and scoring it against an HT reference on the independent 
+
+reference split. Both columns below are medians of the relative RMSE over 10 seeds × 3 budgets × 3overlaps × 3 policies ( make repro-rct-disjoint ; results/refdep_run/ ). We print four decimals because the differences within a column are of order 0 .001:                               
+
+> dataset estimator shared ref. disjoint ref.
+> Hillstrom DM 0.0312 0.0595
+> DR 0.0353 0.0635
+> IPS 0.0305 0.0631
+> SNIPS 0.0313 0.0622
+> Lenta DM 0.0421 0.0624
+> DR 0.0405 0.0648
+> IPS 0.0435 0.0653
+> SNIPS 0.0433 0.0681
+> Jobs DM 0.0845 0.1391
+> DR 0.0765 0.1515
+> IPS 0.0759 0.1628
+> SNIPS 0.0752 0.1469
+
+Both columns come from this reduced design, not from the main run. The “shared ref.” column is the matched control within the 40 /30 /30 experiment — same 30% logged split and same three-budget subset, with the reference computed on the shared logged units — so the two columns are comparable to each other but not to Table 2, whose Hillstrom column uses the main 50 /50 split and all six budgets. That is why the absolute levels here (e.g. Hillstrom DM 0.0312) sit above the main-run values ( DM 0.022): the logged split is smaller and the budget grid differs. Only the within-appendix comparison is meaningful. 
+
+The reference, not the estimator, sets the level. Moving to the disjoint reference raises relative RMSE for every estimator on every dataset — by 48% ( Lenta ), 65% ( Jobs ) and 91% ( Hillstrom ) for DM , and by more for IPS — and that level shift is roughly 2–6 × the spread across estimators within either column. The disjoint reference is a noisier HT estimate computed on fewer units, and most of the increase is reference variance rather than estimator error. 
+
+Which estimator looks best depends on which reference is used. DM is never best under the shared reference — a weighting or DR estimator wins on each dataset ( IPS 0.0305 on Hillstrom , DR 0.0405 on 
+
+Lenta , SNIPS 0.0752 on Jobs ) — and is best on all three under the disjoint one. IPS moves the opposite way: first on Hillstrom and second on Jobs (within 0 .0007 of SNIPS ) under the shared reference, third, third and last under the disjoint one. Note that IPS is worst of the four only on Jobs (0 .1628); on Hillstrom the worst is DR (0 .0635) and on Lenta SNIPS (0 .0681), so this is a shift in the whole ordering rather than an 
+
+IPS -specific penalty. 
+
+How much this experiment can carry. The direction matches the mechanism we proposed: the HT reference is itself an inverse-propensity construction, so on shared units it shares sampling noise with IPS and the two agree partly for reasons unrelated to accuracy; removing that sharing costs weighting estimators their apparent edge. But the differences within a column are 0 .001–0 .009 on Hillstrom and Lenta , this is three datasets, and the reference-variance term dominates the level, so we report the result as consistent with 
+
+that mechanism rather than as an isolation of it. (An earlier five-seed version of this table circulated with different values and a sharper reading; the ten-seed run reported here supersedes it.) What the experiment does establish is the negative conclusion we rely on: the choice of reference moves every estimator’s measured error by more than the estimators differ from each other, so RCT-reference comparisons cannot resolve the estimator ordering. That is why we decline to read the IPS column of Table 2 as a ranking, and it is also why 39 these RMSE values should be read as OPE error plus reference-estimation variance, not as absolute estimator error. On the model-based side the check is reassuring in the direction that matters for the paper’s headline: the shared-split construction did not manufacture the model-based advantage — the cleaner disjoint design produces a stronger one. 40

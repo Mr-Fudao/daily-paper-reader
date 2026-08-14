@@ -1,0 +1,54 @@
+{
+  "label": "2026-08-14",
+  "date": "2026-08-14",
+  "generated_at": "2026-08-14T20:39:13",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202608/14/2608.12489v1-when-can-you-trust-offline-evaluation-of-equal-cost-top-k-allocation-a-controlled-reproducible-benchmark-and-practitioners-guide",
+      "section": "quick",
+      "title_en": "When Can You Trust Offline Evaluation of Equal-Cost Top-k Allocation? A Controlled, Reproducible Benchmark and Practitioner's Guide",
+      "authors": "Binshuang Li",
+      "date": "2026-08-12",
+      "pdf": "https://arxiv.org/pdf/2608.12489v1",
+      "score": "7.0",
+      "evidence": "对预算受限的Top-k分配规则进行离线评估，为政府预算中的绩效评价提供方法",
+      "tldr": "离线评估等成本top-k分配时，确定性的top-k策略会直接暴露弱重叠问题，使估计可信度存疑。我们以五个数据集和两组已知效应扫描为基准，系统比较六种估计器，并用非模拟配对参考验证机制。结果表明，弱重叠由日志策略与目标动作的对齐决定，而非日志锐度；交叉拟合无法修复优化器诅咒，需策略级分裂；倾向性误差是最严重的退化来源。我们发布可复现基准与实践指南，帮助判断离线评估的适用条件。",
+      "tags": "query:budget-perf",
+      "abstract_en": "Organizations decide whom to treat under a budget and want to know what a targeting rule would have earned before deploying it. Off-policy evaluation promises this from logged data, but the deployable rule is a deterministic top-k policy: it removes all averaging over actions, so weak overlap hits the estimate directly. We benchmark six estimators across five datasets and two known-effect sweeps, and validate the mechanisms against a non-simulated paired reference. First, weak overlap is governed by logger-target action alignment, not by logging sharpness alone: what governs support is the logger's probability of the target's actions. Sharpening a logger built from the target's own score barely moves overlap over the tested range; action-level disagreement collapses it. Effective sample size ranks this risk across logging environments, but is weak at ranking candidates within the single log a practitioner holds, and its cut point does not transfer. Second, the optimizer's curse is not fixed by cross-fitting the outcome nuisance. When the rule is fit on the data used to evaluate it, cross-fitting the nuisance alone leaves the reuse bias in place and makes it worse. Honest policy-level splitting avoids the reuse by targeting the learning procedure's value -- a change of estimand, not a de-biasing of the full-sample policy. Third, propensity-estimation error is the largest degradation we measure: an out-of-fold estimate hurts IPS more than any other stress we apply, leaves doubly-robust estimation almost unchanged, and can invert the overlap diagnostic itself. Logging is synthesized and propensities floored at 0.02, so every failure occurs with bounded weights; the floor also reduces the two tuned hybrids to their untuned parents, leaving four practically distinct estimators, and all exact-value surfaces are synthetic or semi-synthetic. We release the benchmark; public data only.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202608/14/2608.08197v1-self-explaining-segment-trees-a-kpi-conditioned-segmentation-framework-for-business-analytics-with-node-level-explanation-via-recursive-subspace-partitioning",
+      "section": "quick",
+      "title_en": "Self-Explaining Segment Trees: A KPI-Conditioned Segmentation Framework for Business Analytics with Node-Level Explanation via Recursive Subspace Partitioning",
+      "authors": "Girish G N, Dhanashekar Kandaswamy",
+      "date": "2026-08-08",
+      "pdf": "https://arxiv.org/pdf/2608.08197v1",
+      "score": "6.0",
+      "evidence": "面向KPI的分割解释框架，可迁移用于绩效评价分析",
+      "tldr": "业务用户面对动态指标时，需定位数据变动源自何处；现有谓词解释虽精确，但轴对齐且不紧凑，难以刻画连续变量组合形成的段。SEST框架首先基于Shapley归因选取KPI相关特征子空间，随后递归划分总体，节点附带效应量与贡献轮廓双解释，并由姿态层输出极端段。理论上证明终止、节点数上界，复杂度在退化情形为二次，平衡情形随深度指数衰减。该架构为指标归因提供自解释分段树，但缺乏实证验证。",
+      "tags": "query:budget-perf",
+      "abstract_en": "Business users confronted with a moving metric need to know which part of their data moved and why. Existing data-explanation methods typically return predicates: conjunctions of attribute-value conditions that isolate responsible records. Predicates are exact and directly executable as filters, but they describe axis-aligned regions and may not compactly capture segments defined by combinations of continuous tendencies. This paper presents Self-Explaining Segment Trees (SEST), an architecture in which an explanation is a multivariate cluster in a feature subspace selected for relevance to a designated key performance indicator (KPI). SEST selects the subspace once per KPI using Shapley attributions over a decision-tree surrogate, recursively partitions the population while choosing the branching factor independently at each node through mixture-model silhouette search, and attaches to every node a dual explanation payload: standardized effect sizes over numeric features and type-dependent contribution profiles over user-designated dimensions. These explanations are computed from untransformed data so surfaced values retain source units and category labels. A stance layer reduces any depth of the tree to its extremal KPI-suppressing and KPI-amplifying segments. We establish termination and a node-count bound determined by the depth limit and minimum segment size, and characterize per-tree construction cost as quadratic in population size in the degenerate case and geometrically decaying across depth in the balanced case. This is an architecture and methodology paper; we report no predictive-accuracy or validation results and leave outcome validation to future work.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202608/14/2608.11047v1-v-fillm-verified-financial-llm-reasoning-benchmark",
+      "section": "quick",
+      "title_en": "V-FiLLM: Verified Financial LLM Reasoning Benchmark",
+      "authors": "Alicia Larsen, Victoire Laurent, Aulia Kharis Rakhamsari, Lara Turgut, Nino Antulov-Fantulin",
+      "date": "2026-08-11",
+      "pdf": "https://arxiv.org/pdf/2608.11047v1",
+      "score": "6.0",
+      "evidence": "面向结构化表格的经核验金融推理基准生成方法",
+      "tldr": "现有金融推理基准较少，且标注依赖模型易引入错误。该框架从真实表格构造可执行计算树，符号化求值得到标准答案并渲染为自然语言问题，无需人工标注，可任意扩展。实验表明，推理深度增加使开源模型准确率最高下降五十一个百分点，对抗性数值扰动下下降四十七个百分点，暴露鲁棒性不足。轻量微调在验证轨迹上准确率从八十一点一升至八十五点六，并在金融问答基准上超过基础模型五个百分点，证明低成本适配可有效增强表格推理。",
+      "tags": "query:budget-perf",
+      "abstract_en": "While existing benchmarks have made substantial progress in evaluating LLMs across STEM domains, financial reasoning over structured data remains comparatively less explored. We introduce V-FiLLM, a framework that generates financial reasoning benchmarks from executable computation trees grounded in real tables, yielding items whose answers are correct by construction. Trees are evaluated symbolically to obtain ground truth and rendered into natural-language questions, removing any model from the labeling loop, so items can be generated at arbitrary scale without annotation cost and without inheriting a generator's error rate. V-FiLLM exposes four independently controllable axes of difficulty including computation depth, expression breadth, financial concept complexity, and context size. By evaluating on open-source models, we find that accuracy falls up to 51% as reasoning depth increases, and up to 47% points under adversarial numerical perturbations, highlighting remaining challenges in robust financial reasoning over tables. We further show that lightweight LoRA fine-tuning on verified chain-of-thought traces improves accuracy from 81.1% to 85.6% on held-out problems and outperforms the base model by 5% points on FinQA (Chen et al., 2022a), s), suggesting that targeted, low-cost adaptation is a promising direction for compositional reasoning in financial QA.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,25 @@
+{
+  "date": "20260815",
+  "date_label": "",
+  "generated_at": "2026-08-15 19:19:00 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2608.10620v1",
+      "route": "202608/15/2608.10620v1-probabilistic-forecasting-via-post-processing-prediction-errors-in--or-out-of-sample",
+      "title": "Probabilistic forecasting via post-processing prediction errors: In- or out-of-sample?",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "提供概率预测方法，可量化预算执行与财务管理的不确定性",
+      "first_seen_at": "2026-08-15 19:19:00 UTC",
+      "updated_at": "2026-08-15 19:19:00 UTC"
+    }
+  ]
+}

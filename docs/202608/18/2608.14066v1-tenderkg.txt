@@ -1,0 +1,407 @@
+TenderKG
+A Knowledge Graph Dataset for Recommendation in Public Procurement
+Yacine Mokhtari
+IMT Atlantique, Lab-STICC, UMR
+6285, CNRS
+Brest, France
+Intescia Group
+Issy-les-Moulineaux, France
+yacine.mokhtari@imt-atlantique.fr
+Véra Pukhkoy
+Intescia Group
+Issy-les-Moulineaux, France
+vpukhkoy@intescia.com
+Grégory Smits
+IMT Atlantique, Lab-STICC, UMR
+6285, CNRS
+Brest, France
+gregory.smits@imt-atlantique.fr
+Abstract
+Public procurement represents a major economic activity, where
+public institutions allocate contracts to companies through com-
+petitive tendering processes. Despite its importance, this domain
+remains underexplored by recommender systems, largely due to
+the lack of publicly available datasets capturing its complexity. In
+this paper, we introduce TenderKG, a large-scale knowledge graph
+dataset constructed from French public procurement data covering
+the period 2021–2023. The dataset models the procurement ecosys-
+tem through heterogeneous entities, including companies, tenders,
+lots, and domain-specific taxonomies of work domains, connected
+via rich semantic and structural relations. A key specificity of this
+setting is that only the awarded companies are visible, resulting
+in sparse explicit signals of awarded interactions. To overcome
+this limitation, TenderKG integrates extensive side information on
+the actors in the French tender market and the tenders, including
+textual descriptions, hierarchical classifications, and geographical
+features, enabling the study of knowledge-aware recommendation
+in a highly constrained and competitive environment. We pro-
+vide detailed statistics and analyses of the dataset, highlighting its
+structural properties, sparsity patterns, and domain-specific char-
+acteristics. We believe TenderKG opens new research directions in
+bidder recommendation, knowledge graph-based recommendation,
+competition-aware matching, and provides a valuable benchmark
+for evaluating methods in real-world, high-stakes decision-making
+scenarios.
+CCS Concepts
+• Information systems →Recommender systems.
+Keywords
+Dataset, Public Procurement, Bidder Recommendation, Knowledge-
+aware Dataset
+1
+Introduction
+Public procurement refers to the process by which public insti-
+tutions acquire works, goods, and services from external compa-
+nies [2]. Representing one of the largest sources of economic activ-
+ity in many countries1, public procurement plays a crucial role for
+both companies seeking business opportunities [2] and researchers
+interested in large-scale economic ecosystems.
+1The Public Procurement Data Space (PPDS)
+Figure 1: Illustration of the procurement process, showing
+interactions between public buyers, contracts, lots, and bid-
+ding companies (C).
+Public procurement processes are typically formalized through
+announcements known as public tenders, issued by public agencies
+(hereafter referred to as public buyers). Each tender is generally
+divided into multiple lots, corresponding to specific sub-parts of
+the contract. Bidding companies can submit bids to one or several
+lots, and ultimately, a single company, referred to as the beneficiary,
+is selected for each lot (see Fig. 1).
+In recent years, there has been a growing interest in developing
+bidder recommender systems[2, 3], which aim to assist either (1)
+public buyers in identifying suitable companies for their tenders,
+or (2) companies in discovering relevant bidding opportunities.
+These systems operate in a particularly challenging setting. First,
+interactions between companies and lots are highly sparse. When
+made publicly available, the number of submissions range under
+5 companies per lot [3]. Second, interactions alone are far from
+sufficient. The recommendation process involves rich contextual
+and domain-specific features: On the one hand, tender characteris-
+tics, such as amount, type, lot nature, public buyer, location, among
+others, and, on the other hand, company characteristics including
+activity sector and staffing range. Third, the problem is inherently
+competitive, each lot can only be awarded to a single company, and
+asymmetric, both parties (public buyers and bidding companies)
+have distinct preferences and constraints.
+These characteristics distinguish bidder recommendation from
+other well-studied recommendation scenarios such as e-commerce
+or multimedia. One can observe similarities with reciprocal rec-
+ommendation, while also introducing unique constraints related
+to competition and exclusivity that can occur in job hunting sce-
+narios. As a result, modeling this problem solely as a user-item
+bipartite graph is insufficient. Instead, capturing the full ecosystem
+1
+arXiv:2608.14066v1  [cs.IR]  14 Aug 2026
+
+
+Mokhtari et al.
+requires leveraging structured domain knowledge to incorporate
+heterogeneous relationships and high-level semantic information.
+Despite studies on public tenders [1], to the best of our knowl-
+edge, a well-structured dataset with rich side information tailored
+for Tender Recommendation does not publicly exist.
+To address this gap, we present TenderKG, a Knowledge Graph
+(KG) dataset derived from French public procurement data, collected
+and processed through an industrial pipeline developed by Intes-
+cia Group2. The dataset covers public tenders published between
+[2021–2023], including public buyers, tenders, lots, and awarded
+companies, along with domain-related side information. The consol-
+idated dataset is made publicly available at FigShare3. Furthermore,
+the Intescia Group will provide updates to the dataset, enabling
+longitudinal and trend analyses.
+Our contributions can be summarized as follows:
+• Curated multi-sources dataset: We provide a dataset
+processed from multiple heterogeneous public sources, in-
+volving extensive data cleaning, normalization, and entity
+resolution.
+• Domain-specific KG: We release a structured representa-
+tion of the procurement ecosystem, capturing key entities
+and relationships, including hierarchical taxonomies such
+as CPV (Common Procurement Vocabulary) and NAF (ac-
+tivity sectors).
+• Dataset characterization: We present a comprehensive
+analysis of the dataset, including a concise overview of the
+procurement domain and key statistical properties (e.g., dis-
+tributions, sparsity, and heterogeneity), highlighting chal-
+lenges for recommendation tasks.
+We believe that this dataset opens new research directions for rec-
+ommendation systems in highly competitive and knowledge-rich
+environments. In particular, it enables the study of competition-
+aware recommendation, semantic matching, and graph-based learn-
+ing approaches. Since only awarded submissions accounts as user
+interactions, this enables reflecting on beyond accuracy metrics
+tailored for high-stakes decision-making scenarios.
+2
+Dataset Description
+2.1
+Collection Process
+The TenderKG dataset comprises all awarded French public tenders
+over a three-year period (2021-2023), collected from multiple official
+sources: including national and European publication platforms
+(e.g., BOAMP4, JOUE5), as well as regional procurement portals. As
+the dataset is constructed from real-world contract award notices,
+its quality is inherently tied to the reporting practices of public
+buyers, and may therefore exhibit variability and missing informa-
+tion. The data has been prepared through an industrial collection
+and processing pipeline developed by Intescia Group, involving
+document retrieval, information extraction and entity resolution
+across heterogeneous sources.
+2https://intescia-group.com
+3https://figshare.com/articles/dataset/TenderKG_A_Knowledge_Graph_Dataset_
+for_Recommendation_in_Public_Procurement/32149909
+4https://www.boamp.fr/pages/entreprise-accueil/
+5https://eur-lex.europa.eu/oj/direct-access.html?locale=en
+Figure 2: TenderKG Schema
+Table 1: Summary of dataset statistics. B and PB denote Ben-
+eficiaries and Public Buyers, respectively. Dual-role refers to
+companies that act as both beneficiaries and public buyers
+in TenderKG. CPV codes are reported at the 5th level.
+Object
+Count
+Object
+Count
+Objects
+Sparsity
+ratio
+Tenders
+6,126
+Companies
+15,340
+B–CPV
+99.62%
+Lots
+29,220
+B
+13,033
+NAF–CPV
+99.45%
+CPV
+2,468
+PB
+2,359
+NAF
+732
+Dual-role
+52
+As this work focuses exclusively on publicly available procure-
+ment data in France, the dataset is released without anonymization.
+It covers a wide range of companies, from very small bidding com-
+panies (1-2 employees) to large organizations with more than 10
+000 employees, spanning diverse industry sectors.
+A key characteristic of this dataset is that only the beneficiaries
+(i.e., awarded companies) are publicly disclosed. Unsuccessful bid-
+ders are, on the other hand, not disclosed by public buyers. As a
+result, observed interactions between public buyers and bidding
+companies are extremely sparse and limited to positive outcomes.
+This setting poses significant challenges for recommender systems
+relying solely on collaborative signals, as the underlying interaction
+graph is highly constrained. To mitigate this limitation, we also
+provide rich tender-side and company-side information, when avail-
+able, including tender titles and descriptions, awarded amounts,
+hierarchical tender classifications (official CPV taxonomy), com-
+pany activity sectors (official NAF), and geographical information
+such as departments, neighboring relations, and regions.
+2.2
+Structure and Content
+The TenderKG dataset is structured as a KG, where information
+is represented as a collection of factual triplets of the form (head,
+relation, tail). The overall schema of the KG is illustrated in Fig. 2,
+comprising 12 entity types and 21 relation types. The summary of
+TenderKG statistics are reported in Table 1.
+Below, we describe the main entity types and their associated
+semantics:
+2
+
+
+TenderKG
+Company: This represents both beneficiaries and public buy-
+ers, as they share common attributes. A company is identified by
+a unique identifier (SIREN) and is associated with metadata such
+as name, registration date, and, when publicly available, financial
+indicators.
+Tender: Corresponds to a procurement announcement issued by a
+public buyer. It constitutes the main document in the dataset and
+includes a unique identifier, a short title, and a textual description,
+typically consisting of one to three sentences summarizing the pro-
+curement objective.
+Lot: Each tender is decomposed into one or several lots, repre-
+senting finer-grained procurement units. Lots are associated with
+textual information (title and description) and correspond to the
+actual items awarded to companies.
+CPV (Common Procurement Vocabulary): CPV codes follow
+a tree structure system defined by the European Union6. They are
+9-digit hierarchical identifiers, where the first digits define broad
+categories and subsequent digits refine the classification. In prac-
+tice, codes may be assigned at varying levels of granularity, and
+multiple CPVs can be associated with a single lot. We provide the
+full hierarchy and labels, enabling structural and semantic reason-
+ing.
+NAF (French Activity Classification): Company activity sectors
+are described using the NAF classification defined by INSEE7. This
+hierarchical taxonomy provides sector labels at multiple levels of
+granularity (levels 1-5), enabling the modeling of similarities be-
+tween companies based on their activity domains. In contrast to
+CPV, each company (public buyer or beneficiary) is mapped to a
+unique leaf node.
+Contract Type: Encodes the four types of procurement, i.e., ser-
+vices, goods, works, and furniture, providing a coarse-grained cate-
+gorization of tenders. Unlike lots that can be assigned to multiple
+CPVs, a tender belongs to only one contract type. It is also worth
+noting that a Contract Type does not have its own distinct set of
+CPVs; the same CPV can appear in lots from different tenders with
+distinct types.
+Legal Form: Represents the legal structure of companies, e.g., com-
+mercial company, public entity, which can influence eligibility and
+participation in tenders.
+Staffing Range: Companies are associated with discretized em-
+ployee count ranges based on INSEE standards8. These ranges are
+organized sequentially to capture relative company sizes with the
+IS_BIGGER_SR relation.
+Department, Region and City: The dataset incorporates three
+levels of geographical granularity. Departments represent the pri-
+mary administrative division in France and are associated with
+both codes and labels. Regions group multiple departments, while
+cities provide finer-grained localization. Additionally, departments
+are linked through neighboring relations, capturing geographical
+proximity, which are relevant for procurement decisions.
+Amount: While the exact awarded amount (in ¤) is stored as a
+6CPV:
+https://single-market-economy.ec.europa.eu/single-market/public-
+procurement/digital-procurement/common-procurement-vocabulary_en
+7NAF: https://www.insee.fr/en/information/8621640
+8Last table on https://www.insee.fr/fr/information/1896455
+Figure 3: Distribution of Tenders and Lots by Type, CPV
+Category, and Amount Range in TenderKG. This diversity
+showcases the richness and heterogeneity of TenderKG.
+data property of lots, we additionally introduce a discretized repre-
+sentation into monetary ranges. These ranges, defined in collabo-
+ration with domain experts, include categories such as Very Low
+(<10K), Low (10K–50K), Medium Low (50K–100K), Medium (100K–
+300K), Medium High (300K–500K), and High (500K–1M). Similar
+to staffing ranges, these categories are organized hierarchically
+through IS_BIGGER_AMOUNT relations, enabling ordinal reasoning.
+Fig. 3 presents the distribution of tenders by contract type (left),
+as well as the distribution of lots by 1st-level CPV category (center)
+and by amount range (right). Most tenders correspond to Services,
+followed by Works, Supplies, and Studies. Regarding the lot distribu-
+tion, as previously discussed, public buyers may assign CPV codes
+at varying levels of granularity. To ensure consistency and struc-
+tured analysis, all CPVs are therefore aggregated to their 1st-level
+categories in Fig. 3, resulting in 45 distinct groups. The resulting
+distribution highlights the diversity of TenderKG in terms of activ-
+ity sectors. In particular, CPV categories 45 (Construction work), 90
+(Sewage, refuse, cleaning, and environmental services), and 50 (Repair
+and maintenance services) are the most represented, accounting
+for 21.5%, 9.7%, and 6.5% of all lots, respectively. Finally, the distri-
+bution across amount ranges shows that most lots fall within the
+High (25.2%) and Medium (22.3%) ranges, while only a small propor-
+tion (3.2%) corresponds to lots for which no amount information
+is provided by public buyers. Overall, these distributions highlight
+the heterogeneity of TenderKG in terms of contract types, activity
+sectors, and economic scale.
+Fig. 4 presents the distributions of beneficiary activity. Partic-
+ularly, Fig. 4a shows the number of awarded lots per beneficiary.
+However, interactions at the lot level are binary (i.e., each award is
+observed only once), limiting the amount of collaborative signal. To
+better characterize beneficiary activity, we instead consider their
+CPV coverage, i.e., the number of distinct 5th-level CPV categories
+associated with each beneficiary. This level is chosen as a trade-
+off between sparsity reduction (higher-level aggregation reduces
+the number of distinct branches) and semantic granularity. The
+resulting distribution (Fig. 4b) follows a similar long-tailed pattern.
+While NAF codes provide a structural grouping of beneficiaries,
+Fig. 5 shows that proximity in the NAF hierarchy does not necessar-
+ily imply higher overlap in CPV assignments. In particular, some
+distant NAF categories exhibit comparable or higher similarity than
+structurally close ones, indicating that shared activity patterns are
+not strictly aligned with the taxonomy. For instance, NAF cate-
+gories 43.21A and 43.99C exhibit a relatively high similarity (0.27),
+3
+
+
+Mokhtari et al.
+(a) Distribution of the num-
+ber of awarded lots per bene-
+ficiary.
+(b) Distribution of the number
+of CPV categories per benefi-
+ciary.
+Figure 4: Distribution of beneficiary activity in TenderKG.
+Both distributions exhibit a strong right-skew, indicating
+that most beneficiaries are associated with a small number
+of awards and categories, while a limited number of benefi-
+ciaries are highly active.
+while categories within the same branch such as 70.10Z and 70.22Z
+show lower overlap (0.13). Notably, 70.10Z is more similar to a cat-
+egory from another branch (68.20B), further indicating that shared
+activity patterns are not strictly aligned with the taxonomy.
+2.3
+Potential Research Directions
+First experiments have been conducted on TenderKG using proven
+GNN-based recommenders [5, 6]. Due to the high sparsity and
+crucial role of side information, the obtained performances were
+significantly lower than those published in the papers. We therefore
+consider TenderKG as a challenging benchmark that motivates the
+development of models adapted to such conditions. The following
+potential research directions are opened up by TenderKG:
+• KG + Textual representation learning: Leveraging both
+hierarchical entities (e.g., CPV, NAF), and ordinal entities
+(such as Amount and Staffing Range) for entity representa-
+tion.
+• Recommendation under sparsity and domain hetero-
+geneity: Addressing the lack of shared interactions and
+the diversity of activity sectors through side information
+(e.g., CPV, NAF), trading between grouping and specializ-
+ing. Exploiting similarities across sectors and attributes to
+recommend opportunities for low-interaction beneficiaries.
+• Domain-specific recommendation: Tacking into account
+domain-specific dimensions centered on buyer–supplier9
+relationships [4]. When considering the competition be-
+tween bidding companies, a poor preference match regard-
+ing a tender may be offset by lower competitiveness.
+We argue that recommender systems in this context should bal-
+ance between relationship continuity, where entities have previously
+interacted, and relationship exploration, where new partnerships
+must be discovered. This duality reflects fundamental dynamics
+of buyer–supplier interactions and poses additional challenges for
+recommendation.
+9A supplier is another term for a bidding company.
+Figure 5: Jaccard similarity between NAF categories based
+on CPV assignments. The matrix highlights both intra- and
+cross-sector overlaps, showing that similarity is not strictly
+driven by the NAF hierarchy.
+3
+Conclusion
+The TenderKG dataset introduces a domain-rich dataset for public
+procurement, integrating tender-related information, and company
+side information within a unified KG. Its construction relies on
+extensive data collection, cleaning, and integration from multiple
+heterogeneous public sources by Intescia Group.
+Through our analysis, we highlight key characteristics of the
+dataset, including strong sparsity, long-tailed distributions, and
+the presence of rich structural and semantic information. These
+properties make TenderKG a challenging and realistic benchmark
+for recommendation tasks in structured domains and high-stakes
+decision-making scenarios. In particular, the dataset opens research
+directions involving deep hierarchical reasoning, ordinal relations,
+and the integration of textual features. These research directions
+are the focus of ongoing work.
+References
+[1] Adrien Deschamps and Lucas Potin. 2025. Processing and consolidation of open
+data on public procurement in France (2015–2023). Data in Brief 58 (2025), 111277.
+[2] Manuel J García Rodríguez, Vicente Rodríguez Montequín, Francisco Ortega Fer-
+nandez, and Joaquín M Villanueva Balsera. 2020. Bidders recommender for public
+procurement auctions using machine learning: data analysis, algorithm, and case
+study with tenders from Spain. Complexity 2020, 1 (2020), 8858258.
+[3] Roberto Nai, Rosa Meo, Gabriele Morina, and Paolo Pasteris. 2023. Public tenders,
+complaints, machine learning and recommender systems: a case study in public
+administration. Computer Law & Security Review 51 (2023), 105887.
+[4] Ali Shamsollahi, Danielle A Chmielewski-Raimondo, Simon J Bell, and Reza
+Kachouie. 2021. Buyer–supplier relationship dynamics: A systematic review.
+Journal of the Academy of Marketing Science 49, 2 (2021), 418–436.
+[5] Rui Sun, Xuezhi Cao, Yan Zhao, Junchen Wan, Kun Zhou, Fuzheng Zhang,
+Zhongyuan Wang, and Kai Zheng. 2020. Multi-modal knowledge graphs for
+recommender systems. In Proceedings of the 29th ACM international conference on
+information & knowledge management. 1405–1414.
+[6] Xiang Wang, Xiangnan He, Yixin Cao, Meng Liu, and Tat-Seng Chua. 2019. KGAT:
+Knowledge Graph Attention Network for Recommendation. In KDD. 950–958.
+4

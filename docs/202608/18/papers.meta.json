@@ -1,0 +1,54 @@
+{
+  "label": "2026-08-18",
+  "date": "2026-08-18",
+  "generated_at": "2026-08-18T20:51:14",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202608/18/2608.15101v1-second-order-policy-effects-as-state-transitions-a-source-linked-benchmark-for-policy-simulation",
+      "section": "quick",
+      "title_en": "Second-Order Policy Effects as State Transitions: A Source-Linked Benchmark for Policy Simulation",
+      "authors": "Wesley Shu",
+      "date": "2026-08-15",
+      "pdf": "https://arxiv.org/pdf/2608.15101v1",
+      "score": "7.0",
+      "evidence": "政策模拟基准可用于评估政府项目和财政绩效。",
+      "tldr": "传统政策评估常把制度环境视为既定，忽视政策引发的系统重构。我们提出二阶政策效应预测，并构建源链接基准：涵盖96个公共政策案例、8个领域、4类执行动作，以及收益、捕获、博弈、负担转移等关键状态变量。经过渡通道审计，副作用模拟器平均政策效应质量为0.945，优于风险登记基线0.838和因果循环基线0.879。证据支持有限结论：过渡状态变量使模拟器对下游制度效应更敏感，值得进一步验证。",
+      "tags": "query:budget-perf",
+      "abstract_en": "Policy evaluation often estimates direct benefits and costs while treating the institutional environment as fixed. In practice, a policy changes the system it enters: actors adapt, enforcement capacity shifts, burdens move, and new equilibria form around capture, gaming, compliance theater, irreversibility, and repair costs. We formalize this as second-order policy-effect prediction and present a source-linked benchmark for policy simulation. The benchmark contains 96 named public-policy cases across eight domains and four balanced action classes: implement, modify, pilot, and block. Each case includes source locators and state variables for benefit, capture, gaming, burden shift, instability, uncertainty, irreversibility, distributional risk, and implementation capacity. The runner regenerates method outputs and aggregate results from the case table, and the simulator never reads the expert action target. We report a protocol-based transition-channel audit with recall, precision, F1-style efficiency, and selective top-channel stress diagnostics, so universal channel coverage is not mistaken for field validation. The side-effect simulator achieves mean policy-effect quality of 0.945, compared with 0.838 for the risk-register baseline and 0.879 for the causal-loop baseline. Its advantage is concentrated in side-effect recall and aggregate transition scoring; it does not dominate the best structured baselines on exact policy-action choice. The evidence remains benchmark-based, but supports a bounded claim: transition-state variables make policy simulators more sensitive to downstream institutional effects.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202608/18/2608.11327v1-long-horizon-forecasting-of-complete-financial-statements-with-forma",
+      "section": "quick",
+      "title_en": "Long-Horizon Forecasting of Complete Financial Statements with Forma",
+      "authors": "Travis L. Johnson, Jiannan Jiang, Soumyabrata Chaudhuri, Yihao Chen, Lauren Falvey, Donal O'Cofaigh",
+      "date": "2026-08-11",
+      "pdf": "https://arxiv.org/pdf/2608.11327v1",
+      "score": "6.0",
+      "evidence": "财务报表预测方法可迁移至预算执行分析。",
+      "tldr": "财务报表长期预测长期被忽视，但估值主要依赖远期现金流。本文提出Forma模型，将报表视为(账户,季度,数值)元组集合，用掩码元组高斯似然训练Transformer，并发布ProForma-20Q基准（78个科目，1-20季度）。实验显示Forma在所有对比模型中领先，且优势随预测时长扩大；预测区间可靠，会计恒等式近似满足，元组接口支持无需重训的情景分析。",
+      "tags": "query:budget-perf",
+      "abstract_en": "Specialist training beats generalist scale when forecasting financial statements. To our knowledge, no prior work jointly forecasts complete financial statements beyond one year, yet in a discounted-cash-flow valuation most firm value sits past that window. We release ProForma-20Q, a reproducible benchmark for forecasting 78 statement line items 1-20 quarters ahead, for anonymized firms, from past statements and an industry code, scored by change-space $R^2$. On it, Forma, a transformer that reads statements as sets of (account, quarter, value) tuples and maximizes a masked-tuple Gaussian likelihood, beats every competitor we field: classical machine learning, chained gradient boosting, a zero-shot time-series foundation model, and frontier large language models. Its lead widens with horizon, where valuation needs accuracy most, and its Gaussian predictive intervals never under-cover. Forma's forecasts nearly satisfy accounting identities; exact coherence is recoverable at no statistically significant accuracy cost. Its tuple interface supports scenario analysis without retraining, and we show that pinning future revenue paths sharpens the rest of the statement.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202608/18/2608.14066v1-tenderkg",
+      "section": "quick",
+      "title_en": "TenderKG",
+      "authors": "Yacine Mokhtari, Véra Pukhkoy, Grégory Smits",
+      "date": "2026-08-14",
+      "pdf": "https://arxiv.org/pdf/2608.14066v1",
+      "score": "6.0",
+      "evidence": "公共采购知识图谱数据集",
+      "tldr": "公共采购是重要经济活动，但推荐系统在该领域研究不足，主要因缺乏公开数据集。我们构建TenderKG，一个覆盖法国2021-2023年采购数据的知识图谱，包含公司、招标、批次等实体和丰富关系。由于仅中标公司可见，信号稀疏，数据集整合文本描述、分类和地理等侧信息。TenderKG为投标人推荐、知识感知推荐等提供基准，助力高风险决策研究。",
+      "tags": "query:budget-perf",
+      "abstract_en": "Public procurement represents a major economic activity, where public institutions allocate contracts to companies through competitive tendering processes. Despite its importance, this domain remains underexplored by recommender systems, largely due to the lack of publicly available datasets capturing its complexity. In this paper, we introduce TenderKG, a large-scale knowledge graph dataset constructed from French public procurement data covering the period 2021--2023. The dataset models the procurement ecosystem through heterogeneous entities, including companies, tenders, lots, and domain-specific taxonomies of work domains, connected via rich semantic and structural relations. A key specificity of this setting is that only the awarded companies are visible, resulting in sparse explicit signals of awarded interactions. To overcome this limitation, TenderKG integrates extensive side information on the actors in the French tender market and the tenders, including textual descriptions, hierarchical classifications, and geographical features, enabling the study of knowledge-aware recommendation in a highly constrained and competitive environment. We provide detailed statistics and analyses of the dataset, highlighting its structural properties, sparsity patterns, and domain-specific characteristics. We believe TenderKG opens new research directions in bidder recommendation, knowledge graph-based recommendation, competition-aware matching, and provides a valuable benchmark for evaluating methods in real-world, high-stakes decision-making scenarios.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

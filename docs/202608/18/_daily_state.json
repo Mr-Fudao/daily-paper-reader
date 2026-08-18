@@ -1,0 +1,57 @@
+{
+  "date": "20260818",
+  "date_label": "",
+  "generated_at": "2026-08-18 20:51:12 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2608.15101v1",
+      "route": "202608/18/2608.15101v1-second-order-policy-effects-as-state-transitions-a-source-linked-benchmark-for-policy-simulation",
+      "title": "Second-Order Policy Effects as State Transitions: A Source-Linked Benchmark for Policy Simulation",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "政策模拟基准可用于评估政府项目和财政绩效。",
+      "first_seen_at": "2026-08-18 20:51:12 UTC",
+      "updated_at": "2026-08-18 20:51:12 UTC"
+    },
+    {
+      "paper_id": "2608.11327v1",
+      "route": "202608/18/2608.11327v1-long-horizon-forecasting-of-complete-financial-statements-with-forma",
+      "title": "Long-Horizon Forecasting of Complete Financial Statements with Forma",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "财务报表预测方法可迁移至预算执行分析。",
+      "first_seen_at": "2026-08-18 20:51:12 UTC",
+      "updated_at": "2026-08-18 20:51:12 UTC"
+    },
+    {
+      "paper_id": "2608.14066v1",
+      "route": "202608/18/2608.14066v1-tenderkg",
+      "title": "TenderKG",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "公共采购知识图谱数据集",
+      "first_seen_at": "2026-08-18 20:51:12 UTC",
+      "updated_at": "2026-08-18 20:51:12 UTC"
+    }
+  ]
+}

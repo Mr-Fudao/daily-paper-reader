@@ -1,0 +1,130 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-18T20:46:49.998138+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 3,
+    "quick_skim_target": 11,
+    "quick_selected": 3
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2608.15101v1",
+      "source": "arxiv",
+      "title": "Second-Order Policy Effects as State Transitions: A Source-Linked Benchmark for Policy Simulation",
+      "abstract": "Policy evaluation often estimates direct benefits and costs while treating the institutional environment as fixed. In practice, a policy changes the system it enters: actors adapt, enforcement capacity shifts, burdens move, and new equilibria form around capture, gaming, compliance theater, irreversibility, and repair costs. We formalize this as second-order policy-effect prediction and present a source-linked benchmark for policy simulation. The benchmark contains 96 named public-policy cases across eight domains and four balanced action classes: implement, modify, pilot, and block. Each case includes source locators and state variables for benefit, capture, gaming, burden shift, instability, uncertainty, irreversibility, distributional risk, and implementation capacity. The runner regenerates method outputs and aggregate results from the case table, and the simulator never reads the expert action target. We report a protocol-based transition-channel audit with recall, precision, F1-style efficiency, and selective top-channel stress diagnostics, so universal channel coverage is not mistaken for field validation. The side-effect simulator achieves mean policy-effect quality of 0.945, compared with 0.838 for the risk-register baseline and 0.879 for the causal-loop baseline. Its advantage is concentrated in side-effect recall and aggregate transition scoring; it does not dominate the best structured baselines on exact policy-action choice. The evidence remains benchmark-based, but supports a bounded claim: transition-state variables make policy simulators more sensitive to downstream institutional effects.",
+      "authors": [
+        "Wesley Shu"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-08-15T07:53:06+00:00",
+      "link": "https://arxiv.org/pdf/2608.15101v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Policy simulation benchmark for evaluating government program and fiscal performance.",
+      "llm_evidence_cn": "政策模拟基准可用于评估政府项目和财政绩效。",
+      "llm_evidence": "政策模拟基准可用于评估政府项目和财政绩效。",
+      "canonical_evidence": "政策模拟基准可用于评估政府项目和财政绩效。",
+      "llm_tldr_en": "Introduces a source-linked benchmark of 96 public-policy cases for predicting second-order policy effects such as capture, gaming, and burden shift, supporting policy simulation and government performance evaluation.",
+      "llm_tldr_cn": "该论文针对政策评估中机构环境被忽视的问题，将二阶政策效应视为状态转移，提出包含96个公共政策案例、八个领域和四类行动（实施、修改、试点、阻止）的源链接基准。每个案例提供收益、捕获、博弈、负担转移等状态变量，以支持对政策实施后系统变化的预测。该基准填补了政策模拟研究中缺乏标准数据的空白，为评估政府财政和公共支出的长期效果提供了可复用的工具。",
+      "llm_tldr": "该论文针对政策评估中机构环境被忽视的问题，将二阶政策效应视为状态转移，提出包含96个公共政策案例、八个领域和四类行动（实施、修改、试点、阻止）的源链接基准。每个案例提供收益、捕获、博弈、负担转移等状态变量，以支持对政策实施后系统变化的预测。该基准填补了政策模拟研究中缺乏标准数据的空白，为评估政府财政和公共支出的长期效果提供了可复用的工具。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "evaluation of fiscal performance in government",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.11327v1",
+      "source": "arxiv",
+      "title": "Long-Horizon Forecasting of Complete Financial Statements with Forma",
+      "abstract": "Specialist training beats generalist scale when forecasting financial statements. To our knowledge, no prior work jointly forecasts complete financial statements beyond one year, yet in a discounted-cash-flow valuation most firm value sits past that window. We release ProForma-20Q, a reproducible benchmark for forecasting 78 statement line items 1-20 quarters ahead, for anonymized firms, from past statements and an industry code, scored by change-space $R^2$. On it, Forma, a transformer that reads statements as sets of (account, quarter, value) tuples and maximizes a masked-tuple Gaussian likelihood, beats every competitor we field: classical machine learning, chained gradient boosting, a zero-shot time-series foundation model, and frontier large language models. Its lead widens with horizon, where valuation needs accuracy most, and its Gaussian predictive intervals never under-cover. Forma's forecasts nearly satisfy accounting identities; exact coherence is recoverable at no statistically significant accuracy cost. Its tuple interface supports scenario analysis without retraining, and we show that pinning future revenue paths sharpens the rest of the statement.",
+      "authors": [
+        "Travis L. Johnson",
+        "Jiannan Jiang",
+        "Soumyabrata Chaudhuri",
+        "Yihao Chen",
+        "Lauren Falvey",
+        "Donal O'Cofaigh"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "q-fin.CP"
+      ],
+      "published": "2026-08-11T18:21:19+00:00",
+      "link": "https://arxiv.org/pdf/2608.11327v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Financial statement forecasting method applicable to budget execution analysis.",
+      "llm_evidence_cn": "财务报表预测方法可迁移至预算执行分析。",
+      "llm_evidence": "财务报表预测方法可迁移至预算执行分析。",
+      "canonical_evidence": "财务报表预测方法可迁移至预算执行分析。",
+      "llm_tldr_en": "Forma forecasts complete financial statements 1-20 quarters ahead by treating statements as account-quarter-value tuples and maximizing masked-tuple likelihood, beating all baselines on ProForma-20Q.",
+      "llm_tldr_cn": "该工作针对完整财务报表长期预测这一难题，提出Forma，一种将财务报表作为账户、季度、值元组集合的Transformer，并在新发布的ProForma-20Q基准上同时预测78个科目未来20个季度。实验显示Forma在变化空间R²指标上优于经典机器学习、梯度提升、零样本时序模型和大语言模型。该结果说明面向特定任务的专用训练优于通用模型，可复现基准为财务预测研究提供了坚实基础。",
+      "llm_tldr": "该工作针对完整财务报表长期预测这一难题，提出Forma，一种将财务报表作为账户、季度、值元组集合的Transformer，并在新发布的ProForma-20Q基准上同时预测78个科目未来20个季度。实验显示Forma在变化空间R²指标上优于经典机器学习、梯度提升、零样本时序模型和大语言模型。该结果说明面向特定任务的专用训练优于通用模型，可复现基准为财务预测研究提供了坚实基础。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "analysis of budget execution and financial management",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.14066v1",
+      "source": "arxiv",
+      "title": "TenderKG",
+      "abstract": "Public procurement represents a major economic activity, where public institutions allocate contracts to companies through competitive tendering processes. Despite its importance, this domain remains underexplored by recommender systems, largely due to the lack of publicly available datasets capturing its complexity. In this paper, we introduce TenderKG, a large-scale knowledge graph dataset constructed from French public procurement data covering the period 2021--2023. The dataset models the procurement ecosystem through heterogeneous entities, including companies, tenders, lots, and domain-specific taxonomies of work domains, connected via rich semantic and structural relations. A key specificity of this setting is that only the awarded companies are visible, resulting in sparse explicit signals of awarded interactions. To overcome this limitation, TenderKG integrates extensive side information on the actors in the French tender market and the tenders, including textual descriptions, hierarchical classifications, and geographical features, enabling the study of knowledge-aware recommendation in a highly constrained and competitive environment. We provide detailed statistics and analyses of the dataset, highlighting its structural properties, sparsity patterns, and domain-specific characteristics. We believe TenderKG opens new research directions in bidder recommendation, knowledge graph-based recommendation, competition-aware matching, and provides a valuable benchmark for evaluating methods in real-world, high-stakes decision-making scenarios.",
+      "authors": [
+        "Yacine Mokhtari",
+        "Véra Pukhkoy",
+        "Grégory Smits"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR"
+      ],
+      "published": "2026-08-14T08:24:30+00:00",
+      "link": "https://arxiv.org/pdf/2608.14066v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Public procurement knowledge graph dataset",
+      "llm_evidence_cn": "公共采购知识图谱数据集",
+      "llm_evidence": "公共采购知识图谱数据集",
+      "canonical_evidence": "公共采购知识图谱数据集",
+      "llm_tldr_en": "TenderKG is a large-scale knowledge graph dataset of French public procurement (2021-2023), modeling companies, tenders, lots, and work-domain taxonomies, providing rich relational data to support analysis of public spending and budget execution.",
+      "llm_tldr_cn": "公共采购在公共部门中占据重要地位，但由于缺乏公开数据集，这一领域在推荐系统等研究中长期被忽视。本文构建了TenderKG，一个基于法国2021至2023年公共采购数据的大规模知识图谱数据集，通过公司、招标、标段、工作领域分类等异构实体及丰富语义与结构关系，刻画采购生态系统的复杂性。该数据集可服务于公共支出分析和预算执行研究，为数据驱动的公共财政管理提供基础资源。",
+      "llm_tldr": "公共采购在公共部门中占据重要地位，但由于缺乏公开数据集，这一领域在推荐系统等研究中长期被忽视。本文构建了TenderKG，一个基于法国2021至2023年公共采购数据的大规模知识图谱数据集，通过公司、招标、标段、工作领域分类等异构实体及丰富语义与结构关系，刻画采购生态系统的复杂性。该数据集可服务于公共支出分析和预算执行研究，为数据驱动的公共财政管理提供基础资源。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "analysis of budget execution and financial management",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

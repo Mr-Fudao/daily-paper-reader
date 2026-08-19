@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-08-19 <!--dpr-date:20260819-->
+    * 速读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202608/19/2608.12589v1-supervised-mixed-frequency-learning-for-macro-financial-forecasting-when-factors-are-weak" data-sidebar-item="{&quot;title&quot;: &quot;Supervised Mixed-Frequency Learning for Macro-Financial Forecasting When Factors are Weak&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2608.12589v1-supervised-mixed-frequency-learning-for-macro-financial-forecasting-when-factors-are-weak&quot;, &quot;score&quot;: &quot;7.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;budget-perf&quot;}], &quot;evidence&quot;: &quot;有监督混频学习方法用于宏观金融预测，可支撑财政绩效评估&quot;}">Supervised Mixed-Frequency Learning for Macro-Financial Forecasting When Factors are Weak</a>
   * 2026-08-18 <!--dpr-date:20260818-->
     * 速读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202608/18/2608.15101v1-second-order-policy-effects-as-state-transitions-a-source-linked-benchmark-for-policy-simulation" data-sidebar-item="{&quot;title&quot;: &quot;Second-Order Policy Effects as State Transitions: A Source-Linked Benchmark for Policy Simulation&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2608.15101v1-second-order-policy-effects-as-state-transitions-a-source-linked-benchmark-for-policy-simulation&quot;, &quot;score&quot;: &quot;7.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;budget-perf&quot;}], &quot;evidence&quot;: &quot;政策模拟基准可用于评估政府项目和财政绩效。&quot;}">Second-Order Policy Effects as State Transitions: A Source-Linked Benchmark for Policy Simulation</a>

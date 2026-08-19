@@ -41,17 +41,17 @@
 <section class="dpr-home-dashboard-card dpr-home-report-card">
   <div class="dpr-home-dashboard-header">
     <div>
-      <span class="dpr-home-dashboard-kicker">2026-08-18</span>
+      <span class="dpr-home-dashboard-kicker">2026-08-19</span>
       <h3 class="dpr-home-dashboard-title">今日汇总</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">共 3 篇</strong>
+    <strong class="dpr-home-dashboard-count">共 1 篇</strong>
   </div>
   <dl class="dpr-home-dashboard-stats">
     <div class="dpr-home-dashboard-stat"><dt>累计更新</dt><dd>1 次</dd></div>
     <div class="dpr-home-dashboard-stat"><dt>精读</dt><dd>0</dd></div>
-    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>3</dd></div>
+    <div class="dpr-home-dashboard-stat"><dt>速读</dt><dd>1</dd></div>
   </dl>
-  <p class="dpr-home-dashboard-body">最近更新：2026-08-18 20:51:12 UTC<br>状态：成功</p>
+  <p class="dpr-home-dashboard-body">最近更新：2026-08-19 20:26:00 UTC<br>状态：成功</p>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-brief-card">
   <div class="dpr-home-dashboard-header">
@@ -62,7 +62,7 @@
     <strong class="dpr-home-dashboard-count">AI</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<p>今日速读3篇论文，覆盖政策模拟、财务预测与知识图谱，暂无精读。最值得关注的是《Second-Order Policy Effects as State Transitions》（7.0分）及《Long-Horizon Forecasting of Complete Financial Statements》（6.0分），分别涉及二阶政策效应与长期财报预测。建议普通读者优先浏览这两篇摘要，了解政策仿真与金融预测的前沿方法。</p>
+<p>今日速读1篇宏观金融预测文献，聚焦“弱因子”场景。最值得关注：混合频率学习如何提升弱因子环境下的预测稳健性。建议可进一步精读该方法，并尝试将其应用于自定义数据集验证效果。</p>
   </div>
 </section>
 <section class="dpr-home-dashboard-card dpr-home-deep-card">
@@ -84,12 +84,12 @@
       <span class="dpr-home-dashboard-kicker">今日累计</span>
       <h3 class="dpr-home-dashboard-title">速读推荐</h3>
     </div>
-    <strong class="dpr-home-dashboard-count">3 篇</strong>
+    <strong class="dpr-home-dashboard-count">1 篇</strong>
   </div>
   <div class="dpr-home-dashboard-body">
-<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Second-Order Policy Effects as State Transitions: A Source-Linked Benchmark for Policy Simulation">Second-Order Policy Effects as State Transitions: A Source-Linked Benchmark for Policy Simulation</span></li><li><span class="dpr-home-dashboard-paper-title" title="Long-Horizon Forecasting of Complete Financial Statements with Forma">Long-Horizon Forecasting of Complete Financial Statements with Forma</span></li><li><span class="dpr-home-dashboard-paper-title" title="TenderKG">TenderKG</span></li></ul>
+<ul class="dpr-home-dashboard-paper-list"><li><span class="dpr-home-dashboard-paper-title" title="Supervised Mixed-Frequency Learning for Macro-Financial Forecasting When Factors are Weak">Supervised Mixed-Frequency Learning for Macro-Financial Forecasting When Factors are Weak</span></li></ul>
   </div>
-  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">budget-perf <strong>3</strong></span></div>
+  <div class="dpr-home-dashboard-tags"><span class="dpr-home-dashboard-tag">budget-perf <strong>1</strong></span></div>
 </section>
 </div>
 

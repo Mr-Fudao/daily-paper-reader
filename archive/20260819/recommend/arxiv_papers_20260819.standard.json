@@ -1,0 +1,54 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-19T20:23:25.744360+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 1,
+    "quick_skim_target": 11,
+    "quick_selected": 1
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2608.12589v1",
+      "source": "arxiv",
+      "title": "Supervised Mixed-Frequency Learning for Macro-Financial Forecasting When Factors are Weak",
+      "abstract": "Factor-MIDAS regressions forecast a low-frequency target by extracting common factors from a large panel of high-frequency predictors via principal component analysis (PCA). While PCA mitigates the curse of dimensionality, it relies on factor pervasiveness, an assumption often violated when factors are weak, as is common in macro-financial forecasting. We propose SsPCA-MIDAS, which integrates supervised scaled PCA (SsPCA) into the mixed-data sampling framework. We establish consistency and asymptotic normality under weak factors, permitting inference on the prediction target. Simulations show that SsPCA-MIDAS outperforms competing PCA-based and supervised methods, especially when weak factors are prevalent. Applying machine-learning techniques such as boosting to the cleaner factors it extracts yields further gains. An extensive application to U.S. macro-financial forecasting shows that SsPCA-MIDAS selects economically meaningful predictors and improves forecasts of GDP, inflation, unemployment, asset prices, and volatility.",
+      "authors": [
+        "Ulrich Hounyo",
+        "Zhendong Li"
+      ],
+      "primary_category": "econ.EM",
+      "categories": [
+        "econ.EM",
+        "stat.ML"
+      ],
+      "published": "2026-08-12T21:02:53+00:00",
+      "link": "https://arxiv.org/pdf/2608.12589v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Supervised mixed-frequency learning for macro-financial forecasting, useful for fiscal performance evaluation",
+      "llm_evidence_cn": "有监督混频学习方法用于宏观金融预测，可支撑财政绩效评估",
+      "llm_evidence": "有监督混频学习方法用于宏观金融预测，可支撑财政绩效评估",
+      "canonical_evidence": "有监督混频学习方法用于宏观金融预测，可支撑财政绩效评估",
+      "llm_tldr_en": "Proposes SsPCA-MIDAS, integrating supervised scaled PCA into mixed-data sampling for weak factors, improving macro-financial forecasting and enabling inference.",
+      "llm_tldr_cn": "该论文针对弱因子情形下PCA提取共同因子不可靠的问题，提出将有监督缩放PCA（SsPCA）引入混频数据采样框架的SsPCA-MIDAS方法。理论证明在弱因子条件下具有一致性和渐近正态性，允许对预测目标进行推断。模拟结果表明，在弱因子普遍存在时其性能优于基于PCA的竞争方法。该方法可应用于宏观金融预测，为财政绩效评估与预算执行分析提供强有力的计量工具。",
+      "llm_tldr": "该论文针对弱因子情形下PCA提取共同因子不可靠的问题，提出将有监督缩放PCA（SsPCA）引入混频数据采样框架的SsPCA-MIDAS方法。理论证明在弱因子条件下具有一致性和渐近正态性，允许对预测目标进行推断。模拟结果表明，在弱因子普遍存在时其性能优于基于PCA的竞争方法。该方法可应用于宏观金融预测，为财政绩效评估与预算执行分析提供强有力的计量工具。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "evaluation of fiscal performance in government",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "label": "2026-08-20",
+  "date": "2026-08-20",
+  "generated_at": "2026-08-20T20:35:38",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202608/20/2608.18354v1-mayoral-experience-or-municipal-capacity-negative-outcome-evidence-on-municipal-budget-execution-in-peru",
+      "section": "deep",
+      "title_en": "Mayoral Experience or Municipal Capacity? Negative-Outcome Evidence on Municipal Budget Execution in Peru",
+      "authors": "Ciro Machacuay, Jaime Lincovil, Helder Rojas",
+      "date": "2026-08-18",
+      "pdf": "https://arxiv.org/pdf/2608.18354v1",
+      "score": "9.0",
+      "evidence": "研究秘鲁市政投资预算执行，识别市长公共管理经验与市政能力的作用",
+      "tldr": "既有研究常将市长经验与市政绩效关联，但存在选择偏差。本研究利用秘鲁1642个地区2015-2022年面板数据，采用市内估计和面板双重机器学习，发现先前公共管理经验正向预测投资预算执行，教育影响较弱。负面结果控制显示跨市比较存在选择效应，但一阶差分负面控制仍显示经验变化与预算执行相关。贡献在于区分领导者与市政能力两种变异来源，并展示负面结果控制如何强化识别。",
+      "tags": "query:budget-perf",
+      "abstract_en": "When experienced mayors govern better-performing municipalities, it is tempting to credit the leader. Yet municipalities with stronger administrative capacity may also be more likely to attract and elect experienced mayors, generating selection on pre-existing municipal capacity. We examine this identification problem using a balanced panel of 1,642 Peruvian district municipalities from 2015 to 2022. Within-municipality estimators and panel double machine learning recover a positive association between prior public-management experience and investment-budget execution, while formal education is substantially weaker. Negative-outcome controls reveal an important distinction. Across municipalities, mayoral human capital predicts GDP and HDI measured before the mayor took office, providing evidence of selection in cross-sectional comparisons. By contrast, the first-difference negative control aligned with the within-municipality design shows that changes in mayoral experience do not predict pre-determined district GDP, while they remain associated with budget execution. Sensitivity analysis and partial-identification bounds nevertheless do not support a clean causal interpretation of that within association. The results therefore separate two sources of variation often conflated in studies of political leadership and show how negative-outcome controls can sharpen the identification of leader effects.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

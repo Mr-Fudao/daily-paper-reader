@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-08-20 <!--dpr-date:20260820-->
+    * 精读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202608/20/2608.18354v1-mayoral-experience-or-municipal-capacity-negative-outcome-evidence-on-municipal-budget-execution-in-peru" data-sidebar-item="{&quot;title&quot;: &quot;Mayoral Experience or Municipal Capacity? Negative-Outcome Evidence on Municipal Budget Execution in Peru&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2608.18354v1-mayoral-experience-or-municipal-capacity-negative-outcome-evidence-on-municipal-budget-execution-in-peru&quot;, &quot;score&quot;: &quot;9.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;budget-perf&quot;}], &quot;evidence&quot;: &quot;研究秘鲁市政投资预算执行，识别市长公共管理经验与市政能力的作用&quot;}">Mayoral Experience or Municipal Capacity? Negative-Outcome Evidence on Municipal Budget Execution in Peru</a>
   * 2026-08-19 <!--dpr-date:20260819-->
     * 速读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202608/19/2608.12589v1-supervised-mixed-frequency-learning-for-macro-financial-forecasting-when-factors-are-weak" data-sidebar-item="{&quot;title&quot;: &quot;Supervised Mixed-Frequency Learning for Macro-Financial Forecasting When Factors are Weak&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2608.12589v1-supervised-mixed-frequency-learning-for-macro-financial-forecasting-when-factors-are-weak&quot;, &quot;score&quot;: &quot;7.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;budget-perf&quot;}], &quot;evidence&quot;: &quot;有监督混频学习方法用于宏观金融预测，可支撑财政绩效评估&quot;}">Supervised Mixed-Frequency Learning for Macro-Financial Forecasting When Factors are Weak</a>

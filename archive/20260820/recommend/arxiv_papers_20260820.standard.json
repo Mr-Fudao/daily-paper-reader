@@ -1,0 +1,53 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-20T20:33:59.382765+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 1,
+    "deep_cap": 6,
+    "deep_selected": 1,
+    "quick_candidates": 0,
+    "quick_skim_target": 11,
+    "quick_selected": 0
+  },
+  "deep_dive": [
+    {
+      "id": "2608.18354v1",
+      "source": "arxiv",
+      "title": "Mayoral Experience or Municipal Capacity? Negative-Outcome Evidence on Municipal Budget Execution in Peru",
+      "abstract": "When experienced mayors govern better-performing municipalities, it is tempting to credit the leader. Yet municipalities with stronger administrative capacity may also be more likely to attract and elect experienced mayors, generating selection on pre-existing municipal capacity. We examine this identification problem using a balanced panel of 1,642 Peruvian district municipalities from 2015 to 2022. Within-municipality estimators and panel double machine learning recover a positive association between prior public-management experience and investment-budget execution, while formal education is substantially weaker. Negative-outcome controls reveal an important distinction. Across municipalities, mayoral human capital predicts GDP and HDI measured before the mayor took office, providing evidence of selection in cross-sectional comparisons. By contrast, the first-difference negative control aligned with the within-municipality design shows that changes in mayoral experience do not predict pre-determined district GDP, while they remain associated with budget execution. Sensitivity analysis and partial-identification bounds nevertheless do not support a clean causal interpretation of that within association. The results therefore separate two sources of variation often conflated in studies of political leadership and show how negative-outcome controls can sharpen the identification of leader effects.",
+      "authors": [
+        "Ciro Machacuay",
+        "Jaime Lincovil",
+        "Helder Rojas"
+      ],
+      "primary_category": "stat.AP",
+      "categories": [
+        "stat.AP"
+      ],
+      "published": "2026-08-18T22:10:48+00:00",
+      "link": "https://arxiv.org/pdf/2608.18354v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Empirical study of municipal budget execution in Peru; disentangles mayor experience and municipal capacity",
+      "llm_evidence_cn": "研究秘鲁市政投资预算执行，识别市长公共管理经验与市政能力的作用",
+      "llm_evidence": "研究秘鲁市政投资预算执行，识别市长公共管理经验与市政能力的作用",
+      "canonical_evidence": "研究秘鲁市政投资预算执行，识别市长公共管理经验与市政能力的作用",
+      "llm_tldr_en": "Using panel data from 1,642 Peruvian district municipalities, the paper disentangles mayoral human capital from municipal capacity effects on investment-budget execution via within-municipality estimators and panel double machine learning, with negative-outcome controls.",
+      "llm_tldr_cn": "针对地方预算执行研究中“市长经验提升绩效”这一因果推断难题，作者利用秘鲁1642个区级市2015-2022年面板数据，通过市内估计量与面板双重机器学习识别市长公共管理经验与投资预算执行的正相关关系。负结果对照检验显示，正式教育影响较弱，跨市比较中市长人力资本效应与市政能力选择效应混叠。研究为政府预算执行绩效评估提供了识别策略和方法论启示。",
+      "llm_tldr": "针对地方预算执行研究中“市长经验提升绩效”这一因果推断难题，作者利用秘鲁1642个区级市2015-2022年面板数据，通过市内估计量与面板双重机器学习识别市长公共管理经验与投资预算执行的正相关关系。负结果对照检验显示，正式教育影响较弱，跨市比较中市长人力资本效应与市政能力选择效应混叠。研究为政府预算执行绩效评估提供了识别策略和方法论启示。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "analysis of budget execution and financial management",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": []
+}

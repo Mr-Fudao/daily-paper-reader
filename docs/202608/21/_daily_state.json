@@ -1,0 +1,25 @@
+{
+  "date": "20260821",
+  "date_label": "",
+  "generated_at": "2026-08-21 20:49:50 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2608.14367v1",
+      "route": "202608/21/2608.14367v1-mind-the-long-tail-understanding-the-difficulty-of-delay-detection-in-business-processes",
+      "title": "Mind the Long Tail: Understanding the Difficulty of Delay Detection in Business Processes",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "面向延迟检测的预测性流程监控，可应用于预算执行分析",
+      "first_seen_at": "2026-08-21 20:49:50 UTC",
+      "updated_at": "2026-08-21 20:49:50 UTC"
+    }
+  ]
+}

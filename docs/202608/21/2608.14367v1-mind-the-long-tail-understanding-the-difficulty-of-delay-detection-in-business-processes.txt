@@ -1,0 +1,274 @@
+Title: Mind the Long Tail: Understanding the Difficulty of Delay Detection in Business Processes
+
+URL Source: https://arxiv.org/pdf/2608.14367v1
+
+Published Time: Mon, 17 Aug 2026 00:55:24 GMT
+
+Number of Pages: 17
+
+Markdown Content:
+# Mind the Long Tail: Understanding the Difficulty of Delay Detection in Business Processes 
+
+Keyvan Amiri Elyasi ⋆1[0009 −0007 −3016 −2392] , Lukas Kirchdorfer ⋆1,2[0000 −0003 −4713 −9328] , and Heiner Stuckenschmidt 1[0000 −0002 −0209 −3859]  
+
+> 1
+
+Data and Web Science Group, University of Mannheim, Germany 
+
+{keyvan.amiri, heiner.stuckenschmidt}@uni-mannheim.de  
+
+> 2
+
+SAP Signavio, Walldorf, Germany 
+
+lukas.kirchdorfer@sap.com 
+
+Abstract. The early detection of delayed cases in business processes is a critical capability for organizations. Predictive process monitoring (PPM) supports this task by using historical event logs to predict the remaining time of ongoing cases, enabling timely interventions to avoid missed deadlines and service level violations. Although remaining time prediction has advanced considerably through sophisticated deep learn-ing architectures, little is known about the intrinsic difficulty of delay detection itself. Since performance is typically assessed using aggregate metrics, prior work provides limited insight into how models perform across the target distribution, especially on the operationally most criti-cal cases with large delays. In this paper, we address this gap by analyz-ing the difficulty of delay detection. Across 14 event logs, we show that remaining times are typically strongly right-skewed, with only a small fraction of cases exhibiting large delays. Existing models capture the mode of this distribution well but perform poorly on high-delay cases. We further uncover pronounced heteroscedasticity, showing that predic-tive uncertainty increases with delay magnitude. Based on these findings, we evaluate approaches to mitigate the imbalance problem, but find only limited benefits, suggesting that the key underlying problem may not be imbalance but higher uncertainty associated with delayed cases. We show that this correlation can be exploited to substantially improve the identi-fication of delayed cases. Overall, our work provides new insights into the sources of difficulty in delay detection and identifies uncertainty-aware modeling as a promising direction for future PPM research. 
+
+Keywords: Predictive Process Monitoring · Remaining Time Predic-tion · Imbalanced Regression · Uncertainty Quantification. 
+
+## 1 Introduction 
+
+Organizations rely on business processes to deliver services to customers and en-sure the timely execution of work. In this context, execution delays are a major  
+
+> ⋆
+
+Equal contribution arXiv:2608.14367v1 [cs.LG] 14 Aug 2026 2 K. Amiri Elyasi et al. 
+
+concern, as they lead to missed deadlines, violated service level agreements, in-creased operational costs, and diminished customer satisfaction [23,29,12]. Con-sequently, the early identification of delay-prone cases is essential for effective process management. Such identification can leverage execution data recorded by enterprise information systems in the form of event logs, which document his-torical process executions and provide a basis for anticipating future behavior. In business process management, this is addressed through predictive process monitoring (PPM), which aims to predict future characteristics of running cases based on historical event data [5]. Among PPM tasks, remaining time prediction is one of the most widely studied. Given the observed prefix of an ongoing case, it estimates the time until completion and provides an actionable signal for identifying potentially delayed cases and enabling timely interventions. In recent years, substantial progress has been made in remaining time predic-tion, largely driven by advances in deep learning architectures such as LSTMs, Transformers, and graph neural networks [16,1,10]. While these approaches im-prove predictive performance, they are typically evaluated using aggregate met-rics such as mean absolute error (MAE), which obscure where models perform well or fail. In particular, such metrics do not capture performance on rare de-layed cases, despite their critical operational impact due to their potential to cause service level violations and increased costs. As we show in this paper, distributions of remaining time in business pro-cesses are typically highly right-skewed: most cases complete within an expected time frame, whereas a small number exhibit extreme delays. Accurately identi-fying these rare delayed cases is essential for effective process management, yet it remains unclear whether existing models can reliably detect them. More fun-damentally, there is still limited understanding of the intrinsic difficulty of delay detection in business processes, which hinders the development of more effec-tive PPM approaches grounded in process-specific insights rather than relying primarily on advances in general-purpose machine learning models. To address these challenges, this paper makes three contributions. 1. First, we study the intrinsic difficulty of delay detection in remaining time prediction. Our analysis shows that (a) remaining times typically follow a strongly right-skewed distribution, (b) existing approaches capture the mode of this distribution well but fail to predict cases with large delays accurately, and (c) predictive uncertainty is heteroscedastic and increases with remaining time, indicating that high-delay cases are substantially noisier than normal cases. 2. Second, building on findings (a) and (b), we hypothesize that a key reason why existing models fail on high-delay cases is the identified target imbalance .We therefore evaluate established imbalanced regression approaches and find, however, that their impact is limited. 3. Third, based on finding (c), we investigate the utility of heteroscedastic un-certainty estimates for delay detection. Specifically, we study whether the re-lationship between predictive uncertainty and remaining time magnitude can Understanding the Difficulty of Delay Detection in Business Processes 3
+
+be exploited to improve the identification of delayed cases. Our results show that uncertainty-aware models can substantially improve delay detection. The remainder of the paper is structured as follows. Section 2 analyzes the diffi-culty of delay detection across a variety of processes. Section 3 describes the ex-perimental setup, followed by the evaluation of imbalanced regression approaches in Section 4 and the assessment of heteroscedastic uncertainty in Section 5. Fi-nally, we discuss related work in Section 6 and conclude the paper in Section 7. 
+
+## 2 Motivation and Analysis 
+
+We illustrate the difficulty of delay detection using the Prepaid Travel Cost 
+
+process from the BPIC20 benchmark and then show that the observed patterns generalize across other event logs. 0 20 40 60 80 100 
+
+> Remaining time
+> 0200 400 600 800
+> Frequency
+> Prediction Ground truth Mean uncertainty Mean error
+> 010 20 30 40 50 60 70
+> Error / uncertainty
+
+Fig. 1: BPIC20PTC distribution of ground-truth and predicted remaining times (in days), with average error and heteroscedastic uncertainty per target range. 
+
+Illustration. To illustrate the difficulty of delay detection, we analyze the BPIC20PTC process from Eindhoven University of Technology, which contains events related to two years of travel expense claims. Figure 1 shows the distribu-tion of remaining times across all possible prefix positions in the process (orange histogram) and compares it with the distribution of predicted remaining times (blue histogram) produced by a standard LSTM-based approach [16]. The ground-truth distribution of remaining times is strongly right-skewed ,with most observations concentrated around 10 days and only a small number extending to 40–100 days. In contrast, the predictions are compressed into a much narrower range and fail to capture high-delay cases. The model never pre-dicts a remaining time above 35 days. As a result, a case that actually requires, 4 K. Amiri Elyasi et al. 
+
+for example, 80 days until completion would receive a prediction of only 30–35 days. Such errors render the prediction ineffective for timely delay identification and operational intervention. Consequently, prediction error increases substan-tially toward the tail of the distribution, as illustrated by the red line. Another key insight is that predictive uncertainty increases with remaining time, exhibiting a clear heteroscedastic pattern. In other words, the figure sug-gests a correlation between the magnitude of uncertainty and the magnitude of remaining time. Heteroscedastic uncertainty is data-dependent and reflects the irreducible noise inherent in the data generation process, and arises from stochastic and unobserved factors that influence process execution [27]. In our example process, the uncertainty is low around the mode of the distribution, where the majority of normal cases are located, but increases sharply for larger remaining times. It reaches its highest values around 40 days and remains ele-vated thereafter. This indicates that high-delay cases are not only rare, but also substantially noisier and therefore more difficult to predict than normal cases. 
+
+Analysis Across Event Logs. To assess whether these observations are the rule rather than the exception, we analyze 14 publicly available event logs, fo-cusing on the skewness of the remaining time distribution and the degree of heteroscedastic uncertainty. Table 1 summarizes the characteristics of the event logs. It reports the Fisher moment coefficient of skewness ( γ) of the remaining time distribution, which quantifies its asymmetry. Positive skewness indicates a long right tail, with larger values corresponding to stronger asymmetry (for example, γ = 2 for an expo-nential distribution). Most logs exhibit pronounced positive skewness, indicating heavy-tailed remaining time distributions where most cases complete within a normal time frame, while a small number experience extremely long durations. Table 1: Characteristics of the 14 event logs used for evaluation. Case duration is in days. γ denotes the skewness of the remaining-time distribution.                                                                                          
+
+> Case duration Case duration Event log Cases Events Avg. Max γEvent log Cases Events Avg. Max γ
+> P2P 608 9119 21.5 109.4 2.8 Helpdesk 4580 21348 40.9 60.0 -0.1 BPIC17W 30276 240854 12.7 288.9 4.2 Sepsis 1050 15214 28.5 422.3 3.0 BPIC15-1 1199 52217 95.9 1486.0 5.2 BPIC20ID 6449 72151 86.5 742.0 3.5 BPIC15-2 832 44354 160.3 1326.0 3.2 BPIC20DD 10500 56437 11.5 469.2 11.5 BPIC15-3 1409 59681 62.2 1512.0 10.0 BPIC20PTC 2099 18246 36.8 328.2 4.0 BPIC15-4 1053 47293 116.9 927.0 3.7 BPIC20TPD 7065 86581 87.4 1202.0 2.6 BPIC15-5 1156 59083 98.0 1344.0 5.2 BPIC20RFP 6886 36796 12.0 410.0 10.6
+
+To examine how prediction error and predictive uncertainty relate to remain-ing time, we analyze their association with the ground-truth remaining time y on the test sets (final 20% of cases) of each event log. Specifically, we compute the Spearman correlation between y and two quantities: (i) the absolute prediction error |ˆy−y| of a standard LSTM model trained with MAE [16], and (ii) the width of the prediction interval from an uncertainty-aware model based on a survival Understanding the Difficulty of Delay Detection in Business Processes 5
+
+Table 2: Spearman correlation between ground-truth remaining time y and (i) absolute prediction error |e| and (ii) prediction interval (PI) width produced by the survival model (Surv).                                             
+
+> Dataset ρ(y, |e|)ρ(y, PI Surv )Dataset ρ(y, |e|)ρ(y, PI Surv )
+> P2P 0.89 0.46 Helpdesk −0.41 −0.53
+> BPIC17W 0.38 −0.43 Sepsis 0.51 0.39
+> BPIC15-1 0.30 0.55 BPIC20ID 0.64 0.80
+> BPIC15-2 −0.20 −0.22 BPIC20DD 0.47 0.21
+> BPIC15-3 0.68 0.64 BPIC20PTC 0.56 0.67
+> BPIC15-4 −0.69 0.09 BPIC20TPD 0.61 0.68
+> BPIC15-5 0.60 0.32 BPIC20RFP 0.55 0.22
+
+formulation [7]. Details on this model are provided in Section 5; here, it suffices to note that, unlike the standard LSTM, it produces both point estimates and associated uncertainty estimates in the form of prediction intervals. Table 2 summarizes the correlations. There is a clear tendency toward het-eroscedasticity: in 10 out of 14 event logs, both the absolute prediction error and the prediction interval width are positively correlated with the true remaining time. In several logs (e.g., BPIC15-3, BPIC20ID, BPIC20PTC, BPIC20TPD), these correlations are moderate to strong for both measures, indicating that long-running cases are substantially noisier than short-running ones. However, this pattern is not universal. Two datasets (BPIC15-2 and Helpdesk) show neg-ative correlations for both measures, while BPIC17W and BPIC15-4 exhibit mixed behavior. This variation indicates that both the strength and direction of heteroscedasticity differ across processes. Nevertheless, the dominant trend is a positive association between remaining time and both prediction error and uncer-tainty. Consequently, remaining time prediction is inherently noisy, with certain regions—such as the long tail—being particularly difficult to predict. This noise can arise from a wide range of sources, including resource contention, synchro-nization effects, batching, task handovers, and system state fluctuations [2,13]. These results indicate clear heteroscedasticity in the right tail of the remain-ing time distribution. Long-delay cases are not only rare, due to target imbalance, but also substantially more variable and harder to predict. Prediction difficulty in the tail, therefore, arises from both data scarcity and increased noise. 
+
+## 3 Problem Setting and Experimental Setup 
+
+In this section, we define the remaining time prediction task and describe the experimental setup used to evaluate the proposed approaches. 
+
+Problem Definition. We formalize remaining time prediction as a supervised learning task based on event log data. 
+
+Event Log, Traces, Event Prefixes. Process execution data are recorded in an event log E, which is a collection of traces. Each trace σ = ⟨e1, e 2, ..., e n⟩ rep-6 K. Amiri Elyasi et al. 
+
+resents the chronological sequence of events for a single process instance (case). An event is a tuple e = ( c, a, t, ∆ ), where c is the case identifier, a the executed activity, t the timestamp, and ∆ an attribute-value map with optional data payload. We define the projection πT (e) = t to extract an event’s timestamp. A prefix of length m ∈ [1 , n − 1] is denoted σm = ⟨e1, . . . , e m⟩ and represents partial execution up to the m-th event. 
+
+Feature Extraction. Remaining time prediction is formulated as a regression task, starting with feature extraction. Event prefixes of varying lengths are encoded into feature vectors x = Γ (σm), and target values y = πT (en) − πT (em). This yields the training dataset D = {(xi, y i)}Ni=1 , where xi ∈ Rd denotes the input and yi ∈ R the target. 
+
+Problem Statement. Given the training dataset D, the goal is to approximate the function y = f (x) that maps inputs to remaining time. The predictive model typically follows an encoder–head structure: an encoder z = g(x, θ ) produces a latent representation z, which is mapped to the predicted remaining time 
+
+ˆy = h(z, ψ ). The parameters θ and ψ are optimized via supervised learning to minimize a regression loss: 
+
+L(θ, ψ ) = 
+
+
+
+> 1
+> N
+
+PNi=1 wi |ˆyi − yi|, if absolute error is used ,
+
+> 1
+> N
+
+PNi=1 wi (ˆ yi − yi)2, if squared error is used. (1) Note that standard loss functions (e.g., MAE, MSE) assign equal weight (wi = 1 ) to all training examples, biasing models toward frequent target values. 
+
+Experimental Setup. For the experiments conducted in the subsequent sec-tions, we will use the following event logs, models, and metrics. The event logs, implementation details, and configurations are available in our repository. 3
+
+Event Logs and Data Split. We use 14 event logs for evaluation to ensure robust and generalizable results (see Table 1). We apply a temporal hold-out split, dividing each log into 64% training, 16% validation, and 20% test data. 
+
+Model. We use a data-aware LSTM model proposed by Navarin et al. [16], which predicts remaining time from event prefixes encoded as sequences of feature vectors (control-flow, temporal, and all data attributes), left-padded to a fixed length. The model consists of two LSTM layers (hidden size 150) with layer normalization and dropout (0.1), followed by a dense linear regression head that maps the final hidden representation to the predicted remaining time. Training uses AdamW, batch size 128, early stopping (patience 30), and up to 300 epochs. 
+
+Hyperparameter Tuning. Hyperparameters are tuned on the validation set using Bayesian optimization. We define approach-specific search spaces, while keeping the model architecture fixed (see details in the supplementary repository). 
+
+Evaluation Metrics. To analyze prediction difficulty across target regions, we partition test samples into many/medium/few groups using quantile-based splits. Thresholds are computed from the training and validation targets. By default, the few-shot region corresponds to the highest 10% of target values, the medium   
+
+> 3https://zenodo.org/records/20433645 Understanding the Difficulty of Delay Detection in Business Processes 7
+
+region to the next 30%, and the many-shot region to the remaining 60%. To enable comparisons across datasets with different cycle time scales, we use a normalized mean absolute error (nMAE) [21]. For a region r, it is defined as 
+
+nMAE r =
+
+> 1
+> |r|
+
+P 
+
+> i∈r
+
+|yi − ˆyi|
+
+> 1
+> N
+
+PNi=1 |yi − median( ytrain )| ,
+
+where yi and ˆyi denote true and predicted remaining times, |r| is the number of samples in region r, and N is the total number of test samples. The denomi-nator corresponds to the mean absolute deviation from the training-set median, i.e., the error of a constant median predictor. This normalizes the MAE rela-tive to a trivial baseline, enabling assessment of prediction difficulty and model performance across regions and datasets on a common scale. Consequently, an nMAE of 1 reflects performance comparable to this baseline, values below 1 indi-cate improved predictions, and values above 1 indicate worse performance. This interpretation enables direct comparison across many-, medium-, and few-shot regions. 
+
+## 4 Assessing the Effectiveness of Imbalanced Regression 
+
+The remaining time distribution is often highly skewed, with only a small frac-tion of cases exhibiting large delays. As a result, standard machine learning models tend to perform poorly on these rare cases, which naturally leads to the hypothesis that target imbalance is a key source of the problem. In this section, we therefore evaluate imbalanced regression approaches designed to address this issue, which have shown promising results in time series forecasting, computer vision, and natural language processing [4,28,22,19]. 
+
+4.1 Data-level Approaches: Resampling the Training Distribution 
+
+We describe data-level approaches for imbalanced regression and evaluate their effectiveness for remaining time prediction. 
+
+Approach. Data-level approaches mitigate imbalance via resampling the train-ing data, either by undersampling frequent target ranges or oversampling rare ones. Oversampling methods generate synthetic samples in sparse regions of the target space, e.g., by interpolating between neighboring observations as in SMOTER [26], or by perturbing rare samples with Gaussian noise [3]. Hybrid methods such as SMOGN combine both strategies by undersampling frequent re-gions and oversampling rare targets through interpolation and noise injection [4]. Applying data-level approaches to PPM is non-trivial. Remaining time pre-diction operates on event prefixes encoded as left-padded sequences, where the meaning of an input depends on both feature values and their position. Naive in-terpolation can produce unrealistic samples by mixing padding with valid events or combining prefixes of different lengths, distorting the sequential structure and violating admissible process behavior. 8 K. Amiri Elyasi et al. 0 50 100 150 200 250 300 350 
+
+Remaining time (days) 
+
+> 0.000 0.005 0.010 0.015 0.020 0.025 0.030 0.035 0.040
+> Density
+> original (no SMOGN) over=2.0, under=0.1 over=2.0, under=0.3 over=2.0, under=0.5 over=2.0, under=1.0 over=5.0, under=0.1 over=5.0, under=0.3 over=5.0, under=0.5 over=5.0, under=1.0 over=10.0, under=0.1 over=10.0, under=0.3 over=10.0, under=0.5 over=10.0, under=1.0
+
+Fig. 2: BPIC20PTC target distribution for various configurations of SMOGN. We adapt SMOGN to this setting as a feature-space augmentation proce-dure applied after prefix encoding. Rare samples are identified using a relevance function derived from the training target distribution, assigning higher impor-tance to large remaining times. To avoid mixing prefixes of different temporal extent, we first group samples by their actual prefix length, computed from the non-padded part of the left-padded input sequence. Nearest neighbors are com-puted only within these prefix-length groups. For each prefix, the padded rows are discarded, the remaining encoded event-level feature vectors are flattened, and Euclidean distance is used to select neighbors. Thus, padding positions do not influence neighbor selection. Synthetic samples are generated in the encoded numerical input space, rather than from raw trace symbols or learned embed-ding vectors. For interpolation-based oversampling, we linearly interpolate the non-padded feature vectors of a rare prefix and one of its neighbors from the same prefix-length group; the padded part remains unchanged. The remaining-time target is interpolated analogously. Alternatively, Gaussian noise is added only to the non-padded part of rare prefixes, scaled by the empirical feature-wise standard deviation within the group. Frequent samples are reduced via random undersampling, while all rare samples are retained. 
+
+Experiments. Figure 2 shows how SMOGN reshapes the training distribution for BPIC20PTC under different configurations. We vary the oversampling factor for rare cases and the undersampling ratio for frequent ones. Increasing both shifts probability mass toward higher remaining times, increasing the density of delayed cases. However, this does not improve predictive performance: the MAE remains between 8.1 and 9.4 days across configurations. Understanding the Difficulty of Delay Detection in Business Processes 9
+
+We apply SMOGN to all 14 event logs and compare it to the same LSTM trained on the original (imbalanced) data. Averaged over five seeds per log, SMOGN reduces nMAE in the few-shot region by 8.0% but increases error in the medium and many regions by 20.5% and 31.4%, respectively, resulting in a 17.5% higher overall nMAE. Detailed results are provided in the supplementary GitHub repository. Overall, even substantial changes to the training distribution do not improve predictive performance, suggesting that data scarcity in the tail is not the pri-mary bottleneck. We therefore turn to algorithm-level approaches. 
+
+4.2 Algorithm-level Approaches: Reweighting the Loss Function 
+
+Algorithm-level approaches mitigate imbalance by modifying the regression ob-jective in Equation 1 to assign greater weight to underrepresented target regions. We first introduce these approaches and then evaluate their effectiveness for re-maining time prediction. 
+
+Approaches. We consider cost-sensitive weighting, distribution-balanced ob-jectives, error-aware losses, and relevance-based error measures, and refer to the original publications for details. 
+
+Cost-Sensitive Weighting (CSW). CSW assigns static loss weights to different target ranges based on the empirical target distribution. The continuous tar-get domain is discretized into bins, and their frequencies are estimated from the training data. Samples in less frequent bins receive higher weights, while those in dense regions are down-weighted. In practice, weights are set inversely proportional to the bin frequency or its square root [28]. 
+
+Balanced Mean Squared Error (BMSE). BMSE incorporates the target distribu-tion directly into the regression objective. We use the batch-based Monte Carlo (BMC) variant proposed in [19]. Instead of applying static weights, BMC con-trasts the prediction error of a sample with the errors obtained for other target values within the same mini-batch. This is implemented through a softmax-style normalization over squared errors across batch targets. Consequently, prediction errors associated with dense target regions receive relatively less influence than those in sparse regions. 
+
+Error-Aware Loss (EAL). EAL adjusts sample contributions based on prediction error magnitude. We consider the Focal-R loss [28], which modulates the error by a nonlinear function that increases with its magnitude. This reduces the contribution of small errors while increasing the relative influence of larger errors. As a result, the optimization focuses more on difficult examples, which are often associated with rare or extreme target values. 
+
+Squared Error Relevance Area (SERA). SERA [22] is a relevance-based loss for imbalanced regression. It relies on a relevance function ϕ : Y → [0 , 1] that assigns each target value an importance score, allowing non-uniform preference over the continuous target domain [25,3]. In this work, ϕ is automatically derived from the training target distribution using box-plot statistics [20], assigning higher relevance to extreme remaining time values. Consequently, prediction errors on 10 K. Amiri Elyasi et al. 
+
+Table 3: Comparison of algorithm-level approaches using average ranks (lower is better) and significant pairwise differences identified by the Wilcoxon signed-rank test. Results are reported for nMAE across target regions.          
+
+> Mode Average Ranks (lower is better) Significant Performance Differences (Wilcoxon signed-rank test p−values )Many Vanilla (1.64), CSW (2.14), EAL (2.36), BMSE (3.86), SERA (5.00) Vanilla > SERA (0.001); CSW > SERA (0.006); EAL > SERA (0.015) Medium CSW (2.21), BMSE (2.36), EAL (2.64), Vanilla (2.86), SERA (4.93) CSW > SERA (0.012); BMSE > SERA (0.020) Few SERA (1.00), BMSE (2.14), CSW (3.57), EAL (3.79), Vanilla (4.50) Vanilla vs BMSE (0.042); SERA > Vanilla (0.000); SERA > CSW (0.020); SERA > EAL (0.009) All EAL (1.93), CSW (2.00), Vanilla (2.36), BMSE (3.71), SERA (5.00) Vanilla > SERA (0.015); CSW > SERA (0.004); EAL > SERA (0.003)
+
+highly relevant targets receive greater weight, while errors on low-relevance tar-gets contribute less to the overall loss. 
+
+Experiments. We compare the above approaches to a baseline trained with standard MAE (Vanilla), using nMAE across different target regions averaged over five random seeds. A Friedman test reveals significant differences across approaches ( p < 0.001 for all regions: all, many, medium, few), motivating a more detailed comparison. In Table 3, approaches are ranked per dataset by nMAE within each region and averaged across datasets, while significant pairwise differences are identified using the Wilcoxon signed-rank test. In the many-shot region, Vanilla attains the best average rank (1.64), while SERA performs significantly worse than Vanilla, CSW, and EAL. In the medium-shot region, results are comparable, with SERA again underperforming relative to CSW and BMSE. A different pattern emerges in the few-shot region, where SERA achieves the best rank (1.00) and significantly outperforms Vanilla, CSW, and EAL; BMSE ranks second and also improves over Vanilla. However, these gains do not translate to overall performance: SERA performs significantly worse overall, while EAL and CSW achieve the best ranks. The boxplots in Figure 3 show nMAE distributions across datasets for each approach. SERA is omitted due to its substantially larger errors in the many-and medium-shot regions and overall. In the many-shot region, Vanilla, CSW, and EAL exhibit nearly identical medians and similar variability, while BMSE shows a slightly higher median and greater spread. A similar pattern appears in the medium-shot region, with increased variability and higher errors across all approaches. In contrast, the few-shot region exhibits substantially higher vari-ability across datasets and consistently large errors, with nMAE often exceeding 1. Since nMAE is normalized by the error of a constant median predictor, values above 1 indicate performance worse than this trivial baseline. This highlights the difficulty and instability of prediction in the long-tail region. Understanding the Difficulty of Delay Detection in Business Processes 11 Vanilla CSW EAL BMSE 0.2 0.4 0.6 0.8 1.0 1.2 1.4 1.6 
+
+> nMAE
+
+(a) Many Vanilla CSW EAL BMSE 0.2 0.5 0.8 1.0 1.2 1.5 1.8 2.0  
+
+> nMAE
+
+(b) Medium Vanilla CSW EAL BMSE 12345678
+
+> nMAE
+
+(c) Few Vanilla CSW EAL BMSE 0.8 1.0 1.2 1.4 1.6  
+
+> nMAE
+
+(d) All 
+
+Fig. 3: Distribution of nMAE across datasets for algorithm-level imbalanced re-gression approaches, analyzed across different target-frequency regions. We also evaluate feature and label distribution smoothing [28] in combination with these approaches, but observe only marginal and inconsistent effects (see supplementary repository). Overall, algorithm-level approaches do not consistently improve prediction accuracy in the long tail. When improvements occur (e.g., SERA), they come at the cost of worse performance in the many-shot region and overall accuracy. Thus, if the goal is solely to identify high-delay cases, SERA may be effective. However, in most practical settings, models are expected to perform well across all cases. 
+
+## 5 Assessing the Effectiveness of Uncertainty Modeling 
+
+Building on the observation from Section 2 that heteroscedastic uncertainty in-creases with remaining time and is particularly pronounced in the long tail of the distribution, we investigate whether this relationship can be exploited to improve delay detection. To this end, we turn the previously used deterministic LSTM 12 K. Amiri Elyasi et al. 
+
+into a probabilistic model via survival analysis, enabling it to produce explicit uncertainty estimates. These estimates are then used as input to a downstream classifier that predicts whether a case will exceed a given delay threshold. This reformulation is not intended to replace remaining time regression, but rather to study whether uncertainty estimates can help distinguish highly delayed cases from normal executions. We first introduce the uncertainty modeling framework and then evaluate its utility for delay detection. 
+
+Modeling Uncertainty via Survival Analysis. To capture predictive un-certainty, we model remaining time using a discrete-time survival formulation, treating process completion as a time-to-event problem [7]. Given an input fea-ture vector x, instead of predicting a single remaining time value ˆy, the model estimates a distribution over future completion times. Concretely, the remaining time horizon is discretized into K ordered intervals using quantile-based binning of the training targets, where K is treated as a tunable hyperparameter. For each interval k ∈ { 1, . . . , K }, the model predicts a hazard value hk(x), corresponding to the conditional probability that the case completes in interval k given that it has not completed earlier. The predictive model uses the same encoder as the Vanilla LSTM model to produce a latent representation z = g(x, θ ), which is mapped to K hazard logits via a dedicated output layer. These logits are transformed into probabilities representing the discrete hazard function. Training minimizes the negative log-likelihood of the observed event time under this formulation. From the predicted hazards, the full discrete remaining time distribution is reconstructed via the corresponding survival and event probabilities. This allows deriving both point estimates and predictive uncertainty measures. In our implementation, we extract summary statistics including the expected remaining time and prediction intervals directly from this distribution. Heteroscedastic uncertainty is quantified by the width of the central 80% prediction interval. Further implementation details are provided in the accompanying repository. 
+
+Delay Detection via Uncertainty Modeling. To evaluate the utility of un-certainty estimates, we formulate delay detection as a binary classification task. A case is labeled as delayed if its total duration exceeds a predefined quantile threshold (e.g., q = 0 .8) of the cycle times in the training and validation sets. The goal is to predict this label for ongoing cases based on their observed prefixes. As illustrated in Figure 4, we develop an uncertainty-aware model that uses the outputs of the previously described survival model. Specifically, we extract distributional summaries (mean and median remaining time), uncertainty mea-sures (prediction standard deviation and the widths of 80% and 90% prediction intervals), tail mass (i.e., the probability that the remaining time exceeds the modeled horizon), and temporal context features (elapsed time since the start of the case and time since the last event). These features are used as input to a gradient boosting classifier (CatBoost). This design enables the model to in-corporate uncertainty signals about future completion times, rather than relying solely on prefix features. Understanding the Difficulty of Delay Detection in Business Processes 13 Event 
+
+> Log
+> Encoded
+> Event
+> Prefixes
+> Time-to-Event
+> Probabilities
+> Features
+> (e.g., Uncertainty
+> Estimates)
+> Binary
+> Classifier
+> (CATBoost)
+> Delayed
+> Cases
+> Normal
+> Cases
+> LSTM-based
+> Survival
+> Model
+
+Fig. 4: Uncertainty-aware delay detection pipeline using survival-based predic-tions and a tabular classifier. 
+
+Results. We evaluate the performance of our uncertainty-aware model in de-tecting high-delay cases using recall, precision, F1-score, and PR-AUC across all 14 event logs in Table 4. We compare our model against a baseline , which shares the same LSTM encoder as the survival model, but—instead of model-ing uncertainty—directly produces a point estimate, classifying the prefix either as normal or high-delay. The baseline achieves very low recall and therefore misses most delayed cases. In contrast, the uncertainty-aware model substan-tially improves recall across all datasets, increasing the average from 0.21 to 0.61. This means that a much larger proportion of delayed cases can be identi-fied in advance, which is essential for timely intervention. For instance, on the BPIC20PTC log, the baseline correctly identifies only 1 out of 175 high-delay cases, whereas the uncertainty-aware model detects 132. A Wilcoxon signed-rank test ( p < 0.0001 ) confirms that this improvement is statistically significant. These gains are achieved while maintaining competitive precision: in most cases, precision remains comparable or improves (e.g., BPIC17W: 0.48 to 0.77), with no statistically significant difference overall ( p = 0 .17 ). Consequently, the F1-score consistently improves across datasets, reflecting a better balance be-tween precision and recall. Similarly, PR-AUC improves in nearly all cases, indi-cating improved ranking of delayed cases. These improvements are statistically significant (Wilcoxon test: p < 0.0001 for F1-score, p < 0.0003 for PR-AUC). Overall, these results demonstrate that incorporating predictive uncertainty improves delay detection performance by substantially increasing the ability to identify delayed cases without sacrificing precision. This suggests that uncer-tainty provides actionable information for prioritizing high-risk cases in practice. We observe similar improvements under a stricter delay definition ( q = 0 .9), as reported in the supplementary repository. However, since delay detection ab-stracts the original regression problem into a threshold-based classification task, these findings should not be interpreted as improvements in remaining time es-timation itself. To further assess how early delayed cases can be identified during process execution, we perform an earliness analysis that evaluates model performance at different stages of a running case. Specifically, each prefix is interpreted as a partial observation of an ongoing process instance, and its length is normalized 14 K. Amiri Elyasi et al. 
+
+Table 4: Delay detection performance (threshold q = 0 .8). Average Recall, Preci-sion, F1-score, and PR-AUC over five random seeds for baseline and uncertainty-aware models.                                                                                                                           
+
+> Baseline Classifier Uncertainty-Aware Model Dataset Recall Precision F1-Score PRAUC Recall Precision F1-Score PRAUC P2P 0.11 0.99 0.20 0.74 0.83 0.95 0.89 0.91
+> BPIC17W 0.34 0.48 0.40 0.38 0.59 0.77 0.67 0.59
+> BPIC15-1 0.49 0.34 0.39 0.23 0.66 0.40 0.49 0.30
+> BPIC15-2 0.38 0.11 0.17 0.07 0.75 0.12 0.21 0.10
+> BPIC15-3 0.31 0.39 0.34 0.23 0.65 0.65 0.65 0.48
+> BPIC15-4 0.40 0.04 0.07 0.04 0.75 0.06 0.12 0.05
+> BPIC15-5 0.33 0.42 0.36 0.24 0.53 0.41 0.46 0.29
+> HelpDesk 0.02 0.32 0.04 0.21 0.66 0.25 0.36 0.24
+> Sepsis 0.19 0.59 0.27 0.26 0.51 0.28 0.36 0.24 BPIC20ID 0.05 0.04 0.04 0.02 0.39 0.12 0.18 0.06
+> BPIC20DD 0.11 0.52 0.18 0.30 0.47 0.65 0.55 0.45
+> BPIC20PTC 0.01 0.18 0.01 0.06 0.76 0.20 0.31 0.16
+> BPIC20TPD 0.07 0.22 0.11 0.11 0.46 0.28 0.35 0.18
+> BPIC20RFP 0.18 0.73 0.29 0.42 0.48 0.74 0.58 0.53
+> Average 0.21 0.38 0.21 0.23 0.61 0.42 0.44 0.33
+
+by the total number of events in that case (i.e., its full execution trace). This allows us to group prefixes according to how far the case has progressed (e.g., early, mid, and late stages), and to evaluate performance on subsets of prefixes corresponding to up to 20%, 40%, 60%, and 80% of the process execution. The uncertainty-aware model consistently outperforms the baseline across all prefix ratios, with the most pronounced gains at early stages. In particular, recall is substantially higher even when only a small portion of the case is observed, while precision remains comparable, resulting in consistently improved F1-scores and PR-AUC. Although the performance gap narrows as more of the case becomes available, the uncertainty-aware model remains superior throughout, indicating that incorporating predictive uncertainty enables earlier and more reliable de-tection of delayed cases. 
+
+## 6 Prior Work 
+
+In this section, we review prior work on imbalanced learning in predictive pro-cess monitoring (PPM) and discuss emerging uncertainty-aware approaches for remaining time prediction. Data imbalance is a recurring challenge across a wide range of PPM tasks [17], including next activity prediction, outcome prediction, and anomaly detection. In these settings, imbalance arises from skewed class distributions, where rare but operationally critical events (e.g., exceptional activities, negative outcomes, Understanding the Difficulty of Delay Detection in Business Processes 15 
+
+or anomalies) are underrepresented. Existing work has addressed imbalance in PPM primarily using techniques from imbalanced classification. In next activity prediction, cost-sensitive learning and focal-style losses have been proposed to emphasize hard and minority examples, improving performance on infrequent activities [11,18,9]. At the data level, oversampling techniques have been used to rebalance class distributions [15]. In outcome prediction, re-sampling approaches such as SMOTE and its variants are commonly applied to mitigate class imbalance [24,14]. Similar strategies have also been adopted in domain-specific applications, including loan default and payment delay pre-diction [30,29,23]. Finally, in process anomaly and deviation detection, where imbalance is inherent, prior work often combines representation learning with biased sampling or under-sampling to better detect rare behaviors [6,8]. Overall, these approaches can be broadly categorized into data-level meth-ods (e.g., resampling [14]), algorithm-level methods (e.g., cost-sensitive learn-ing [11]), and hybrid combinations [30]. However, all existing work focuses on 
+
+classification settings. In contrast, imbalance in regression tasks—such as re-maining time prediction—has not been systematically addressed, despite the strongly skewed and long-tailed nature of target distributions in this domain. In parallel, a small body of work has begun to investigate uncertainty-aware modeling for remaining time prediction [27,2]. These approaches aim to quantify predictive uncertainty, which can provide additional information beyond point estimates. However, they do not explicitly address imbalance, nor do they study the interaction between skewed target distributions and predictive uncertainty. In this work, we address these gaps by systematically studying imbalanced regression in PPM, considering both data-level and algorithm-level approaches, and by investigating uncertainty-aware modeling as a complementary perspec-tive for delay detection. 
+
+## 7 Conclusion 
+
+In this paper, we investigated the intrinsic difficulty of delay detection in PPM. Our analysis showed that remaining times in business processes are typically strongly right-skewed, with existing models capturing normal cases well but struggling on the rare and operationally critical high-delay cases. We further found that predictive uncertainty increases with delay magnitude, revealing pro-nounced heteroscedasticity in the tail of the distribution. Thus, our findings identified target imbalance and noise as potential sources of difficulty. While es-tablished imbalanced regression approaches yielded only limited improvements, leveraging predictive uncertainty substantially enhanced the identification of de-layed cases. These findings highlight the long tail of remaining time prediction as a key challenge for PPM and identify uncertainty-aware modeling as a promising avenue for future work. This work has several limitations that open up avenues for future research. First, while we show that predictive uncertainty can substantially improve delay detection, the underlying sources of this uncertainty are not yet fully disentan-16 K. Amiri Elyasi et al. 
+
+gled and may stem from multiple factors, such as process variability, missing context, or concept drift. Future work could therefore investigate richer uncer-tainty modeling approaches, integrate additional contextual information, and study how delay detection methods can be adapted online in changing process environments. Second, reformulating remaining time prediction as a binary de-lay detection task entails a loss of information and dependence on a threshold choice. A promising direction for future work is therefore to move beyond binary classification and instead model the full conditional distribution of remaining time, enabling delay detection and related problems (e.g., service level agree-ment violations) to be formulated as downstream decision rules rather than fixed thresholds. Third, our empirical evaluation is based on a set of publicly available event logs and LSTM-based predictive models. Although this reveals consistent patterns, it remains an open question how strongly these findings generalize to other process domains, industrial settings, and other architectures. 
+
+## References 
+
+1. Amiri Elyasi, K., van der Aa, H., Stuckenschmidt, H.: Pgtnet: A process graph transformer network for remaining time prediction of business process instances. In: CAISE. pp. 124–140. Springer (2024) 2. Amiri Elyasi, K., van der Aa, H., Stuckenschmidt, H.: A simple and calibrated approach for uncertainty-aware remaining time prediction. In: International Con-ference on Business Process Management. pp. 217–234. Springer (2025) 3. Branco, P., Ribeiro, R.P., Torgo, L.: Ubl: an r package for utility-based learning. arXiv preprint arXiv:1604.08079 (2016) 4. Branco, P., Torgo, L., Ribeiro, R.P.: Smogn: a pre-processing approach for im-balanced regression. In: First international workshop on learning with imbalanced domains: Theory and applications. pp. 36–50. PMLR (2017) 5. Di Francescomarino, C., Ghidini, C.: Predictive process monitoring. In: Process mining handbook, pp. 320–346. Springer International Publishing Cham (2022) 6. Elaziz, E.A., et al.: Deep reinforcement learning for data-efficient weakly supervised business process anomaly detection. Journal of Big Data 10 (1) (2023) 7. George, B., Seals, S., Aban, I.: Survival analysis and regression models. Journal of nuclear cardiology 21 (4), 686–694 (2014) 8. Grohs, M., Pfeiffer, P., Rehse, J.R.: Business process deviation prediction: Predict-ing non-conforming process behavior. In: ICPM. pp. 113–120. IEEE (2023) 9. He, X., Oyamada, R., De Smedt, J., et al.: Tackling multi-class imbalance in next activity prediction with class-balanced focal loss. In: ICPM Workshops (2025) 10. Hennig, M.C., Schmidt, R.: Leveraging temporal graphs for enhancing transformer-based predictive process monitoring. In: BPM. pp. 291–307. Springer (2025) 11. Käppel, M., Jablonski, S., Schönig, S.: Cost-sensitive predictive business process monitoring. In: European Conference on Advances in Databases and Information Systems. pp. 14–26. Springer (2021) 12. Kim, S., Kim, H., Park, Y.: Early detection of vessel delays using combined his-torical and real-time information. J. operational research society 68 (2) (2017) 13. Kraus, A., Elyasi, K.A., van der Aa, H.: On the use of steady-state detection for process mining: Achieving more accurate insights. In: CAISE. pp. 204–220. Springer (2025) Understanding the Difficulty of Delay Detection in Business Processes 17 14. Márquez-Chamorro, A.E., Resinas, M., Ruiz-Cortés, A., Toro, M.: Run-time pre-diction of business process indicators using evolutionary decision rules. Expert Systems with Applications 87 , 1–14 (2017) 15. Mehdiyev, N., Fettke, P., Evermann, J.: A novel business process prediction model using a deeplearning method. BISE 62 (2), 143–157 (2020) 16. Navarin, N., Vincenzi, B., Polato, M., Sperduti, A.: Lstm networks for data-aware remaining time prediction of business process instances. In: 2017 IEEE Symposium Series on Computational Intelligence (SSCI). pp. 1–7. IEEE (2017) 17. Neu, D.A., Lahann, J., Fettke, P.: A systematic literature review on state-of-the-art deep learning methods for process prediction. Artificial Intelligence Review 55 (2), 801–827 (2022) 18. Nguyen, A., Chatterjee, S., Weinzierl, S., Schwinn, L., Matzner, M., Eskofier, B.: Time matters: Time-aware lstms for predictive business process monitoring. In: International Conference on Process Mining. pp. 112–123. Springer (2020) 19. Ren, J., Zhang, M., Yu, C., Liu, Z.: Balanced mse for imbalanced visual regression. In: CVPR. pp. 7926–7935 (2022) 20. Ribeiro, R.P., Moniz, N.: Imbalanced regression and extreme value prediction. Machine Learning 109 (9), 1803–1835 (2020) 21. Roider, J., Nguyen, A., Zanca, D., Eskofier, B.M.: Assessing the performance of remaining time prediction methods for business processes. IEEE Access (2024) 22. Silva, A., Ribeiro, R.P., Moniz, N.: Model optimization in imbalanced regression. In: International Conference on Discovery Science. pp. 3–21. Springer (2022) 23. Tater, T., Dechu, S., Mani, S., Maurya, C.: Prediction of invoice payment status in account payable business process. In: International Conference on Service-Oriented Computing. pp. 165–180. Springer (2018) 24. Teinemaa, I., Dumas, M., Maggi, F.M., Di Francescomarino, C.: Predictive busi-ness process monitoring with structured and unstructured data. In: International Conference on Business Process Management. pp. 401–417. Springer (2016) 25. Torgo, L., Ribeiro, R.: Utility-based regression. In: European conference on prin-ciples of data mining and knowledge discovery. pp. 597–604. Springer (2007) 26. Torgo, L., Ribeiro, R.P., Pfahringer, B., Branco, P.: Smote for regression. In: Por-tuguese conference on artificial intelligence. pp. 378–389. Springer (2013) 27. Weytjens, H., De Weerdt, J.: Learning uncertainty with artificial neural networks for predictive process monitoring. Applied Soft Computing 125 , 109134 (2022) 28. Yang, Y., Zha, K., Chen, Y., Wang, H., Katabi, D.: Delving into deep imbalanced regression. In: ICML. pp. 11842–11851. PMLR (2021) 29. Zeng, S., Melville, P., Lang, C.A., Boier-Martin, I., Murphy, C.: Using predictive analysis to improve invoice-to-cash collection. In: KDD. pp. 1043–1050 (2008) 30. Zhang, X., Zhang, T., Hou, L., Liu, X., Guo, Z., Tian, Y., Liu, Y.: Data-driven loan default prediction: A machine learning approach for enhancing business process management. Systems 13 (7), 581 (2025)

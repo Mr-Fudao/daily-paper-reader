@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-08-21 <!--dpr-date:20260821-->
+    * 速读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202608/21/2608.14367v1-mind-the-long-tail-understanding-the-difficulty-of-delay-detection-in-business-processes" data-sidebar-item="{&quot;title&quot;: &quot;Mind the Long Tail: Understanding the Difficulty of Delay Detection in Business Processes&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2608.14367v1-mind-the-long-tail-understanding-the-difficulty-of-delay-detection-in-business-processes&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;budget-perf&quot;}], &quot;evidence&quot;: &quot;面向延迟检测的预测性流程监控，可应用于预算执行分析&quot;}">Mind the Long Tail: Understanding the Difficulty of Delay Detection in Business Processes</a>
   * 2026-08-20 <!--dpr-date:20260820-->
     * 精读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202608/20/2608.18354v1-mayoral-experience-or-municipal-capacity-negative-outcome-evidence-on-municipal-budget-execution-in-peru" data-sidebar-item="{&quot;title&quot;: &quot;Mayoral Experience or Municipal Capacity? Negative-Outcome Evidence on Municipal Budget Execution in Peru&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2608.18354v1-mayoral-experience-or-municipal-capacity-negative-outcome-evidence-on-municipal-budget-execution-in-peru&quot;, &quot;score&quot;: &quot;9.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;budget-perf&quot;}], &quot;evidence&quot;: &quot;研究秘鲁市政投资预算执行，识别市长公共管理经验与市政能力的作用&quot;}">Mayoral Experience or Municipal Capacity? Negative-Outcome Evidence on Municipal Budget Execution in Peru</a>

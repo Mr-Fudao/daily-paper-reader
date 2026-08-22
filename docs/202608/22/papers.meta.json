@@ -1,0 +1,54 @@
+{
+  "label": "2026-08-22",
+  "date": "2026-08-22",
+  "generated_at": "2026-08-22T20:01:30",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202608/22/2608.16763v1-lava-logic-aware-validation-and-augmentation-framework-for-large-scale-financial-document-auditing",
+      "section": "quick",
+      "title_en": "LAVA: Logic-Aware Validation and Augmentation Framework for Large-Scale Financial Document Auditing",
+      "authors": "Ruoqi Shu, Xuhui Wang, Isaac Wang, Yanming Mai, Bo Wan",
+      "date": "2026-08-17",
+      "pdf": "https://arxiv.org/pdf/2608.16763v1",
+      "score": "7.0",
+      "evidence": "大型金融文档审计流水线，用于薪资、税务合规校验，直接支持预算执行与财务管理分析",
+      "tldr": "金融文档审计要求高精度与可追溯性，但异构布局和复杂规则使现有管线难以可靠处理。LAVA框架基于多模态大语言模型，通过规则检索、布局保留提取、元数据增强和符号验证四阶段流程，实现稳健的规则落地与错误归因。在真实大规模基准上，相较基线有效抑制幻觉并改善边缘案例，保持高效令牌使用，适合高吞吐场景。",
+      "tags": "query:budget-perf",
+      "abstract_en": "Financial document validation in production, such as payroll auditing, tax compliance, and loan underwriting, demands exceptional accuracy, consistency, and reproducibility under strict enterprise constraints. In practice, documents arrive with heterogeneous layouts and formats, semantically rich and context-dependent content, and embedded business rules that current pipelines struggle to process reliably. We introduce LAVA (Logic-Aware Validation and Augmentation), a modular, backbone-agnostic pipeline built on multimodal large language models, that integrates a four-stage design: document-rule retrieval, layout-preserving information extraction, auxiliary metadata enrichment, and auditable symbolic/arithmetic verification. LAVA supports robust rule grounding, fine-grained error attribution, and consistent, traceable end-to-end execution, capabilities essential for high-stakes deployment. Evaluated on a large real-world benchmark with diverse financial documents and dozens of expert-curated validation rules, LAVA outperforms baselines in hallucination control and edge-case handling while maintaining efficient token usage, demonstrating practicality for high-volume, time-critical validation.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202608/22/2608.17079v1-dynamic-regime-aware-conformal-calibration-for-reliable-economic-forecast-intervals-under-multiple-distribution-shifts",
+      "section": "quick",
+      "title_en": "Dynamic Regime-Aware Conformal Calibration for Reliable Economic Forecast Intervals under Multiple Distribution Shifts",
+      "authors": "Bogdan Oancea",
+      "date": "2026-08-17",
+      "pdf": "https://arxiv.org/pdf/2608.17079v1",
+      "score": "7.0",
+      "evidence": "提供可靠的预测区间，在分布变化下支撑财政绩效评估",
+      "tldr": "经济预测面临协变量偏移、概念漂移等分布变化，破坏交换性假设，使标准共形区间失效。提出动态体制感知共形预测（DRACP），将密度比、局部核与概率体制权重融入加权共形框架，并配置在线显著性控制器。在48个真实经济序列上，DRACP覆盖率达0.890，最接近名义水平，且任何序列不低于0.80，校准可靠性优于强自适应方法。该工作强调可靠校准与区间效率的权衡，为需要覆盖率保证的决策提供可解释方案。",
+      "tags": "query:budget-perf",
+      "abstract_en": "Conformal prediction provides distribution-free prediction intervals but relies on exchangeability, an assumption often violated in economic forecasting because of covariate shift, concept drift, local heterogeneity and latent regimes. We propose Dynamic Regime-Aware Conformal Prediction (DRACP), which combines density-ratio, localized kernel and probabilistic regime-aware weighting with a self-tuning online significance controller in a unified weighted conformal calibration framework. We distinguish three theoretical results: finite-sample validity under oracle importance weights, a coverage-gap bound for estimated weights with rates in effective sample size, and deterministic or regret guarantees for the online controller. We evaluate DRACP against six baselines on 48 real forecasting series covering euro-area and EU-27 HICP inflation, US macroeconomic and energy indicators, and daily financial series. Recent online methods (FACI, strongly-adaptive online conformal prediction and conformal PID) were verified against the authors' implementations. DRACP is not the most efficient method: strongly-adaptive online conformal prediction achieves the best interval score and intervals about 20% narrower. Instead, DRACP provides the most reliable calibration, achieving coverage closest to the nominal 0.90 (0.890), never falling below 0.80 on any series, maintaining the best coverage at all forecast horizons, and performing best during the 2021-2023 inflation surge. The strongly-adaptive method undercovers on 20 of 48 series versus 10 for DRACP. DRACP therefore offers a principled trade-off between calibration and efficiency, favoring reliable coverage when prediction intervals must satisfy coverage standards. An ablation study shows that the online controller and conditional-scale normalization provide most of the performance gain, whereas the weighting components make a smaller contribution.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202608/22/2608.15124v1-decision-driven-regularization-a-blended-model-for-learning-and-optimization",
+      "section": "quick",
+      "title_en": "Decision-Driven Regularization: A Blended Model for Learning and Optimization",
+      "authors": "Gar Goei Loke, Qinshen Tang, Yangge Xiao, Xun Zhang",
+      "date": "2026-08-15",
+      "pdf": "https://arxiv.org/pdf/2608.15124v1",
+      "score": "6.0",
+      "evidence": "集成学习与优化的决策模型，可应用于基于绩效的预算分配",
+      "tldr": "在按需配送、零售、投资组合等上下文优化问题中，决策者根据特征学习结果并优化成本，但现有集成学习与优化方法缺乏预测准确性控制，易过拟合。为此，提出决策驱动正则化，构建双目标优化以平衡预测误差与决策成本，并引入依赖于超参数的代理成本处理成本函数模糊性。该框架统一了鲁棒优化与遗憾最小化视角，推广了SPO+模型。合成研究显示，其在决策有效性上显著优于OLS、随机森林、XGBoost、SPO+等基准。",
+      "tags": "query:budget-perf",
+      "abstract_en": "In contextual optimization, the decision-maker seeks optimal decisions to minimize a cost function, that varies based on observed features. This context is common in many business applications ranging from on-demand delivery and retail operations to portfolio optimization and inventory management. In this paper, we study the learning and optimization approach, which first learns how outcomes result from the features, and then selects optimal decisions based on these outcomes. We focus on the integrated learning and optimization literature, and identify that a lack of control for prediction accuracy can lead to overfitting and a loss of decision effectiveness against simple separate learning and optimization models. Instead, we propose a bi-objective formulation that balances prediction accuracy and cost minimization, termed decision-driven regularization. It also addresses ambiguity in the definition of the cost function via a surrogate that depends on a new hyperparameter. We additionally show that alternative perspectives for formulating the problem, namely robust optimization and regret minimization, lead to models that are closely related to our proposed model. As a consequence, our framework generalizes models such as SPO+. Our model is shown to be numerically superior to other benchmarks, such as OLS, Random Forest, XGBoost, SPO+, Perturbation Gradient, and Learning and Rank, in our synthetic studies.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

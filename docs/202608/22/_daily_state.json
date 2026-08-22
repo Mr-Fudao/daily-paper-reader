@@ -1,0 +1,57 @@
+{
+  "date": "20260822",
+  "date_label": "",
+  "generated_at": "2026-08-22 20:01:27 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2608.16763v1",
+      "route": "202608/22/2608.16763v1-lava-logic-aware-validation-and-augmentation-framework-for-large-scale-financial-document-auditing",
+      "title": "LAVA: Logic-Aware Validation and Augmentation Framework for Large-Scale Financial Document Auditing",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "大型金融文档审计流水线，用于薪资、税务合规校验，直接支持预算执行与财务管理分析",
+      "first_seen_at": "2026-08-22 20:01:27 UTC",
+      "updated_at": "2026-08-22 20:01:27 UTC"
+    },
+    {
+      "paper_id": "2608.17079v1",
+      "route": "202608/22/2608.17079v1-dynamic-regime-aware-conformal-calibration-for-reliable-economic-forecast-intervals-under-multiple-distribution-shifts",
+      "title": "Dynamic Regime-Aware Conformal Calibration for Reliable Economic Forecast Intervals under Multiple Distribution Shifts",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "提供可靠的预测区间，在分布变化下支撑财政绩效评估",
+      "first_seen_at": "2026-08-22 20:01:27 UTC",
+      "updated_at": "2026-08-22 20:01:27 UTC"
+    },
+    {
+      "paper_id": "2608.15124v1",
+      "route": "202608/22/2608.15124v1-decision-driven-regularization-a-blended-model-for-learning-and-optimization",
+      "title": "Decision-Driven Regularization: A Blended Model for Learning and Optimization",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "集成学习与优化的决策模型，可应用于基于绩效的预算分配",
+      "first_seen_at": "2026-08-22 20:01:27 UTC",
+      "updated_at": "2026-08-22 20:01:27 UTC"
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-22T19:59:02.190989+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 3,
+    "quick_skim_target": 11,
+    "quick_selected": 3
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2608.16763v1",
+      "source": "arxiv",
+      "title": "LAVA: Logic-Aware Validation and Augmentation Framework for Large-Scale Financial Document Auditing",
+      "abstract": "Financial document validation in production, such as payroll auditing, tax compliance, and loan underwriting, demands exceptional accuracy, consistency, and reproducibility under strict enterprise constraints. In practice, documents arrive with heterogeneous layouts and formats, semantically rich and context-dependent content, and embedded business rules that current pipelines struggle to process reliably. We introduce LAVA (Logic-Aware Validation and Augmentation), a modular, backbone-agnostic pipeline built on multimodal large language models, that integrates a four-stage design: document-rule retrieval, layout-preserving information extraction, auxiliary metadata enrichment, and auditable symbolic/arithmetic verification. LAVA supports robust rule grounding, fine-grained error attribution, and consistent, traceable end-to-end execution, capabilities essential for high-stakes deployment. Evaluated on a large real-world benchmark with diverse financial documents and dozens of expert-curated validation rules, LAVA outperforms baselines in hallucination control and edge-case handling while maintaining efficient token usage, demonstrating practicality for high-volume, time-critical validation.",
+      "authors": [
+        "Ruoqi Shu",
+        "Xuhui Wang",
+        "Isaac Wang",
+        "Yanming Mai",
+        "Bo Wan"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-08-17T16:10:05+00:00",
+      "link": "https://arxiv.org/pdf/2608.16763v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Large-scale financial document auditing pipeline for payroll/tax compliance, directly supports budget execution and financial management analysis",
+      "llm_evidence_cn": "大型金融文档审计流水线，用于薪资、税务合规校验，直接支持预算执行与财务管理分析",
+      "llm_evidence": "大型金融文档审计流水线，用于薪资、税务合规校验，直接支持预算执行与财务管理分析",
+      "canonical_evidence": "大型金融文档审计流水线，用于薪资、税务合规校验，直接支持预算执行与财务管理分析",
+      "llm_tldr_en": "LAVA is a multimodal LLM pipeline for auditing large-scale financial documents, with rule retrieval, layout-preserving extraction, metadata enrichment, and auditable symbolic verification. It targets payroll audits, tax compliance, and loan underwriting, improving audit accuracy, consistency, and reproducibility.",
+      "llm_tldr_cn": "生产环境中的财务文档校验（如薪资审计、税务合规、贷款审批）要求高精度、一致性与可复现性，但现有流程难以处理异构版式和内嵌业务规则。本文提出LAVA流水线，基于多模态大语言模型，以文档规则检索、保持版式的信息抽取、元数据增强和可审计的符号/算术验证四个阶段协同工作。该框架可对业务规则进行可追溯的合规验证。其为预算执行与财务管理中的文档审计提供了通用且可扩展的技术方案。",
+      "llm_tldr": "生产环境中的财务文档校验（如薪资审计、税务合规、贷款审批）要求高精度、一致性与可复现性，但现有流程难以处理异构版式和内嵌业务规则。本文提出LAVA流水线，基于多模态大语言模型，以文档规则检索、保持版式的信息抽取、元数据增强和可审计的符号/算术验证四个阶段协同工作。该框架可对业务规则进行可追溯的合规验证。其为预算执行与财务管理中的文档审计提供了通用且可扩展的技术方案。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "analysis of budget execution and financial management",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.15124v1",
+      "source": "arxiv",
+      "title": "Decision-Driven Regularization: A Blended Model for Learning and Optimization",
+      "abstract": "In contextual optimization, the decision-maker seeks optimal decisions to minimize a cost function, that varies based on observed features. This context is common in many business applications ranging from on-demand delivery and retail operations to portfolio optimization and inventory management. In this paper, we study the learning and optimization approach, which first learns how outcomes result from the features, and then selects optimal decisions based on these outcomes. We focus on the integrated learning and optimization literature, and identify that a lack of control for prediction accuracy can lead to overfitting and a loss of decision effectiveness against simple separate learning and optimization models. Instead, we propose a bi-objective formulation that balances prediction accuracy and cost minimization, termed decision-driven regularization. It also addresses ambiguity in the definition of the cost function via a surrogate that depends on a new hyperparameter. We additionally show that alternative perspectives for formulating the problem, namely robust optimization and regret minimization, lead to models that are closely related to our proposed model. As a consequence, our framework generalizes models such as SPO+. Our model is shown to be numerically superior to other benchmarks, such as OLS, Random Forest, XGBoost, SPO+, Perturbation Gradient, and Learning and Rank, in our synthetic studies.",
+      "authors": [
+        "Gar Goei Loke",
+        "Qinshen Tang",
+        "Yangge Xiao",
+        "Xun Zhang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "math.OC"
+      ],
+      "published": "2026-08-15T08:49:33+00:00",
+      "link": "https://arxiv.org/pdf/2608.15124v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "blended learning and optimization model for cost-minimizing decisions, applicable to performance-based budget allocation",
+      "llm_evidence_cn": "集成学习与优化的决策模型，可应用于基于绩效的预算分配",
+      "llm_evidence": "集成学习与优化的决策模型，可应用于基于绩效的预算分配",
+      "canonical_evidence": "集成学习与优化的决策模型，可应用于基于绩效的预算分配",
+      "llm_tldr_en": "The paper identifies overfitting in integrated learning and optimization and proposes a bi-objective method with decision-driven regularization to balance prediction accuracy and decision quality. It improves decision effectiveness compared to separate learning and optimization, supporting cost-sensitive resource allocation like budget decisions.",
+      "llm_tldr_cn": "在集成学习与优化的决策框架中，仅关注预测精度容易导致过拟合和决策效果下降。本文提出一种决策驱动的正则化混合模型，通过双目标优化在预测准确性与决策有效性之间取得平衡。实验表明该模型优于简单的分步学习与优化方法，能提升成本最小化决策的质量。该方法可用于诸如预算分配等需要基于预测结果进行决策的场景，具有广泛的应用价值。",
+      "llm_tldr": "在集成学习与优化的决策框架中，仅关注预测精度容易导致过拟合和决策效果下降。本文提出一种决策驱动的正则化混合模型，通过双目标优化在预测准确性与决策有效性之间取得平衡。实验表明该模型优于简单的分步学习与优化方法，能提升成本最小化决策的质量。该方法可用于诸如预算分配等需要基于预测结果进行决策的场景，具有广泛的应用价值。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "performance budgeting concept and implementation",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2608.17079v1",
+      "source": "arxiv",
+      "title": "Dynamic Regime-Aware Conformal Calibration for Reliable Economic Forecast Intervals under Multiple Distribution Shifts",
+      "abstract": "Conformal prediction provides distribution-free prediction intervals but relies on exchangeability, an assumption often violated in economic forecasting because of covariate shift, concept drift, local heterogeneity and latent regimes. We propose Dynamic Regime-Aware Conformal Prediction (DRACP), which combines density-ratio, localized kernel and probabilistic regime-aware weighting with a self-tuning online significance controller in a unified weighted conformal calibration framework. We distinguish three theoretical results: finite-sample validity under oracle importance weights, a coverage-gap bound for estimated weights with rates in effective sample size, and deterministic or regret guarantees for the online controller. We evaluate DRACP against six baselines on 48 real forecasting series covering euro-area and EU-27 HICP inflation, US macroeconomic and energy indicators, and daily financial series. Recent online methods (FACI, strongly-adaptive online conformal prediction and conformal PID) were verified against the authors' implementations. DRACP is not the most efficient method: strongly-adaptive online conformal prediction achieves the best interval score and intervals about 20% narrower. Instead, DRACP provides the most reliable calibration, achieving coverage closest to the nominal 0.90 (0.890), never falling below 0.80 on any series, maintaining the best coverage at all forecast horizons, and performing best during the 2021-2023 inflation surge. The strongly-adaptive method undercovers on 20 of 48 series versus 10 for DRACP. DRACP therefore offers a principled trade-off between calibration and efficiency, favoring reliable coverage when prediction intervals must satisfy coverage standards. An ablation study shows that the online controller and conditional-scale normalization provide most of the performance gain, whereas the weighting components make a smaller contribution.",
+      "authors": [
+        "Bogdan Oancea"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-08-17T19:36:15+00:00",
+      "link": "https://arxiv.org/pdf/2608.17079v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "provides reliable economic forecast intervals, supporting evaluation of fiscal performance under distribution shifts",
+      "llm_evidence_cn": "提供可靠的预测区间，在分布变化下支撑财政绩效评估",
+      "llm_evidence": "提供可靠的预测区间，在分布变化下支撑财政绩效评估",
+      "canonical_evidence": "提供可靠的预测区间，在分布变化下支撑财政绩效评估",
+      "llm_tldr_en": "The paper proposes DRACP, a regime-aware weighted conformal prediction method for economic forecasting, combining density-ratio, kernel, and probabilistic weighting with a self-tuning significance controller. It yields valid prediction intervals under distribution shifts, useful for fiscal forecasting and performance evaluation.",
+      "llm_tldr_cn": "经济预测中普遍存在协变量漂移、概念漂移和潜在机制变化，传统保形预测因可交换性假设失效而不可靠。本文提出动态机制感知保形预测（DRACP），将密度比、局部核和概率机制感知加权与在线显著性控制器统一于加权保形校准框架。理论证明其在重要性权重下具有有限样本有效性、覆盖缺口界及后悔保证。该方法可为政府财政预测提供可靠的区间估计，支撑预算执行与绩效评估。",
+      "llm_tldr": "经济预测中普遍存在协变量漂移、概念漂移和潜在机制变化，传统保形预测因可交换性假设失效而不可靠。本文提出动态机制感知保形预测（DRACP），将密度比、局部核和概率机制感知加权与在线显著性控制器统一于加权保形校准框架。理论证明其在重要性权重下具有有限样本有效性、覆盖缺口界及后悔保证。该方法可为政府财政预测提供可靠的区间估计，支撑预算执行与绩效评估。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "evaluation of fiscal performance in government",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}

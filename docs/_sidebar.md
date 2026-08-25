@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-08-25 <!--dpr-date:20260825-->
+    * 速读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202608/25/2608.18534v1-finrca-bench-benchmarking-evidence-retrieval-and-reasoning-for-financial-ai-systems" data-sidebar-item="{&quot;title&quot;: &quot;FinRCA-Bench: Benchmarking Evidence Retrieval and Reasoning for Financial AI Systems&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2608.18534v1-finrca-bench-benchmarking-evidence-retrieval-and-reasoning-for-financial-ai-systems&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;budget-perf&quot;}], &quot;evidence&quot;: &quot;金融对账证据检索与推理基准，可迁移至预算执行与财务管理分析&quot;}">FinRCA-Bench: Benchmarking Evidence Retrieval and Reasoning for Financial AI Systems</a>
   * 2026-08-22 <!--dpr-date:20260822-->
     * 速读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202608/22/2608.16763v1-lava-logic-aware-validation-and-augmentation-framework-for-large-scale-financial-document-auditing" data-sidebar-item="{&quot;title&quot;: &quot;LAVA: Logic-Aware Validation and Augmentation Framework for Large-Scale Financial Document Auditing&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2608.16763v1-lava-logic-aware-validation-and-augmentation-framework-for-large-scale-financial-document-auditing&quot;, &quot;score&quot;: &quot;7.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;budget-perf&quot;}], &quot;evidence&quot;: &quot;大型金融文档审计流水线，用于薪资、税务合规校验，直接支持预算执行与财务管理分析&quot;}">LAVA: Logic-Aware Validation and Augmentation Framework for Large-Scale Financial Document Auditing</a>

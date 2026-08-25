@@ -1,0 +1,24 @@
+{
+  "label": "2026-08-25",
+  "date": "2026-08-25",
+  "generated_at": "2026-08-25T19:51:39",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202608/25/2608.18534v1-finrca-bench-benchmarking-evidence-retrieval-and-reasoning-for-financial-ai-systems",
+      "section": "quick",
+      "title_en": "FinRCA-Bench: Benchmarking Evidence Retrieval and Reasoning for Financial AI Systems",
+      "authors": "Pratik Ghawate",
+      "date": "2026-08-19",
+      "pdf": "https://arxiv.org/pdf/2608.18534v1",
+      "score": "6.0",
+      "evidence": "金融对账证据检索与推理基准，可迁移至预算执行与财务管理分析",
+      "tldr": "大型语言模型用于金融操作时，推理性能依赖证据获取。金融对账证据分散在发票、订单、账目等多张表中，端到端准确率混淆了证据访问与推理质量。为此提出FinRCA-Bench，包含2250个合成对账案例、14张运营表、1500个故障和750个难负例，并比较规则/SQL、经典ML、语义检索及TPGR等方法。仅改变检索方式，宏召回从0.83%升至77.70%，16类准确率从2.05%升至72.44%，但严格证据合同准确率仅5.72%，表明检索架构显著影响性能，正确根因标签不足以作为可审计诊断。",
+      "tags": "query:budget-perf",
+      "abstract_en": "Large language models are increasingly used to support financial operations, but their apparent reasoning performance can depend on whether they receive the right evidence. In financial reconciliation, the evidence needed for diagnosis is distributed across invoices, purchase orders, approvals, allocations, payments, ledger entries, and bank activity, linked by transactional relationships rather than textual similarity. End-to-end accuracy can therefore conflate evidence access with reasoning quality. We introduce FinRCA-Bench, a deterministic synthetic benchmark of 2,250 accounts-payable-to-bank reconciliation cases spanning 14 operational tables, including 1,500 injected failures across 15 causal categories and 750 legitimate or hard-negative cases. Root-cause labels and record-level evidence contracts are hidden from the model, allowing retrieval to be evaluated independently of answer correctness. We compare Rules/SQL, classical machine learning, dense semantic retrieval, deterministic relational expansion, and Typed Provenance Graph Retrieval (TPGR), a typed traversal restricted to persisted transaction relationships. Rules/SQL reaches 84.97% held-out exact accuracy and classical ML reaches 95.44%. Holding the reasoning model, prompt, and generation settings fixed while changing only retrieval increases macro required-record recall from 0.83% to 77.70% and exact 16-class accuracy from 2.05% to 72.44%. Structural retrieval failures outnumber reasoning failures with sufficient retrieval by 95 to 15; 254 correct predictions occur despite incomplete retrieval, and strict returned-evidence contract accuracy is only 5.72%. On FinRCA-Bench, retrieval architecture strongly shapes observed AI-system performance, and a correct root-cause label is a weak proxy for an auditable diagnosis.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

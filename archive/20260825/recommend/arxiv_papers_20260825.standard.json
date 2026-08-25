@@ -1,0 +1,53 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-25T19:50:39.634110+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 1,
+    "quick_skim_target": 11,
+    "quick_selected": 1
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2608.18534v1",
+      "source": "arxiv",
+      "title": "FinRCA-Bench: Benchmarking Evidence Retrieval and Reasoning for Financial AI Systems",
+      "abstract": "Large language models are increasingly used to support financial operations, but their apparent reasoning performance can depend on whether they receive the right evidence. In financial reconciliation, the evidence needed for diagnosis is distributed across invoices, purchase orders, approvals, allocations, payments, ledger entries, and bank activity, linked by transactional relationships rather than textual similarity. End-to-end accuracy can therefore conflate evidence access with reasoning quality. We introduce FinRCA-Bench, a deterministic synthetic benchmark of 2,250 accounts-payable-to-bank reconciliation cases spanning 14 operational tables, including 1,500 injected failures across 15 causal categories and 750 legitimate or hard-negative cases. Root-cause labels and record-level evidence contracts are hidden from the model, allowing retrieval to be evaluated independently of answer correctness. We compare Rules/SQL, classical machine learning, dense semantic retrieval, deterministic relational expansion, and Typed Provenance Graph Retrieval (TPGR), a typed traversal restricted to persisted transaction relationships. Rules/SQL reaches 84.97% held-out exact accuracy and classical ML reaches 95.44%. Holding the reasoning model, prompt, and generation settings fixed while changing only retrieval increases macro required-record recall from 0.83% to 77.70% and exact 16-class accuracy from 2.05% to 72.44%. Structural retrieval failures outnumber reasoning failures with sufficient retrieval by 95 to 15; 254 correct predictions occur despite incomplete retrieval, and strict returned-evidence contract accuracy is only 5.72%. On FinRCA-Bench, retrieval architecture strongly shapes observed AI-system performance, and a correct root-cause label is a weak proxy for an auditable diagnosis.",
+      "authors": [
+        "Pratik Ghawate"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.IR"
+      ],
+      "published": "2026-08-19T04:36:01+00:00",
+      "link": "https://arxiv.org/pdf/2608.18534v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "financial reconciliation benchmark for evidence retrieval and reasoning applicable to budget execution and financial management analysis",
+      "llm_evidence_cn": "金融对账证据检索与推理基准，可迁移至预算执行与财务管理分析",
+      "llm_evidence": "金融对账证据检索与推理基准，可迁移至预算执行与财务管理分析",
+      "canonical_evidence": "金融对账证据检索与推理基准，可迁移至预算执行与财务管理分析",
+      "llm_tldr_en": "Paper introduces FinRCA-Bench, a synthetic benchmark for evaluating LLM-based financial AI systems on evidence retrieval and reasoning in accounts-payable-to-bank reconciliation, with injected causal failures and hard negatives.",
+      "llm_tldr_cn": "金融AI系统在大规模财务操作中越来越多地被使用，但其推理质量高度依赖是否获得正确的证据。本文提出FinRCA-Bench，一个确定性合成的基准，包含2250个应付账款到银行对账案例，并注入1500个跨越15种因果类别的故障。该基准用于测试AI在跨表证据检索与因果推理上的能力，避免将证据获取与推理质量混为一谈。它为金融对账与财务管理的自动化分析提供了标准化的评测工具。",
+      "llm_tldr": "金融AI系统在大规模财务操作中越来越多地被使用，但其推理质量高度依赖是否获得正确的证据。本文提出FinRCA-Bench，一个确定性合成的基准，包含2250个应付账款到银行对账案例，并注入1500个跨越15种因果类别的故障。该基准用于测试AI在跨表证据检索与因果推理上的能力，避免将证据获取与推理质量混为一谈。它为金融对账与财务管理的自动化分析提供了标准化的评测工具。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "analysis of budget execution and financial management",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "date": "20260825",
+  "date_label": "",
+  "generated_at": "2026-08-25 19:51:36 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2608.18534v1",
+      "route": "202608/25/2608.18534v1-finrca-bench-benchmarking-evidence-retrieval-and-reasoning-for-financial-ai-systems",
+      "title": "FinRCA-Bench: Benchmarking Evidence Retrieval and Reasoning for Financial AI Systems",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "金融对账证据检索与推理基准，可迁移至预算执行与财务管理分析",
+      "first_seen_at": "2026-08-25 19:51:36 UTC",
+      "updated_at": "2026-08-25 19:51:36 UTC"
+    }
+  ]
+}

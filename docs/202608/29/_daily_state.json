@@ -1,8 +1,25 @@
 {
   "date": "20260829",
   "date_label": "",
-  "generated_at": "2026-08-29 02:27:32 UTC",
+  "generated_at": "2026-08-29 21:10:12 UTC",
   "recommend_exists": true,
-  "run_count": 1,
-  "papers": []
+  "run_count": 2,
+  "papers": [
+    {
+      "paper_id": "2608.25720v1",
+      "route": "202608/29/2608.25720v1-endogenous-selection-and-spillovers-bayesian-inference-for-policy-relevant-causal-effects",
+      "title": "Endogenous Selection and Spillovers: Bayesian Inference for Policy-Relevant Causal Effects",
+      "section": "deep",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 8.0,
+      "evidence": "面向政策评估的因果推断方法，适用于财政绩效评价",
+      "first_seen_at": "2026-08-29 21:10:12 UTC",
+      "updated_at": "2026-08-29 21:10:12 UTC"
+    }
+  ]
 }

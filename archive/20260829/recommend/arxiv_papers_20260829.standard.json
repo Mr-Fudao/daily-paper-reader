@@ -1,16 +1,51 @@
 {
   "mode": "standard",
-  "generated_at": "2026-08-29T02:27:31.863621+00:00",
+  "generated_at": "2026-08-29T21:07:28.493170+00:00",
   "stats": {
     "mode": "standard",
     "tag_count": 1,
-    "deep_divecandidates": 0,
+    "deep_divecandidates": 1,
     "deep_cap": 6,
-    "deep_selected": 0,
+    "deep_selected": 1,
     "quick_candidates": 0,
     "quick_skim_target": 11,
     "quick_selected": 0
   },
-  "deep_dive": [],
+  "deep_dive": [
+    {
+      "id": "2608.25720v1",
+      "source": "arxiv",
+      "title": "Endogenous Selection and Spillovers: Bayesian Inference for Policy-Relevant Causal Effects",
+      "abstract": "This paper develops a new econometric framework to identify and estimate policy-relevant causal effects in contexts with endogenous selection into treatment and spillovers within single large networks or spatial settings. Conventional causal inference methods relying on either unconfoundedness or no-interference assumptions are generally inadequate in these scenarios. We introduce a Spillover Roy model that jointly models endogenous treatment selection and potential outcomes while allowing spillovers through a low-dimensional exposure mapping of neighbors' treatments. The model captures heterogeneous treatment responses across levels of latent resistance to treatment and neighborhood exposure. Within this framework, we define policy-relevant direct, spillover, and total effects under feasible policy changes and show that the total effect decomposes into a direct component from policy-induced participation and a spillover component from policy-induced changes in neighborhood treatment exposure. For estimation and inference, we develop a Bayesian data-augmentation algorithm with parameter expansion that enables efficient posterior computation and coherent uncertainty quantification for heterogeneous causal effects and policy counterfactuals. An application to the U.S. Opportunity Zones program finds positive direct effects on housing development but limited spillover benefits, while counterfactual policy analysis reveals diminishing returns from program expansion.",
+      "authors": [
+        "Duong Trinh"
+      ],
+      "primary_category": "econ.EM",
+      "categories": [
+        "econ.EM"
+      ],
+      "published": "2026-08-26T12:37:15+00:00",
+      "link": "https://arxiv.org/pdf/2608.25720v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "causal inference framework for policy-relevant effects, applicable to fiscal performance evaluation",
+      "llm_evidence_cn": "面向政策评估的因果推断方法，适用于财政绩效评价",
+      "llm_evidence": "面向政策评估的因果推断方法，适用于财政绩效评价",
+      "canonical_evidence": "面向政策评估的因果推断方法，适用于财政绩效评价",
+      "llm_tldr_en": "Develops a Spillover Roy model for identifying and estimating policy-relevant causal effects under endogenous selection and spillovers, offering tools to evaluate fiscal and budget interventions.",
+      "llm_tldr_cn": "政策评估中常面临内生选择与空间溢出并存的问题，传统因果推断方法难以得出可靠结论。为此，本文提出Spillover Roy模型，将治疗选择和潜在结果联合建模，并通过低维暴露映射刻画邻居治疗溢出，进行贝叶斯推断。结果显示，该框架能估计不同潜在抵抗水平下的异质政策效应，并识别政策相关因果参数，为财政绩效评价等复杂政策情景提供了有力工具。",
+      "llm_tldr": "政策评估中常面临内生选择与空间溢出并存的问题，传统因果推断方法难以得出可靠结论。为此，本文提出Spillover Roy模型，将治疗选择和潜在结果联合建模，并通过低维暴露映射刻画邻居治疗溢出，进行贝叶斯推断。结果显示，该框架能估计不同潜在抵抗水平下的异质政策效应，并识别政策相关因果参数，为财政绩效评价等复杂政策情景提供了有力工具。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "evaluation of fiscal performance in government",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    }
+  ],
   "quick_skim": []
 }

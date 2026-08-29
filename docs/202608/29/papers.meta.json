@@ -1,8 +1,24 @@
 {
   "label": "2026-08-29",
   "date": "2026-08-29",
-  "generated_at": "2026-08-29T02:27:32",
-  "count": 0,
-  "papers": [],
+  "generated_at": "2026-08-29T21:10:14",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202608/29/2608.25720v1-endogenous-selection-and-spillovers-bayesian-inference-for-policy-relevant-causal-effects",
+      "section": "deep",
+      "title_en": "Endogenous Selection and Spillovers: Bayesian Inference for Policy-Relevant Causal Effects",
+      "authors": "Duong Trinh",
+      "date": "2026-08-26",
+      "pdf": "https://arxiv.org/pdf/2608.25720v1",
+      "score": "8.0",
+      "evidence": "面向政策评估的因果推断方法，适用于财政绩效评价",
+      "tldr": "传统因果推断方法或依赖无混淆假设，或排除干扰效应，难处理单个大网络中的内生选择与溢出。本文提出斯皮尔曼溢出罗伊模型，联合建模处理选择与潜在结果，利用低维暴露映射刻画邻居影响。应用美国机会区项目，发现住房开发有正直接效应但溢出有限，扩展政策收益递减。新方法提供政策相关因果效应的贝叶斯推断，实现异质性效应量化。",
+      "tags": "query:budget-perf",
+      "abstract_en": "This paper develops a new econometric framework to identify and estimate policy-relevant causal effects in contexts with endogenous selection into treatment and spillovers within single large networks or spatial settings. Conventional causal inference methods relying on either unconfoundedness or no-interference assumptions are generally inadequate in these scenarios. We introduce a Spillover Roy model that jointly models endogenous treatment selection and potential outcomes while allowing spillovers through a low-dimensional exposure mapping of neighbors' treatments. The model captures heterogeneous treatment responses across levels of latent resistance to treatment and neighborhood exposure. Within this framework, we define policy-relevant direct, spillover, and total effects under feasible policy changes and show that the total effect decomposes into a direct component from policy-induced participation and a spillover component from policy-induced changes in neighborhood treatment exposure. For estimation and inference, we develop a Bayesian data-augmentation algorithm with parameter expansion that enables efficient posterior computation and coherent uncertainty quantification for heterogeneous causal effects and policy counterfactuals. An application to the U.S. Opportunity Zones program finds positive direct effects on housing development but limited spillover benefits, while counterfactual policy analysis reveals diminishing returns from program expansion.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
   "errors": []
 }

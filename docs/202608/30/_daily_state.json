@@ -1,0 +1,41 @@
+{
+  "date": "20260830",
+  "date_label": "",
+  "generated_at": "2026-08-30 21:47:10 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2608.23796v1",
+      "route": "202608/30/2608.23796v1-accelerating-the-adoption-of-residential-solar-power-systems-policy-analysis-using-a-dynamic-structural-model",
+      "title": "Accelerating the Adoption of Residential Solar Power Systems: Policy Analysis using a Dynamic Structural Model",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "在有限预算下评估政府激励计划的有效性，直接考察公共政策的财政绩效",
+      "first_seen_at": "2026-08-30 21:47:10 UTC",
+      "updated_at": "2026-08-30 21:47:10 UTC"
+    },
+    {
+      "paper_id": "2608.27049v1",
+      "route": "202608/30/2608.27049v1-research-design-tracking-and-assessment-for-the-social-sciences",
+      "title": "Research Design Tracking and Assessment for the Social Sciences",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "自动化研究设计追踪与评估，可直接支持社会科学文献综述",
+      "first_seen_at": "2026-08-30 21:47:10 UTC",
+      "updated_at": "2026-08-30 21:47:10 UTC"
+    }
+  ]
+}

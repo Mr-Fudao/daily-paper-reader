@@ -1,0 +1,100 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-08-30T21:44:54.887045+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 2,
+    "quick_skim_target": 11,
+    "quick_selected": 2
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2608.23796v1",
+      "source": "arxiv",
+      "title": "Accelerating the Adoption of Residential Solar Power Systems: Policy Analysis using a Dynamic Structural Model",
+      "abstract": "Problem definition: Solar electricity generation is a strategic component of energy portfolios designed to meet growing demand and reduce carbon emissions. Governments and municipalities encourage household photovoltaic (PV) adoption through upfront rebates and tax credits. Limited budgets require principled, data-driven policies that account for the drivers of adoption and the effects of incentives on adoption rates.   Methodology/results: We develop a dynamic structural model of residential PV diffusion based on adoption decisions by forward-looking households that weigh the economic trade-offs between installing now and later. Adoption depends on return on investment and influence from neighboring adopters. The model segments households by home value and urbanization level, incorporates unobserved heterogeneity, and captures spatiotemporal installation dynamics. We estimate the model using Bayesian methods and detailed household-level data from Austin, Texas. In out-of-sample tests, it predicts installations more accurately than contemporary alternatives. We simulate counterfactual policies within the dynamic equilibrium of PV diffusion to evaluate rebate designs. The framework can also be adapted to study the adoption of other durable technologies.   Managerial implications: A rebate offered for a limited period generates more adoption and emissions reductions than a prolonged, costlier program. This counterintuitive result arises from forward-looking behavior, neighbor influence, and accelerated adoption before the rebate expires. We also evaluate phased reductions and rebates differentiated by household segment. A two-step reduction outperforms multiple small reductions. Geographic differentiation improves policy performance, whereas differentiation by home value offers little advantage over a uniform rebate.",
+      "authors": [
+        "Sebastián Souyris",
+        "Jason A. Duan",
+        "Anantaram Balakrishnan",
+        "Varun Rai"
+      ],
+      "primary_category": "econ.EM",
+      "categories": [
+        "econ.EM",
+        "cs.LG",
+        "stat.AP"
+      ],
+      "published": "2026-08-24T20:01:39+00:00",
+      "link": "https://arxiv.org/pdf/2608.23796v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "evaluates government incentive programs under limited budgets, directly assessing fiscal performance of a public policy",
+      "llm_evidence_cn": "在有限预算下评估政府激励计划的有效性，直接考察公共政策的财政绩效",
+      "llm_evidence": "在有限预算下评估政府激励计划的有效性，直接考察公共政策的财政绩效",
+      "canonical_evidence": "在有限预算下评估政府激励计划的有效性，直接考察公共政策的财政绩效",
+      "llm_tldr_en": "Governments promote residential PV adoption with rebates and tax credits under limited budgets; the paper develops a dynamic structural model of adoption to evaluate incentives, providing principled data-driven policy analysis.",
+      "llm_tldr_cn": "政府利用前期补贴和税收抵免促进家庭光伏采用，但预算有限，需要数据驱动的政策评估。本文构建了前瞻性家庭的动态结构模型，纳入投资回报和邻里效应，以分析激励对采用率的影响。研究发现该模型能够为市政决策提供原则性依据，优化预算分配以加速太阳能普及。",
+      "llm_tldr": "政府利用前期补贴和税收抵免促进家庭光伏采用，但预算有限，需要数据驱动的政策评估。本文构建了前瞻性家庭的动态结构模型，纳入投资回报和邻里效应，以分析激励对采用率的影响。研究发现该模型能够为市政决策提供原则性依据，优化预算分配以加速太阳能普及。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "evaluation of fiscal performance in government",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2608.27049v1",
+      "source": "arxiv",
+      "title": "Research Design Tracking and Assessment for the Social Sciences",
+      "abstract": "Reliable assessment of causal research designs in the social sciences is critical for evidence-based policy-making, yet has so far relied entirely on manual expert analysis. We introduce Automated Research Design Tracking and Assessment (ARDTrA), a task that involves detecting the research design used in a paper and assessing the quality of its application. We create an expert-annotated dataset of papers covering six families of counterfactual research designs and evaluate the task using a multi-turn RAG-based conversational pipeline. Across four retrieval strategies, four LLMs and six embedding models, we find that passage length is the main driver of performance, explaining 52-66% of the variance. A per-research-design analysis also shows that human and machine difficulty do not align: the designs that prove hardest for the system are not those on which expert annotators disagree most, pointing to two independent sources of task difficulty.",
+      "authors": [
+        "Marco Rovera",
+        "Sergiu Burlacu",
+        "Dominique Cappelletti",
+        "Alessio Tomelleri",
+        "Sonia Marzadro",
+        "Martina Bazzoli",
+        "Annalisa Tassi",
+        "Jessica Gagete-Miranda"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.CY"
+      ],
+      "published": "2026-08-27T12:36:17+00:00",
+      "link": "https://arxiv.org/pdf/2608.27049v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "automates research design tracking and assessment, directly supporting literature reviews in social sciences",
+      "llm_evidence_cn": "自动化研究设计追踪与评估，可直接支持社会科学文献综述",
+      "llm_evidence": "自动化研究设计追踪与评估，可直接支持社会科学文献综述",
+      "canonical_evidence": "自动化研究设计追踪与评估，可直接支持社会科学文献综述",
+      "llm_tldr_en": "Reliable assessment of causal research designs is critical yet manual; the paper introduces ARDTrA, an automated task for detecting and assessing research designs, with an expert-annotated dataset and RAG pipeline, finding passage length explains 52-66% of variance.",
+      "llm_tldr_cn": "社会科学因果研究设计的可靠评估对循证决策至关重要，但一直依赖人工专家分析。本文提出ARDTrA任务，自动检测论文使用的研究设计并评估其应用质量，构建了覆盖六类反事实研究设计的专家标注数据集，并用多轮RAG对话流程进行评估。实验发现段落长度是性能主要驱动因素，解释52-66%的方差，且人和机器在各类设计上表现各有优劣。",
+      "llm_tldr": "社会科学因果研究设计的可靠评估对循证决策至关重要，但一直依赖人工专家分析。本文提出ARDTrA任务，自动检测论文使用的研究设计并评估其应用质量，构建了覆盖六类反事实研究设计的专家标注数据集，并用多轮RAG对话流程进行评估。实验发现段落长度是性能主要驱动因素，解释52-66%的方差，且人和机器在各类设计上表现各有优劣。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "literature review of performance based budgeting",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

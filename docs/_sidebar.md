@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-09-01 <!--dpr-date:20260901-->
+    * 速读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202609/01/2608.30568v1-collapsibility-of-performance-metrics-in-clinical-predictive-ai" data-sidebar-item="{&quot;title&quot;: &quot;Collapsibility of Performance Metrics in Clinical Predictive AI&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2608.30568v1-collapsibility-of-performance-metrics-in-clinical-predictive-ai&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;budget-perf&quot;}], &quot;evidence&quot;: &quot;分析性能指标可折叠性，直接关系到预算绩效评估的方法学&quot;}">Collapsibility of Performance Metrics in Clinical Predictive AI</a>
   * 2026-08-30 <!--dpr-date:20260830-->
     * 速读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202608/30/2608.23796v1-accelerating-the-adoption-of-residential-solar-power-systems-policy-analysis-using-a-dynamic-structural-model" data-sidebar-item="{&quot;title&quot;: &quot;Accelerating the Adoption of Residential Solar Power Systems: Policy Analysis using a Dynamic Structural Model&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2608.23796v1-accelerating-the-adoption-of-residential-solar-power-systems-policy-analysis-using-a-dynamic-structural-model&quot;, &quot;score&quot;: &quot;7.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;budget-perf&quot;}], &quot;evidence&quot;: &quot;在有限预算下评估政府激励计划的有效性，直接考察公共政策的财政绩效&quot;}">Accelerating the Adoption of Residential Solar Power Systems: Policy Analysis using a Dynamic Structural Model</a>

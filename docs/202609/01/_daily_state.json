@@ -1,0 +1,25 @@
+{
+  "date": "20260901",
+  "date_label": "",
+  "generated_at": "2026-09-01 22:28:52 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2608.30568v1",
+      "route": "202609/01/2608.30568v1-collapsibility-of-performance-metrics-in-clinical-predictive-ai",
+      "title": "Collapsibility of Performance Metrics in Clinical Predictive AI",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "分析性能指标可折叠性，直接关系到预算绩效评估的方法学",
+      "first_seen_at": "2026-09-01 22:28:52 UTC",
+      "updated_at": "2026-09-01 22:28:52 UTC"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-01T22:27:40.384590+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 1,
+    "quick_skim_target": 11,
+    "quick_selected": 1
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2608.30568v1",
+      "source": "arxiv",
+      "title": "Collapsibility of Performance Metrics in Clinical Predictive AI",
+      "abstract": "Background: Population level assessments of predictive artificial intelligence (AI) can conceal performance disparities across subgroups. Fairness evaluations commonly rely on performance analyses across subgroups. However, some performance metrics are non-collapsible, meaning that the overall population performance value does not equal the weighted average of subgroup specific values.   Objective: To examine the collapsibility properties of commonly reported performance metrics in predictive AI, with a focus on the area under the receiver operating characteristic curve (AUC, also known as c-statistic).   Methods: We investigate the collapsibility of 15 performance metrics, either by expressing each metric as a linear combination of its stratum specific values or, where non-collapsible, by providing a counterexample inspired by Simpson's paradox as a formal disproof.   Results: Five performance metrics (AUC, calibration intercept, calibration slope, expected calibration error, and Nagelkerke R^2) are shown to be non-collapsible, and ten (O:E ratio, logloss, Brier score, accuracy, F1-score, true positive rate, true negative rate, positive predictive value, negative predictive value, and net benefit) are shown to be collapsible. The AUC is shown to be non-collapsible because it decomposes into within- and cross-group AUC terms when subpopulations coexist, such that its overall value may fall outside the range of subgroup specific AUCs.   Conclusions: Non-collapsibility of performance metrics has important consequences for reporting, model appraisal, and fairness evaluation. It can generate spurious differences between subgroup and overall performance, which may mislead fairness evaluations. Explicitly acknowledging and reporting the collapsibility properties of performance metrics improves both the interpretability and transparency of fairness assessments.",
+      "authors": [
+        "João Matos",
+        "Ben Van Calster",
+        "Richard D. Riley",
+        "Paula Dhiman",
+        "Gary S. Collins"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-08-31T10:43:22+00:00",
+      "link": "https://arxiv.org/pdf/2608.30568v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Analysis of performance metric collapsibility, directly relevant to performance evaluation methodology in budgeting",
+      "llm_evidence_cn": "分析性能指标可折叠性，直接关系到预算绩效评估的方法学",
+      "llm_evidence": "分析性能指标可折叠性，直接关系到预算绩效评估的方法学",
+      "canonical_evidence": "分析性能指标可折叠性，直接关系到预算绩效评估的方法学",
+      "llm_tldr_en": "This paper analyzes collapsibility of 15 performance metrics including AUC, showing some overall metrics do not equal subgroup-weighted averages. The findings guide metric choice for stratified evaluations and extend to public-sector performance measurement.",
+      "llm_tldr_cn": "针对预测AI在总体层面的性能评估可能掩盖亚组表现差异、且部分指标不具有可折叠性的问题，本文系统考察了15种常用性能指标的可折叠性。通过将每个指标表示为亚组特异值的线性组合，文章重点剖析了AUC等指标在总体与亚组间的数值关系，发现并非所有指标都满足总体值等于亚组加权平均的性质。这一结果提示在多亚组公平性评估中选择指标与报告结果时要谨慎。该研究为绩效指标的方法学特性提供了新认识，其分析逻辑可直接迁移到政府预算绩效等分层评估场景。",
+      "llm_tldr": "针对预测AI在总体层面的性能评估可能掩盖亚组表现差异、且部分指标不具有可折叠性的问题，本文系统考察了15种常用性能指标的可折叠性。通过将每个指标表示为亚组特异值的线性组合，文章重点剖析了AUC等指标在总体与亚组间的数值关系，发现并非所有指标都满足总体值等于亚组加权平均的性质。这一结果提示在多亚组公平性评估中选择指标与报告结果时要谨慎。该研究为绩效指标的方法学特性提供了新认识，其分析逻辑可直接迁移到政府预算绩效等分层评估场景。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "research on performance evaluation in government budgeting",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "label": "2026-09-01",
+  "date": "2026-09-01",
+  "generated_at": "2026-09-01T22:28:54",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202609/01/2608.30568v1-collapsibility-of-performance-metrics-in-clinical-predictive-ai",
+      "section": "quick",
+      "title_en": "Collapsibility of Performance Metrics in Clinical Predictive AI",
+      "authors": "João Matos, Ben Van Calster, Richard D. Riley, Paula Dhiman, Gary S. Collins",
+      "date": "2026-08-31",
+      "pdf": "https://arxiv.org/pdf/2608.30568v1",
+      "score": "6.0",
+      "evidence": "分析性能指标可折叠性，直接关系到预算绩效评估的方法学",
+      "tldr": "临床预测AI的总体性能指标可能掩盖子组差异，公平性评估常用子组性能对比。本文系统考察15种指标的可折叠性，通过线性组合或辛普森悖论反例验证。结果发现AUC等5种不可折叠，总体值可超出子组范围，而10种可折叠。这提示非可折叠指标会产生虚假差异，建议报告时明确属性以提升公平性评估的透明性。",
+      "tags": "query:budget-perf",
+      "abstract_en": "Background: Population level assessments of predictive artificial intelligence (AI) can conceal performance disparities across subgroups. Fairness evaluations commonly rely on performance analyses across subgroups. However, some performance metrics are non-collapsible, meaning that the overall population performance value does not equal the weighted average of subgroup specific values.   Objective: To examine the collapsibility properties of commonly reported performance metrics in predictive AI, with a focus on the area under the receiver operating characteristic curve (AUC, also known as c-statistic).   Methods: We investigate the collapsibility of 15 performance metrics, either by expressing each metric as a linear combination of its stratum specific values or, where non-collapsible, by providing a counterexample inspired by Simpson's paradox as a formal disproof.   Results: Five performance metrics (AUC, calibration intercept, calibration slope, expected calibration error, and Nagelkerke R^2) are shown to be non-collapsible, and ten (O:E ratio, logloss, Brier score, accuracy, F1-score, true positive rate, true negative rate, positive predictive value, negative predictive value, and net benefit) are shown to be collapsible. The AUC is shown to be non-collapsible because it decomposes into within- and cross-group AUC terms when subpopulations coexist, such that its overall value may fall outside the range of subgroup specific AUCs.   Conclusions: Non-collapsibility of performance metrics has important consequences for reporting, model appraisal, and fairness evaluation. It can generate spurious differences between subgroup and overall performance, which may mislead fairness evaluations. Explicitly acknowledging and reporting the collapsibility properties of performance metrics improves both the interpretability and transparency of fairness assessments.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

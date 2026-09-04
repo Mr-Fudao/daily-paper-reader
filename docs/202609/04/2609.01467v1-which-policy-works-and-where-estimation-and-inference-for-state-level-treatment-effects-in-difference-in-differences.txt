@@ -1,0 +1,672 @@
+Title: Which Policy Works, and Where? Estimation and Inference for State-Level Treatment Effects in Difference-in-Differences
+
+URL Source: https://arxiv.org/pdf/2609.01467v1
+
+Published Time: Wed, 02 Sep 2026 01:39:11 GMT
+
+Number of Pages: 34
+
+Markdown Content:
+# Which Policy Works, and Where? Estimation and Inference for State-Level Treatment Effects in Difference-in-Differences ∗
+
+## Nichole Austin r○ Sunny R. Karim r○ Erin Strumpf † r○ Matthew D. Webb September 2, 2026 
+
+Abstract 
+
+Policies with a common objective and implementation date may differ in details or context. We distinguish the aggregate average treatment effect on the treated (ATT) from sub-aggregate ATTs defined by implementation cohort, jurisdiction, period, or policy type. UN-DID and DID-INT, two DiD estimators that construct jurisdiction-by-time effects, estimate these ATTs under parallel-trends conditions matched to the aggregation. In CPS placebo-law simulations, randomization inference is generally well-sized, though some jurisdiction-specific tests are conservative. The jackknife can be undefined for sub-aggregate ATTs; when defined, it over-rejects with few treated or comparison jurisdictions. Estimands and inference methods should match the policy question and implementation setting. 
+
+# 1 Introduction 
+
+A large literature estimates policy impacts using variation in the timing of implementa-tion across jurisdictions. Recent work has documented the weighting problems in two-way fixed effects estimation and developed alternative estimators that restrict comparisons to untreated or not-yet-treated jurisdictions (Goodman-Bacon, 2021; De Chaisemartin and D’Haultfoeuille, 2020; Callaway and Sant’Anna, 2021; Sun and Abraham, 2021; Borusyak et al., 2024). In the Callaway–Sant’Anna framework, these comparisons identify cohort-by-time 
+
+> ∗
+
+We are grateful to the Canadian Institutes of Health Research (CIHR) for funding this project: grant number PJT-175079. We thank seminar participants at the 2025 CEA for helpful comments, and Eric Jamieson and Yunhan Liu for valuable research assistance. The authors declare that they have no relevant financial or non-financial competing interests to report. r○Certified random order: A0Crar8Czf4g. 
+
+> †
+
+Austin: Dalhousie University, nichole.austin@dal.ca . Karim: Carleton University, sunny.karim@cm ail.carleton.ca . Strumpf: McGill University, erin.strumpf@mcgill.ca (corresponding author). Webb: Carleton University, matt.webb@carleton.ca .
+
+1arXiv:2609.01467v1 [econ.EM] 1 Sep 2026 effects, where a cohort is the group of jurisdictions that implement a policy at the same time; these effects can then be aggregated across cohorts and periods (Callaway and Sant’Anna, 2021). Policymakers often want to know the influence of specific policy design elements (e.g., a subsidized price vs. a reimbursement) and which contextual factors are facilitators or barriers to policy success. However, eligibility rules, benefit generosity, administration, enforcement, and context can differ across jurisdictions even when implementation timing is identical. Because cohort-by-time effects average across jurisdictions that implement at the same time, they combine these differences in policy content and context. The resulting cohort average may be well identified but may not answer the policy question of interest. This paper contributes to two strands of the literature. One asks how to define and estimate interpretable treatment effects under staggered adoption (Goodman-Bacon, 2021; Callaway and Sant’Anna, 2021; Sun and Abraham, 2021; Borusyak et al., 2024). The other asks how to do inference when treatment is assigned at the cluster level and the number of treated clusters is modest (Bertrand et al., 2004; Conley and Taber, 2011; MacKinnon and Webb, 2020; MacKinnon et al., 2023b; Karim et al., 2026). Restricting comparisons to untreated or not-yet-treated jurisdictions does not by itself resolve the policy-content prob-lem. When timing cohorts combine materially different interventions or policy environments, researchers should report jurisdiction-specific ATTs alongside cohort-specific and aggregate ATTs. Our contribution is twofold: we define and estimate aggregate and sub-aggregate ATTs that distinguish implementation cohort, jurisdiction, evaluation period, and policy type, and we study inference for these ATTs under staggered adoption. The aggregate ATT averages across treated jurisdictions and post-treatment periods; sub-aggregate ATTs condition on implementation cohort, jurisdiction, evaluation period, policy type, or combinations of these dimensions. For example, states that raise the minimum wage in the same year may enact different percentage increases. A cohort ATT averages across those changes, whereas state-specific ATTs preserve the link between each statutory increase and its estimated effect. The policy-specific averages can combine jurisdictions that share a policy type even when they implement it in different periods. Our identification strategies retain the modern literature’s explicit comparisons with never-treated or not-yet-treated jurisdictions, while the estimands align the aggregation with the implementation cohort, jurisdiction, evaluation period, or policy type of interest. The parallel-trends condition must align with the ATT being identified: jurisdiction-specific ATTs require jurisdiction-level parallel trends, whereas aggregate, cohort-specific, and policy-specific ATTs require the corresponding weighted parallel-trends conditions. We also maintain no anticipation and no spillovers across jurisdictions. Two recently developed DiD approaches, DiD with Unpoolable data (UN-DID) (Karim et al., 2024) and Intersection DiD (DID-INT) (Karim 2and Webb, 2024), construct jurisdiction-by-time ATTs that can be aggregated to each of these levels. In the minimum-wage application, state-specific estimates vary substantially within implementation cohorts, including among states with similar statutory increases. We also study inference for aggregate and sub-aggregate ATTs under staggered adop-tion. Using the recently developed UN-DID and DID-INT procedures (Karim et al., 2024; Karim and Webb, 2024), we compare randomization inference with the cluster jackknife (MacKinnon et al., 2023b,c; Hansen, 2025a,b). In Current Population Survey (CPS)-based placebo-law simulations, RI rejection frequencies remain close to 5 percent for aggregate, cohort-specific, and policy-specific ATTs. For state-specific ATTs, RI is conservative when only one jurisdiction implements the placebo policy at each treatment date. When it re-mains defined, the jackknife follows a two-boundary pattern: it over-rejects when only a few treated jurisdictions contribute to the ATT and again when only a few comparison jurisdic-tions remain. The jackknife is undefined for cohort-specific ATTs when a cohort contains a single treated jurisdiction and for policy-specific ATTs when a policy type is represented by a single treated jurisdiction. The usual leave-one-jurisdiction-out jackknife is also unde-fined for jurisdiction-specific ATTs because deleting the focal jurisdiction removes it from the sample. The number of treated and comparison jurisdictions is not the only consideration for inference with multi-stage DiD estimators. Deleting a jurisdiction can change aggregation weights, make the corresponding leave-one-jurisdiction-out estimate undefined, or require re-estimation of shared first-stage nuisance parameters. Whether deletion requires full re-estimation depends on how the first stage is specified. When DID-INT’s covariate coefficients are jurisdiction specific, deleting another jurisdiction leaves them unchanged, so a Fast jack-knife (FastJack) (MacKinnon et al., 2023b) calculation that holds first-stage estimates fixed can reproduce the leave-one-out estimator. When covariate coefficients or other nuisance parameters are shared across jurisdictions, full re-estimation is needed to reproduce the estimator in each leave-one-out sample. Section 2 uses Canadian in vitro fertilization (IVF) and graduate-retention policies to show why timing-cohort averages may not answer the policy question. Section 3 defines jurisdiction- and policy-specific ATTs and states their identifying assumptions. Section 4 describes UN-DID and DID-INT and explains how aggregation and first-stage estimation affect jackknife inference. Section 5 applies this framework to state minimum-wage changes. Section 6 presents the placebo-law simulation design and results. Section 7 concludes. 32 Why Cohort Averages Can Miss the Policy Question 
+
+Figure 1 and Table 1 illustrate the point with Canadian policy examples. The IVF subsidy programs studied in Austin and Apold (2023) differ across Canadian provinces in who is covered, how much is paid, and how payments are delivered. The graduate-retention credits in Mikola and Webb (2023) differ in duration, refundability, and effective generosity. In both settings, implementation timing does not pin down treatment content. A timing cohort is therefore an econometric object, not necessarily a policy object of substantive interest. 
+
+(a) Who is covered? (b) When does coverage begin? 
+
+(c) How much support is offered? (d) How are benefits paid? 
+
+Figure 1: IVF coverage policies in Canada vary in eligibility, generosity, and payment design, so jurisdictions that begin coverage at the same time may implement different versions of the policy. Source: Austin and Apold (2023). 4Program in Province SK MB NS NB start year 2007 2007 2006 2005 
+
+maximum amount 20k 25k 15k 20k 
+
+rebate per year 10%, 20% 4k, 10% 2.5k 4k 
+
+NPV @ 5% 16.9 14.1 13.3 12.6 
+
+refundable credit Y* N N N
+
+rollover credit N* Y N Y
+
+eligibility duration 7 10 6 20 
+
+application required N N Y Y
+
+tuition based Y Y N Y
+
+tuition % refunded 100% 60% — 50% 
+
+program costs 35m 34m 25m —Table 1: Graduate-retention programs implemented in the same year may nevertheless differ across provinces in duration, refundability, and generosity. Programs analyzed in Mikola and Webb (2023).    
+
+> Notes: An em dash denotes not applicable or not reported. The asterisks indicate Saskatchewan’s announced 2012 change from a refundable credit to a rollover credit. If a refundable credit exceeds taxes owed, the excess is paid to the taxpayer rather than lost. An unused rollover credit can be carried forward and used in a later year.
+
+Implementation timing can remain the main source of identifying variation even when policy content and context vary within a cohort. In such settings, cohort-specific ATTs should be interpreted alongside jurisdiction- or policy-specific ATTs that preserve the di-mensions of policy variation relevant to the question. 
+
+# 3 ATT Estimands and Identification 
+
+## 3.1 Aggregate and Sub-Aggregate ATTs 
+
+Let units i = 1 , . . . , N be observed over periods t = 1 , . . . , T , and let jurisdictions be indexed by s = 1 , . . . , H . Let Si denote unit i’s jurisdiction, which is fixed over the study period, and let Ds,t ∈ { 0, 1} denote jurisdiction-level treatment status, so Di,t = DSi,t . Observed outcomes satisfy 
+
+Yi,t = Di,t Yi,t (1) + (1 − Di,t )Yi,t (0) .
+
+Treatment is absorbing. If Gs is the first treated period for jurisdiction s, with Gs = ∞
+
+for never-treated jurisdictions, then jurisdiction s is untreated before period Gs and treated from period Gs onward. We use jurisdiction as the general term for the geographic unit at which a policy is 5implemented. In the U.S. application and CPS simulations, these jurisdictions are states, and we use state when referring specifically to those settings. In the textbook two-jurisdiction, two-period DiD design, two-way fixed effects recovers the average treatment effect on the treated (ATT) under parallel trends. Under staggered adoption, βTWFE from the same regression, 
+
+Yi,t = αi + γt + βTWFE Di,t + ui,t , (1) includes three comparisons: treated versus never treated, treated versus not-yet-treated, and treated versus already treated jurisdictions. With heterogeneous effects, some of these com-parisons receive weights that are often hard to interpret and can even be negative (Goodman-Bacon, 2021; De Chaisemartin and D’Haultfoeuille, 2020). Researchers therefore do not want to include comparisons between treated and already-treated jurisdictions when estimating the ATT. These comparisons are commonly called “forbidden comparisons” (Goodman-Bacon, 2021). Some modern alternatives, notably Callaway and Sant’Anna (2021) solve that problem by estimating cohort-by-time ATTs and making the control group explicit. If 
+
+Gg = {s : Gs = g} is the set of jurisdictions first treated in period g, then a common building block is ATT g,t = E[Yi,t (1) − Yi,t (0) | Si ∈ G g] , t ≥ g. (2) Aggregate summaries then take the form ATT g =
+
+> T
+
+X
+
+> t=g
+
+ωg,t ATT g,t , ATT = X 
+
+> g:Gg̸=∅
+> T
+
+X
+
+> t=g
+
+Ωg,t ATT g,t . (3) Here ωg,t ≥ 0 are post-treatment aggregation weights within cohort g, with PTt=g ωg,t = 1, and Ω g,t ≥ 0 are the overall aggregation weights with P 
+
+> g:Gg̸=∅
+
+PTt=g Ωg,t = 1. A calendar-time ATT can similarly be formed by averaging across treated cohorts ob-served in period t,ATT t = X
+
+> g≤t
+
+ρg|tATT g,t , ρg|t ≥ 0, X
+
+> g≤t
+
+ρg|t = 1 ,
+
+where ρg|t are the aggregation weights across treated cohorts observed in period t. Thus ATT g
+
+holds the implementation cohort fixed and averages over post-treatment periods, whereas ATT t holds the evaluation period fixed and averages over treated cohorts. Unlike TWFE, these estimators exclude already-treated jurisdictions from the comparison group, eliminating the negative weights generated by those comparisons. They also make the 6comparison group and aggregation weights explicit. However, they still organize effects by implementation date rather than by policy content. If two jurisdictions implement policies in the same year but one offers a generous refundable credit and the other offers a small nonrefundable subsidy with short eligibility, the average effect for that timing cohort may not match any policy a reader cares about. The problem is not averaging by itself; it is averaging across jurisdictions whose policies differ in design or implementation. For a treated jurisdiction s, let Ts = {t : Gs ≤ t ≤ T } denote its observed post-treatment periods. The natural jurisdiction-specific building block is ATT s,t := E[Yi,t (1) − Yi,t (0) | Si = s] , t ∈ T s. (4) This object answers the question, “What was the effect in jurisdiction s at time t?” Averaging over Ts, with weights νs,t ≥ 0 and P 
+
+> t∈T s
+
+νs,t = 1, gives the jurisdiction-specific average ATT ATT s = X
+
+> t∈T s
+
+νs,t ATT s,t . (5) The weights define the temporal aggregation: equal weights average across periods, while sample-size weights average across treated observations. The relation to cohort effects is straightforward. If Gg is the timing cohort that first implements the policy in period g, then ATT g,t = X
+
+> s∈G g
+
+πs|g,t ATT s,t , t ≥ g. (6) Here πs|g,t is the share of treated units in jurisdiction s among treated units in cohort g at time t, so P 
+
+> s∈G g
+
+πs|g,t = 1; these weights are often proportional to the number of obser-vations in each jurisdiction-by-time cell. Many estimators report ATT g,t without retaining the jurisdiction-specific estimates, although eq. (6) shows that the cohort-time ATT aver-ages ATT s,t over jurisdictions first treated in the same period. This cohort-specific ATT is useful when those jurisdictions implement comparable policies, but it masks within-cohort variation. Between cohort-specific and jurisdiction-specific ATTs are policy-specific ATTs. Let Ps
+
+denote the policy type implemented by jurisdiction s, and let p index its possible values. For example, Ps = A might denote a direct subsidy and Ps = B a refundable tax credit, while 
+
+Ps = 0 for never-treated jurisdictions. 7For policy type p and calendar period t, define the set of contributing treated jurisdictions 
+
+Sp,t = {s : Ps = p, G s ≤ t}.
+
+When this set is nonempty, the policy-specific ATT at time t is ATT p,t = X
+
+> s∈S p,t
+
+πs|p,t ATT s,t , X
+
+> s∈S p,t
+
+πs|p,t = 1 . (7) Aggregating over the post-treatment periods in which policy type p is observed gives ATT p = X
+
+> t∈T p
+
+νp,t ATT p,t , X
+
+> t∈T p
+
+νp,t = 1 . (8) All of these estimands are ATTs. The aggregate ATT averages across treated jurisdictions and post-treatment periods; sub-aggregate ATTs condition on cohort (ATT g and ATT g,t ), jurisdiction (ATT s and ATT s,t ), or policy type (ATT p and ATT p,t ). The time-indexed esti-mands also condition on the evaluation period. 
+
+## 3.2 Identification 
+
+The same distinction appears in the identifying assumptions. Let ¯Y 0 
+
+> s,t
+
+= E[Yi,t (0) | Si = s], ¯Y 0 
+
+> g,t
+
+= X
+
+> s∈G g
+
+πs|g,t ¯Y 0
+
+> s,t
+
+, ¯Y 0 
+
+> p,t
+
+= X
+
+> s∈S p,t
+
+πs|p,t ¯Y 0
+
+> s,t
+
+.
+
+For treated jurisdiction s and post-treatment period t, let t′ 
+
+> s
+
+= Gs − 1 and let Cs,t denote the comparison set used for the jurisdiction-time contrast. This set consists of never-treated jurisdictions and, when allowed by the estimator, jurisdictions not yet treated by t. Define the comparison trend ∆ ¯Y Cs,t = X
+
+> s′∈C s,t
+
+λs′|s,t 
+
+  ¯Ys′,t − ¯Ys′,t ′
+
+> s
+
+ , X
+
+> s′∈C s,t
+
+λs′|s,t = 1 .
+
+The same comparison jurisdictions are evaluated at t and t′
+
+> s
+
+. Because every jurisdiction in 
+
+Cs,t is untreated in both periods, ∆ ¯Y Cs,t is a weighted untreated comparison trend. The weights λs′|s,t are the comparison weights used by the estimator for the corresponding contrast. With no anticipation, and no cross-jurisdiction spillovers, identification of ATT g,t 
+
+8requires parallel trends for the cohort average: 
+
+X
+
+> s∈G g
+
+πs|g,t E ¯Y 0 
+
+> s,t
+
+− ¯Y 0
+
+> s,t ′
+> s
+
+ = X
+
+> s∈G g
+
+πs|g,t E∆ ¯Y Cs,t 
+
+ , t ≥ g, (9) This condition requires the weighted untreated trend for jurisdictions first treated in period 
+
+g to match the weighted comparison-jurisdiction trend. It can hold even when individual jurisdictions in Gg violate jurisdiction-specific parallel trends because their deviations may offset, as fig. 3 illustrates. Identification of ATT p,t can be based on an analogous policy-specific average condition. Because a policy type can appear in more than one timing cohort, the pre-treatment period t′ 
+
+> s
+
+may differ across jurisdictions in Sp,t . The direct policy-specific parallel-trends condition is 
+
+X
+
+> s∈S p,t
+
+πs|p,t E ¯Y 0 
+
+> s,t
+
+− ¯Y 0
+
+> s,t ′
+> s
+
+ = X
+
+> s∈S p,t
+
+πs|p,t E∆ ¯Y Cs,t 
+
+ , t ∈ T p. (10) This condition requires the weighted untreated trend for jurisdictions implementing policy type p to match the corresponding weighted comparison-jurisdiction trend. It is weaker than requiring every jurisdiction in Sp,t to satisfy the same restriction on its own and is the direct identifying condition for ATT p,t . It likewise permits offsetting jurisdiction-specific violations. Identification of ATT s,t requires the stronger jurisdiction-level condition 
+
+E ¯Y 0 
+
+> s,t
+
+− ¯Y 0
+
+> s,t ′
+> s
+
+ = E∆ ¯Y Cs,t 
+
+ , t ≥ Gs, (11) and ATT s inherits that requirement because it aggregates ATT s,t . If the jurisdiction-level condition holds for each s ∈ S p,t , then ATT p,t is also identified as a weighted average of identi-fied jurisdiction-time effects, and ATT p is identified by aggregating those policy-time effects. For the policy-specific aggregate, however, eq. (10) is the direct identifying assumption. 
+
+Proposition 1. Fix a treated jurisdiction s and a post-treatment period t ≥ Gs. Treat-ment is absorbing, so once jurisdiction s is treated it remains treated thereafter. Suppose also that (i) no anticipation holds, so Yi,t ′ 
+
+> s
+
+= Yi,t ′ 
+
+> s
+
+(0) among units in jurisdiction s; (ii) no cross-jurisdiction spillovers hold, so outcomes for jurisdictions in Cs,t are untreated potential outcomes; and (iii) the jurisdiction-level parallel-trends condition in eq. (11) holds. Then the DiD contrast   ¯Ys,t − ¯Ys,t ′
+
+> s
+
+ − ∆ ¯Y Cs,t 
+
+identifies ATT s,t . If eq. (11) holds for every t ∈ T s, then the weighted average of these identified contrasts identifies ATT s.
+
+9By no anticipation, ¯Ys,t ′ 
+
+> s
+
+= ¯Y 0 
+
+> s,t ′
+> s
+
+. By no spillovers, ∆ ¯Y Cs,t is an untreated comparison trend. Subtracting the jurisdiction-level parallel-trends restriction from the observed juris-diction trend leaves E[Yi,t (1) − Yi,t (0) | Si = s]. Aggregating over t with weights νs,t gives ATT s. Similarly, subtracting eq. (10) from the observed policy-specific average trend iden-tifies ATT p,t , and aggregating those identified policy-by-time effects gives ATT p. Finally, if eq. (11) holds for every s ∈ G g, then multiplying by πs|g,t and summing over jurisdic-tions implies eq. (9), so the cohort-time estimand ATT g,t is identified as a weighted average of identified jurisdiction-time effects. The same implication holds for eq. (10) when the jurisdiction-level condition holds for every jurisdiction in Sp,t . The converse need not hold. One jurisdiction in the cohort or policy-type group can drift upward relative to comparisons while another drifts downward by a similar amount, so the weighted average deviation is close to zero even though neither treated jurisdiction satisfies jurisdiction-level parallel trends on its own. Figures 2 and 3 illustrate the difference. In both figures, States 1 and 2 are treated at the same time and therefore belong to the same treated cohort, while State 3 is the untreated control. The fourth panel plots the treated-cohort trend, defined as the average of States 1 and 2. In Figure 2, States 1 and 2 each move approximately in parallel with State 3 before treatment, so both the state-level and cohort-level parallel-trends restrictions are plausible. In Figure 3, State 1 drifts upward relative to State 3 while State 2 drifts downward by a similar amount overall. The slope reverses each period, representing a pattern of seasonality or cyclicality. Averaging States 1 and 2 therefore produces a treated-cohort trend that looks close to the control trend, even though neither treated state satisfies state-level parallel trends. That illustrates the paper’s central trade-off. State-level estimands are often more interpretable, but they require stronger assumptions for identification. 
+
+−10 −5 00246810 Time Earnings State 1 (Treated) 
+
+−10 −5 0Time State 2 (Treated) 
+
+−10 −5 0Time State 3 (Control) 
+
+−10 −5 0Time Treated Cohort Figure 2: A case in which the state-level and cohort-level parallel trends assumptions are both plausible. States 1 and 2 are treated at the same time and can be averaged into a treated cohort. These examples also have an implication for pre-trend diagnostics. Cohort-level pre-10 −10 −5 0
+
+−10246810 12 Time Earnings State 1 (Treated) 
+
+−10 −5 0Time State 2 (Treated) 
+
+−10 −5 0Time State 3 (Control) 
+
+−10 −5 0Time Treated Cohort Figure 3: A case in which offsetting pre-trends can make the treated cohort average look as if the parallel trends assumption holds even though individual treated states do not satisfy state-level parallel trends. treatment trends can appear parallel even when jurisdiction-specific pre-treatment trends show offsetting departures. Graphical and other pre-trend diagnostics should therefore be examined at the same level of aggregation as the ATT of interest. 
+
+# 4 Estimation and Inference 
+
+We do not propose a new estimator. Instead, we use two recently developed procedures, UN-DID and DID-INT, to estimate the aggregate and sub-aggregate ATTs defined above and study inference for them. UN-DID is designed for settings in which microdata cannot be pooled: jurisdiction-by-time means and long differences are computed within data silos and then combined (Karim et al., 2024). DID-INT is designed for pooled data and permits flexible covariate adjustment, including specifications in which covariate coefficients vary across jurisdictions, over time, or both (Karim and Webb, 2024). Both estimators rely on multi-stage estimation which is explained in Section 4.2. Because treatment is assigned at the jurisdiction level and outcomes may be correlated within jurisdictions, inference should account for jurisdiction-level clustering (Bertrand et al., 2004; MacKinnon et al., 2023a). Conventional jurisdiction-clustered inference is challenging for both estimators. In UN-DID, microdata are assumed to remain siloed at the jurisdiction level, so conventional cluster-robust standard errors at the jurisdiction level are unavailable in the first stage because there is only one cluster per silo. In DID-INT, the flexible first-stage specification can include jurisdiction-specific time effects and covariate coefficients. The regressors associated with these nuisance parameters are nonzero within only one jurisdiction. Additionally, the one-way cluster-robust covariance matrix has rank at most H − 1, making conventional clustered inference for this set of jurisdiction-specific parameters infeasible. We are concerned with inference on the aggregate and sub-aggregate ATTs rather than 11 the first-stage nuisance parameters themselves. The issue is that uncertainty from first-stage estimation contributes to the sampling variation of the ATT and therefore must be accounted for in inference on the ATT. We consequently consider randomization inference and the cluster jackknife. Care must be taken as the jackknife is available only when the relevant ATT remains defined after each jurisdiction is deleted. It must also be implemented in a way that correctly accounts for any first-stage nuisance parameters that change after removing a jurisdiction. 
+
+## 4.1 The CCC assumption 
+
+The key additional ingredient for DID-INT is the common causal covariates (CCC) assump-tion. Time-varying covariates may affect outcomes differently across jurisdictions or periods. If the first-stage adjustment incorrectly imposes common covariate effects, the residualized outcomes can violate the relevant parallel-trends condition even when a more flexible adjust-ment would satisfy it (Karim and Webb, 2024). DID-INT accommodates such differences by allowing the covariate function f (Xi,s,t ) to vary across jurisdictions, periods, or both. Four DID-INT specifications are relevant. The homogeneous specification imposes com-mon covariate effects across jurisdictions and periods and is appropriate when two-way CCC holds. The jurisdiction-varying and time-varying specifications allow covariate effects to dif-fer across jurisdictions and periods, respectively. The two-way specification allows them to differ across both dimensions and accommodates violations of two-way CCC. UN-DID nat-urally allows covariate effects to vary across jurisdictions; adding time interactions extends it to the two-way case. These distinctions matter for two reasons. First, they determine which identifying re-striction on residualized untreated outcomes is plausible. Second, they determine whether deleting one jurisdiction changes nuisance parameters used for the remaining jurisdictions, which is why the CCC discussion is central for the jackknife below. 
+
+## 4.2 A multi-stage estimator architecture 
+
+Both UN-DID and DID-INT can be viewed as multi-stage procedures. First, the researcher estimates nuisance objects needed to form untreated counterfactual trends, such as outcome regressions, adjustment terms, weights, or covariate residualizations. In the implementations studied here, the basic ingredients are long differences of the form Ys,t − Ys,t ′ for treated jurisdictions and corresponding differences for the comparison jurisdictions, where t′ = Gs −1is the period immediately before treated jurisdiction s implements the policy. Second, these objects are used to construct treated-jurisdiction-by-time building blocks [ATT s,t for treated 12 jurisdictions s and post-treatment periods t ≥ Gs. Third, the building blocks are aggregated to form the relevant aggregate or sub-aggregate ATT. The jurisdiction-specific average is 
+
+[ATT s = X
+
+> t∈T s
+
+νs,t [ATT s,t ,
+
+where equal weights over the post-treatment periods are a common default. Cohort-level objects are recovered by averaging within timing cohorts, 
+
+[ATT g,t = X
+
+> s∈G g
+
+πs|g,t [ATT s,t , [ATT g = X
+
+> t∈T g
+
+ωg,t [ATT g,t ,
+
+with πs|g,t often proportional to the number of observations in each jurisdiction-time cell. In estimators such as Callaway–Sant’Anna (Callaway and Sant’Anna, 2021), the jurisdic-tion label is not retained as part of the reported estimand once observations are grouped into a treatment-timing cohort. Policy-specific ATTs are recovered by averaging the same jurisdiction-time building blocks within policy type, 
+
+[ATT p,t = X
+
+> s∈S p,t
+
+πs|p,t [ATT s,t , [ATT p = X
+
+> t∈T p
+
+νp,t [ATT p,t ,
+
+while an overall summary takes the form 
+
+[ATT = X
+
+> s:Gs<∞
+
+X
+
+> t∈T s
+
+Ωs,t [ATT s,t , Ωs,t ≥ 0, X
+
+> s,t
+
+Ωs,t = 1 .
+
+This architecture separates the object being estimated from the procedure used to es-timate it. The same building blocks can produce jurisdiction-level, cohort-level, or aggre-gate summaries. But inference depends on all three stages. A resampling procedure may change the building blocks, the aggregation weights, or whether the corresponding leave-one-jurisdiction-out estimate is defined. Different weights also answer different questions. Equal weights over treated jurisdiction-by-time cells emphasize treated exposure. Equal weights over jurisdictions emphasize the typical treated jurisdiction. Population or treated-count weights emphasize aggregate pol-icy reach. Under equal weighting of treated jurisdiction-by-time cells, early adopters also receive more total weight because they contribute more post-treatment periods. Researchers should therefore defend the aggregation rule as part of the design rather than treat it as a bookkeeping detail. 13 4.3 When leave-one-jurisdiction-out estimates are defined 
+
+The cluster jackknife deletes one jurisdiction at a time and estimates variance from the dispersion of the leave-one-jurisdiction-out replicates, 
+
+dVar JK (bθ) = H − 1
+
+H
+
+> H
+
+X
+
+> s=1
+
+bθ(s) − ¯θ(·)
+
+2
+
+, ¯θ(·) = 1
+
+H
+
+> H
+
+X
+
+> s=1
+
+bθ(s). (12) The method is appealing when treatment is assigned at the jurisdiction level and the ATT remains defined after each jurisdiction is deleted (MacKinnon et al., 2023b; Karim et al., 2026). This condition is not automatic in staggered-adoption designs. An aggregate ATT can usually be recomputed after deleting one jurisdiction, although its weights must be renormal-ized. A cohort-specific ATT can be recomputed only if the relevant cohort remains nonempty. If a cohort contains one treated jurisdiction, deleting it makes the corresponding leave-one-out estimate of ATT g or ATT g,t undefined. The same condition applies to policy-specific ATTs: deleting one jurisdiction must leave at least one treated jurisdiction contributing to the relevant ATT p or ATT p,t . If a policy type or policy-by-time cell is represented by one treated jurisdiction, the standard delete-one-jurisdiction jackknife cannot be computed for that ATT. Jurisdiction-specific ATTs are different. After deleting jurisdiction s, the data needed to estimate ATT s and ATT s,t are absent from the leave-one-jurisdiction-out sample. The stan-dard delete-one-jurisdiction jackknife therefore cannot be computed for these ATTs. Other restricted deletion schemes are conceivable, but they represent a different sampling experi-ment. The simulation results below therefore report randomization inference for jurisdiction-specific ATTs and use the jackknife only when every required leave-one-out estimate is de-fined. 
+
+## 4.4 A four-jurisdiction example: jackknife reweighting under stag-gered adoption 
+
+A four-jurisdiction example shows that deletion can change not only whether a leave-one-out estimate is defined but also the composition and weights of the ATT being estimated. Consider two never-treated comparisons c1 and c2, one early-treated jurisdiction j, and one late-treated jurisdiction ℓ. There are three periods, t = 0 , 1, 2. The early-treated jurisdiction first implements the policy in period 1, so Gj = 1; the late-treated jurisdiction first imple-ments the policy in period 2, so Gℓ = 2; and Gc1 = Gc2 = ∞. The comparison group consists 14 only of c1 and c2; the late-treated jurisdiction ℓ is not used as a not-yet-treated comparison in period 1. The early-treated jurisdiction contributes two post-treatment cells, ( j, 1) and (j, 2), while the late-treated jurisdiction contributes one post-treatment cell, ( ℓ, 2). Suppose the reported aggregate gives equal weight to treated jurisdiction-time cells: ATT avg = 13 (ATT j, 1 + ATT j, 2 + ATT ℓ, 2) .
+
+Deleting a comparison jurisdiction leaves all three treated cells used to form the aggregate ATT, although the comparison aggregate used to estimate counterfactual trends changes. Deleting the late-treated jurisdiction instead leaves ATT (ℓ) = 12 (ATT j, 1 + ATT j, 2) ,
+
+while deleting the early-treated jurisdiction leaves ATT (j) = ATT ℓ, 2.
+
+The leave-one-jurisdiction-out estimates differ not only because of sampling variation. When effects vary across jurisdictions or policy types, deleting a jurisdiction changes the substan-tive mix of treatment-effect cells being averaged. Deleting the early-treated jurisdiction removes two treated cells, while deleting the late-treated jurisdiction removes one. Jackknife dispersion therefore reflects both effect heterogeneity and reweighting induced by staggered exposure lengths. This example does not establish over-rejection by itself, but it highlights why jackknife inference can be unreliable when only a few treated jurisdictions contribute to a cohort-specific ATT (Conley and Taber, 2011; MacKinnon and Webb, 2017, 2020). Deleting one of those jurisdictions changes the composition and weights used to form the ATT. The simulations below show over rejection when the jackknife remains defined with few treated jurisdictions, and again when few comparison jurisdictions remain. 
+
+## 4.5 FastJack and TrueJack 
+
+For DID-INT, a leave-one-jurisdiction-out replication can be implemented in two concep-tually different ways. FastJack holds fixed first-stage nuisance objects that are unaffected by deleting the jurisdiction and recomputes the contrasts and aggregation steps that must change (MacKinnon et al., 2023b). TrueJack is the brute-force full re-estimation jackknife: it reruns DID-INT’s first stage in every leave-one-jurisdiction-out sample. TrueJack provides 15 the reference full jackknife when deletion changes shared nuisance parameters. The key issue is whether the first-stage CCC restrictions imply nuisance parameters that are jurisdiction-specific or shared across jurisdictions. When the first-stage parameters are jurisdiction-specific, deleting one jurisdiction need not change the nuisance components used for the remaining jurisdictions, so FastJack can be reliable. TrueJack is required when the first stage contains shared nuisance parameters that change after deleting a jurisdiction, such as pooled covariate coefficients, restrictions common across jurisdictions, restrictions common across time, or other partially pooled CCC components. The need for full re-estimation is not monotone in flexibility. In no-covariate specifica-tions, there may be no shared first-stage nuisance objects to re-estimate, so FastJack can be reliable. Jurisdiction-varying covariate coefficients can also permit FastJack when the omitted jurisdiction’s first-stage parameters are not used for remaining jurisdictions. At the other extreme, fully flexible jurisdiction-by-time specifications can permit fast recomputa-tion because the nuisance components for remaining jurisdiction-time cells do not depend on the omitted jurisdiction. Homogeneous covariate specifications, time-varying covariate coef-ficients, and other partially pooled CCC restrictions are different. In those cases, deleting a jurisdiction generally changes nuisance parameters for remaining observations, so a FastJack that holds those parameters fixed is not the jackknife for the maintained model. The first-stage coefficient structure determines which jackknife is required. With a pooled coefficient 
+
+β or time-specific coefficients βt, deleting one jurisdiction changes coefficients used for the remaining jurisdictions, so TrueJack is required. With jurisdiction-specific coefficients βs or jurisdiction-by-time coefficients βs,t , deletion leaves the coefficients for remaining jurisdic-tions unchanged, so FastJack reproduces TrueJack. In the DID-INT simulations below, FastJack and TrueJack coincide for the remaining state-time cells because the first-stage residualization allows covariate coefficients to vary at the state-by-time level. In the UN-DID simulations, the relevant nuisance components are computed within the jurisdiction-level pieces being combined. The jackknife over-rejection documented below should therefore be read as evidence about whether deletion changes the composition and weights of the reported ATT and finite sample issues, not as evidence about the additional cost of re-estimating shared first-stage nuisance components. 
+
+## 4.6 Randomization inference 
+
+In our simulations, randomization inference (RI) treats the observed assignment as one draw from a design that fixes the numbers of early-treated, late-treated, and untreated states. It tests the sharp null of no effect for the units and treatment assignments being permuted, using 16 the raw estimate rather than a studentized statistic (MacKinnon and Webb, 2020; Athey and Imbens, 2022). For ATT, ATT g, and ATT g,t , the reference set permutes the realized early-treated, late-treated, and untreated labels across the H sampled states, holding fixed the numbers of sampled states, early-treated states, and late-treated states. For ATT s, the focal state is fixed but its treatment timing may change; assignments are retained when the focal state is treated. For ATT s,t , the focal state and calendar period are fixed; assignments are retained when the focal state is treated by that period. For the policy-specific ATTs ATT p and ATT p,t , let P G s denote the joint policy-type-and-timing assignment. In the policy simulations, P G s takes values A2, A4, B2, B4, and 0, where the letter records policy type and the number records the implementation-timing group. The RI procedure permutes these joint labels and then derives Ps and Gs from each reassigned P G s. This keeps untreated states assigned to Ps = Gs = 0 and rules out treated policy assignments without a treatment date. The RI p-value is the share of admissible reassignment estimates whose absolute value is at least as large as the observed estimate. The simulations below evaluate the finite-sample size of this procedure. Crucially, RI tests a design-based null hypothesis that is not the same as the conventional null. The number of admissible assignments depends on the numbers of treated and comparison states. Let A denote the total number of admissible assignments, including the observed assignment, and let S = A − 1 denote the number of admissible alternative assignments used to construct the randomization distribution. Let H be the total number of jurisdictions, and J be the number of early adopting jurisdictions and L the number of late adopting jurisdictions, assuming two adoption cohorts. For aggregate and cohort-specific ATTs, 
+
+A = H!
+
+J! L! ( H − J − L)! .
+
+For ATT s, the number of admissible assignments is 
+
+A = (H − 1)! (J − 1)! L! ( H − J − L)! + (H − 1)! 
+
+J! ( L − 1)! ( H − J − L)! .
+
+For ATT s,t , the same count applies once both treatment cohorts are eligible at period t;before the late treatment date, only the first term applies. When eight states are sampled and one is treated at each treatment date, there are 56 aggregate assignments, 14 state-specific assignments, and 7 early-period state-time-specific assignments. These correspond to S = 55, 13, and 6 alternative assignments, respectively. When S is small, conventional randomization p-values are necessarily coarse because they depend only on the rank of the observed statistic within a small set of reassigned statistics. We therefore use the kernel-smoothing procedure of Racine and MacKinnon (2007) when 17 S < 99. The procedure estimates the distribution of the randomization statistics using a kernel-smoothed CDF, so the p-value depends on their magnitudes as well as their ranks. Racine and MacKinnon (2007) show that this approach can improve inference when only a small number of resamples are available, and Webb (2023) applies the same procedure to wild-cluster-bootstrap inference when the number of available bootstrap samples is small. In our simulations, we enumerate all admissible alternative assignments and use the kernel-smoothed p-value when S < 99. For 99 ≤ S < 999, we enumerate all alternatives and use the ordinary exact randomization p-value. Let [ATT denote the observed estimate and let [ATT ∗ 
+
+> s
+
+denote the estimate obtained under alternative assignment s. Then 
+
+p = 1 + PSs=1 1( |\ATT ∗ 
+
+> s
+
+| ≥ | [ATT |)1 + S .
+
+For S ≥ 999, we draw 999 alternative assignments and use 
+
+p = 1 + P999  
+
+> s=1
+
+1( |\ATT ∗ 
+
+> s
+
+| ≥ | [AT T |)1000 .
+
+## 4.7 Software availability 
+
+Both estimators are already available in software. UN-DID is available through the CRAN package undidR (Jamieson, 2025), with companion Stata, Julia, and Python implementations described in Karim et al. (2024). DID-INT is available through the Julia package DiDInt.jl 
+
+and the Stata wrapper didintjl , as described in Karim and Webb (2024). 
+
+# 5 A Worked Minimum-Wage Example 
+
+The minimum-wage application in Callaway and Sant’Anna (2021) studies county-level teen employment from 2001 through 2007, when the federal minimum wage remained fixed at 
+
+$5.15. The sample begins with states whose minimum wage equaled the federal rate; a state becomes treated when it first raises its minimum above the federal rate, producing cohorts first treated in 2004, 2006, and 2007 and a comparison group of states that never raise their minimum. These are state policy changes, not the phased federal increase that began in 2007. Because states in the same cohort set different new minimum wages, the percentage increase varies within cohorts. We report no-covariate ATTs. Because UN-DID and DID-INT coincide in this specifica-tion, the illustration focuses on differences across levels of aggregation rather than differences between estimators. The aggregate ATT, formed by averaging across treated cohort-time 18 cells, is −0.052, with a jackknife p-value of 0 .010 and a randomization-inference p-value of 0.004. State-specific estimates reveal variation hidden by cohort aggregation. Figure 4 plots the no-covariate state-specific ATTs against the percentage increase in the statutory minimum wage in the implementation year. The 2007 cohort provides the clearest example: two states with minimum-wage increases of 19% and 25% have the most disparate estimated ATTs in the figure. The 2006 cohort shows the same pattern: states with similar statutory increases have different estimated ATTs. These within-cohort differences motivate reporting state-specific ATTs alongside cohort averages. Within-cohort dispersion in estimated ATTs is not, by itself, evidence of treatment-effect heterogeneity: it can also arise from sampling error or violations of state-level parallel trends. A cohort-time ATT, ATT g,t , averages across states first treated in period g when effects are measured in period t. When those states implement substantively different policy changes, it does not reveal which state’s reform has the largest estimated effect or whether larger statutory increases are associated with larger employment responses. State-specific ATTs preserve the link between each state’s policy change and its estimated employment effect. 0 10 20 30 
+
+−0.12 
+
+−0.08 
+
+−0.04 00.02 Percent increase in statutory minimum wage State-specific estimate 
+
+> 2004 2006 2007
+
+Figure 4: No-covariate state-specific ATTs plotted against each state’s percentage increase in the statutory minimum wage in its implementation year. Colors and symbols denote implementation cohorts. Tables 2–4 report the aggregate, cohort, state, and state-by-time no-covariate ATTs. UN-DID and DID-INT coincide in the no-covariate specification, so the tables report one set of estimates. Although the aggregate ATT is −0.052, state-level ATTs range from −0.105 in Michigan to 0 .016 in Montana. Only Illinois and Wisconsin have state-level RI p-values below 0 .05, illustrating how aggregation can obscure both the dispersion and uncertainty 19 of state-specific estimates. For ATT s and ATT s,t , the tables report RI p-values; jackknife 
+
+p-values are unavailable. 
+
+Estimand Estimate JK p RI p
+
+ATT -0.052 0.010 0.004 ATT g, 2004 -0.091 — 0.115 ATT g, 2006 -0.047 0.071 0.148 ATT g, 2007 -0.028 0.093 0.046 ATT g,t , 2004, 2004 -0.034 — 0.374 ATT g,t , 2004, 2005 -0.071 — 0.198 ATT g,t , 2004, 2006 -0.125 — 0.103 ATT g,t , 2004, 2007 -0.136 — 0.144 ATT g,t , 2006, 2006 -0.023 0.377 0.368 ATT g,t , 2006, 2007 -0.071 0.018 0.096 ATT g,t , 2007, 2007 -0.028 0.093 0.046 
+
+Table 2: Aggregate and cohort-level no-covariate ATTs in the minimum-wage application   
+
+> Notes: Jackknife p-values are unavailable for the 2004 cohort because Illinois is its only treated state; deleting Illinois makes the corresponding ATT undefined.
+
+State Cohort Estimate RI p
+
+Illinois 2004 -0.091 0.037 Florida 2006 -0.004 0.985 Minnesota 2006 -0.058 0.627 Wisconsin 2006 -0.074 0.017 Colorado 2007 -0.024 0.096 Maryland 2007 -0.010 0.316 Michigan 2007 -0.105 0.308 Missouri 2007 -0.027 0.250 Montana 2007 0.016 0.776 Nevada 2007 0.002 0.993 North Carolina 2007 0.000 1.000 Ohio 2007 -0.037 0.240 West Virginia 2007 -0.007 0.538 
+
+Table 3: State-level no-covariate ATTs (ATT s) in the minimum-wage application 20 State Cohort Year Estimate RI p                                                                            
+
+> Illinois 2004 2004 -0.034 0.943 Illinois 2004 2005 -0.071 0.886 Illinois 2004 2006 -0.125 0.090 Illinois 2004 2007 -0.136 0.021 Florida 2006 2006 0.016 1.000 Florida 2006 2007 -0.024 0.602 Minnesota 2006 2006 -0.021 0.168 Minnesota 2006 2007 -0.096 0.029 Wisconsin 2006 2006 -0.062 0.314 Wisconsin 2006 2007 -0.087 0.088 Colorado 2007 2007 -0.024 0.190 Maryland 2007 2007 -0.010 0.296 Michigan 2007 2007 -0.105 0.308 Missouri 2007 2007 -0.027 0.293 Montana 2007 2007 0.016 0.914 Nevada 2007 2007 0.002 0.993 North Carolina 2007 2007 0.000 1.000 Ohio 2007 2007 -0.037 0.307 West Virginia 2007 2007 -0.007 0.505
+
+Table 4: State-by-time no-covariate ATTs (ATT s,t ) in the minimum-wage application 
+
+# 6 Monte Carlo Evidence 
+
+## 6.1 Simulation Design 
+
+These simulations examine the size of jackknife and randomization-inference tests for ag-gregate and sub-aggregate average treatment effects on the treated (ATTs). The aggregate ATT combines effects across treated jurisdictions and post-treatment periods, while sub-aggregate ATTs condition on treatment cohort, jurisdiction, evaluation period, policy type, or combinations of these dimensions. We use placebo laws in Current Population Survey (CPS) data so that every null hypothesis is true by construction. The data come from the Merged Outgoing Rotation Group files for 1979–1999 and contain individual earnings, state, year, age, and education. The outcome is the log of women’s weekly earnings; observations with earnings below $20 are excluded. The resulting sample contains 547,818 observations. Both estimators use age, age squared, and education indicators. DID-INT also allows the first-stage covariate coefficients to vary at the state-by-time level. Each replication draws an eight-year window and H states from the CPS sample. Treat-ment is absorbing and assigned to an early cohort of J states and a late cohort of L states, with J = L. In the main design, the early cohort implements the placebo law in the fifth year of the window and the late cohort implements it in the seventh. The exhaustive grid is 
+
+H ∈ { 8, 12 , 16 , 20 , 24 , 28 , 32 , 36 , 40 }, J = L = 1 , . . . , H/ 2 − 1.
+
+Thus, every design retains at least two untreated states, and the grid contains 99 distinct 21 (H, J ) cells. The results reported here use 50,000 independent replication families per cell. All ATT estimands are built from jurisdiction-by-time effects, ATT s,t , using the weights associated with the relevant aggregation. The aggregate ATT combines these effects across treated jurisdictions and post-treatment periods, whereas the sub-aggregate ATTs condition on treatment cohort (ATT g and ATT g,t ), jurisdiction (ATT s and ATT s,t ), policy type (ATT p
+
+and ATT p,t ), and, for the time-indexed estimands, evaluation period. The policy experiment assigns each treated state one of two policy types, A or B. Aggregating across evaluation periods gives one ATT p for each policy type. Retaining the evaluation-period dimension gives four ATT p,t estimands, labeled A2, A4, B2, and B4. We compare DID-INT and UN-DID. The jackknife deletes one sampled state at a time, recomputes the corresponding ATT estimate and any second-stage aggregation, and uses the dispersion of the leave-one-state-out estimates to form a two-sided test; deletion changes the sample used for inference but not the ATT being estimated. The jackknife is unavailable when deleting a state makes that ATT undefined. This occurs for cohort- and policy-specific ATTs when only one treated state contributes to the relevant cohort or policy type, and for state-specific ATTs whenever the focal state is deleted. Randomization inference is implemented as described in Section 4, using the admissible reassignments appropriate to each ATT and the Racine–MacKinnon kernel-smoothed pro-cedure when the number of alternative assignments is small. All rejection frequencies refer to two-sided tests at the 5 percent level. Each replication randomly samples states and assigns treatment roles at random, so the RI results average over assignments in which smaller and larger states are treated. They do not cover settings in which treated jurisdictions are systematically smaller or larger than comparison jurisdictions. In a TWFE setting, MacKinnon and Webb (2020) show that coefficient-based RI can over-reject when treated clusters are relatively small and under-reject when they are relatively large. 
+
+## 6.2 Simulation Results 
+
+6.2.1 Aggregate ATT 
+
+Figure 5 shows aggregate null rejection frequencies across J = L for five values of H. Jack-knife rejection follows a U-shaped pattern: it is highest when each cohort contains only one treated state, falls as the number of treated states per cohort increases over an intermediate range, and rises again when only two comparison states remain. At H = 40, jackknife rejection falls from 17.18 percent to 5.60 percent between J = 1 and J = 10 for DID-INT, and from 16.80 percent to 5.80 percent for UN-DID. At J = 19, 22 0.04 0.06 0.08 0.10 0.12 0.14 0.16 0.18                              
+
+> Rejection frequency
+> (a) DID-INT: Jackknife
+> H= 8
+> H= 16
+> H= 24
+> H= 32
+> H= 40
+> 0.044 0.046 0.048 0.050 0.052 0.054 0.056
+> (b) DID-INT: RI
+> 1357911 13 15 17 19
+> States in each treatment cohort, J=L
+> 0.04 0.06 0.08 0.10 0.12 0.14 0.16 0.18
+> Rejection frequency
+> (c) UN-DID: Jackknife
+> 1357911 13 15 17 19
+> States in each treatment cohort, J=L
+> 0.044 0.046 0.048 0.050 0.052 0.054 0.056
+> (d) UN-DID: RI
+
+Figure 5: Aggregate ATT rejection frequencies. The horizontal axis is J = L; lines select H ∈ { 8, 16 , 24 , 32 , 40 }. Rows distinguish DID-INT and UN-DID, while columns dis-tinguish jackknife and RI. The dashed line is the nominal 0.05 rejection rate. Jackknife panels share one vertical scale and RI panels share a separate, tighter scale. Each design cell contains 50,000 replication families. when only two controls remain, rejection rises to 13.43 and 13.39 percent, respectively. The corresponding MCSEs are approximately 0.10–0.17 percentage points, so Monte Carlo sampling error cannot account for the U-shaped pattern. Under the placebo null, RI rejection frequencies remain much closer to the 5 percent nominal level. Across the displayed cells, rejection ranges from 4.72 to 5.30 percent; across the full 99-cell grid it ranges from 4.42 to 5.30 percent. The RI panels use a tighter vertical scale because their movements are small. The MCSE near a rejection probability of 0.05 is about 0.10 percentage points, so the remaining neighboring-cell fluctuations should not be read as a systematic ranking. DID-INT and UN-DID follow the same broad pattern. 23 6.2.2 Cohort-Specific ATTs: ATT g and ATT g,t 
+
+Cohort-specific ATTs are sub-aggregate ATTs that average only over treated jurisdictions in one implementation cohort. Figure 6 fixes H = 40 and reports results separately for the early and late cohorts. The four panels compare ATT g and ATT g,t under jackknife and RI for both estimators. When each cohort contains two treated jurisdictions ( J = 2), jackknife rejection across the eight estimator, cohort, and cohort-time curves ranges from 15.81 to 16.94 percent. It falls to 5.98–6.46 percent at J = 10, then rises to 14.18–15.11 percent when only two controls remain at J = 19. The rejection-frequency curves for ATT g and ATT g,t are often close, and neither set of tests exhibits uniformly greater size distortion. Rejection frequencies for the early and late cohorts differ by as much as 0.62 percentage points, so the figure reports them separately rather than averaging them. Under the placebo null, RI rejection frequencies range from 4.68 to 5.30 percent across the cohort-specific panels for both DID-INT and UN-DID. 
+
+6.2.3 State-Specific ATTs: ATT s and ATT s,t 
+
+State-specific ATTs do not admit the usual leave-one-state-out jackknife because deleting the focal state makes the corresponding leave-one-out estimate undefined. Figure 7 therefore reports RI only. It fixes H = 40 and reports results separately for early- and late-treated states and for ATT s and ATT s,t .Rejection ranges from 3.22 to 5.80 percent across the state panels. At J = 1, when only one state is treated at each treatment date, all eight state- and state-time-specific rejection frequencies lie between 3.22 and 4.13 percent, indicating conservative RI tests in these cells. Rejection frequencies for early- and late-treated states also differ in some cells by substantially more than their Monte Carlo standard errors. The largest gap occurs for UN-DID ATT s,t at J = 17, where the rejection frequencies for the early- and late-treated states are 5.62 and 3.62 percent. We do not have an explanation for this difference based on the assignment mechanism, so we report the early- and late-treated series separately rather than averaging them. 24 0.04 0.06 0.08 0.10 0.12 0.14 0.16 0.18 
+
+> Rejection frequency
+
+(a) DID-INT: Jackknife   
+
+> ATT (g): early
+> ATT (g): late
+> ATT (g,t): early
+> ATT (g,t): late
+> 0.044 0.046 0.048 0.050 0.052 0.054 0.056
+
+(b) DID-INT: RI          
+
+> 1357911 13 15 17 19
+
+States in each treatment cohort, J = L
+
+> 0.04 0.06 0.08 0.10 0.12 0.14 0.16 0.18
+> Rejection frequency
+
+(c) UN-DID: Jackknife          
+
+> 1357911 13 15 17 19
+
+States in each treatment cohort, J = L
+
+> 0.044 0.046 0.048 0.050 0.052 0.054 0.056
+
+(d) UN-DID: RI Figure 6: Cohort-specific ATT rejection frequencies. The figure fixes H = 40 and plots ATT g and ATT g,t against J = L, reporting the early and late cohorts separately. Rows distinguish DID-INT and UN-DID; columns distinguish jackknife and RI. The dashed line is the nominal 0.05 rejection rate. Jackknife panels share one vertical scale and RI panels share a separate, tighter scale. When J = 1, each cohort contains one treated jurisdiction. Deleting that jurisdiction makes its cohort-specific ATT undefined, so the leave-one-jurisdiction-out jackknife cannot be computed. Each design cell contains 50,000 replication families. 25 1 3 5 7 9 11 13 15 17 19                  
+
+> States in each treatment cohort, J=L
+> 0.030 0.035 0.040 0.045 0.050 0.055 0.060
+> Rejection frequency
+> (a) DID-INT
+> 1357911 13 15 17 19
+> States in each treatment cohort, J=L
+> (b) UN-DID
+> ATT (s): early
+> ATT (s): late
+> ATT (s,t): early
+> ATT (s,t): late
+
+Figure 7: RI for state-specific ATTs. The figure fixes H = 40 and plots ATT s and ATT s,t against J = L, reporting early- and late-treated states separately. DID-INT is at left and UN-DID at right; both panels use the same tight RI scale. The dashed line is the nominal 0.05 rejection rate. Each design cell contains 50,000 replication families. 
+
+6.2.4 Policy-Specific ATTs: ATT p and ATT p,t 
+
+The policy experiment distinguishes the ATT for a policy type, ATT p, from the ATT for a policy type at a particular evaluation period, ATT p,t . The top rows of Figures 8 and 9 report rejection frequencies for the two time-aggregated ATT p estimands, A and B, while the bottom rows report rejection frequencies for four ATT p,t estimands: A2, A4, B2, and B4. Thus, A2 and A4—or B2 and B4—are distinct ATT p,t estimands, not distinct ATT p
+
+estimands. Policy-specific jackknife rejection is elevated both when only a few treated states con-tribute to each policy-specific ATT and when only two comparison states remain. At J = 2, rejection across policy types and estimators ranges from 15.75 to 17.73 percent. The four rates fall to 6.04–6.46 percent at J = 10 and rise to 10.93–12.12 percent with two controls at J = 19. There is no stable A-versus-B ordering. The ATT p,t rejection-frequency curves share this broad U-shaped pattern, but rejection differs by evaluation period in some cells. At J = 2, A2, A4, B2, and B4 reject between 15.95 and 17.13 percent. At J = 10, A2 and B2 reject between 7.48 and 7.73 percent, whereas A4 and B4 reject between 5.94 and 6.22 percent. With two controls, the eight curves range from 11.90 to 13.32 percent. 26 0.04 0.06 0.08 0.10 0.12 0.14 0.16 0.18 
+
+> Rejection frequency
+
+(a) ATT (p): DID-INT (b) ATT (p): UN-DID              
+
+> AB
+> 1357911 13 15 17 19
+> States in each treatment cohort, J=L
+> 0.04 0.06 0.08 0.10 0.12 0.14 0.16 0.18
+> Rejection frequency
+
+(c) ATT (p, t): DID-INT             
+
+> 1357911 13 15 17 19
+> States in each treatment cohort, J=L
+
+(d) ATT (p, t): UN-DID 
+
+> A2 A4 B2 B4
+
+Figure 8: Jackknife rejection for policy-specific ATTs. The figure fixes H = 40 and varies J = L. The top row reports ATT p for A and B; the bottom row reports ATT p,t for A2, A4, B2, and B4. DID-INT is at left and UN-DID at right. All panels share a common scale, and the dashed line is the nominal 0.05 rejection rate. When J = 1, deleting a treated state leaves no state assigned to the relevant policy type, making the corresponding policy-specific ATT—and hence its jackknife statistic—undefined. Each design cell contains 50,000 replication families. 27 0.044 0.046 0.048 0.050 0.052 0.054 0.056                                 
+
+> Rejection frequency
+> (a) ATT (p): DID-INT (b) ATT (p): UN-DID
+> AB
+> 1357911 13 15 17 19
+> States in each treatment cohort, J=L
+> 0.044 0.046 0.048 0.050 0.052 0.054 0.056
+> Rejection frequency
+> (c) ATT (p,t): DID-INT
+> 1357911 13 15 17 19
+> States in each treatment cohort, J=L
+> (d) ATT (p,t): UN-DID
+> A2 A4 B2 B4
+
+Figure 9: RI for policy-specific ATTs. The figure fixes H = 40 and varies J = L. The top row reports ATT p for A and B; the bottom row reports ATT p,t for A2, A4, B2, and B4. DID-INT is at left and UN-DID at right. All panels share a tight RI scale, and the dashed line is the nominal 0.05 rejection rate. Each design cell contains 50,000 replication families. Figure 9 reports the corresponding RI rejection frequencies, which range from 4.73 to 5.29 percent. Differences among neighboring A/B and ATT p,t curves do not reveal a stable ranking by policy type or evaluation period. In these placebo-null simulations, RI rejection frequencies vary less across policy types and evaluation periods than the jackknife rejection frequencies. 
+
+6.2.5 Jackknife Rejection Across Levels of Aggregation 
+
+Figure 10 fixes H = 40 and compares jackknife rejection frequencies for the aggregate ATT with those for the cohort-specific ATT g and cohort-and-evaluation-period-specific ATT g,t .The aggregate ATT averages over both treated cohorts, whereas ATT g and ATT g,t are com-puted separately by cohort; ATT g,t additionally conditions on evaluation period. The sub-28 1 3 5 7 9 11 13 15 17 19                   
+
+> States in each treatment cohort, J=L
+> 0.04 0.06 0.08 0.10 0.12 0.14 0.16 0.18
+> Rejection frequency
+> (a) DID-INT
+> 1357911 13 15 17 19
+> States in each treatment cohort, J=L
+> (b) UN-DID
+> ATT ATT (g)ATT (g,t)
+
+Figure 10: Jackknife rejection across levels of aggregation. The figure fixes H = 40 and plots rejection frequencies against J = L for ATT, ATT g, and ATT g,t . DID-INT is at left and UN-DID at right; both panels use the same scale. The dashed line is the nominal 0.05 rejection rate. Rejection frequencies for ATT g and ATT g,t average the corresponding early- and late-cohort frequencies. Each design cell contains 50,000 replication families. aggregate ATTs often have higher rejection frequencies when few treated states contribute to each cohort, although the three sets of tests are not strictly ordered in every cell. At J = 2, DID-INT rejects 10.67 percent for ATT, 16.71 percent for ATT g, and 16.23 percent for ATT g,t ; the corresponding UN-DID frequencies are 10.70, 16.12, and 16.74 per-cent. By J = 10, all six frequencies lie between 5.60 and 6.31 percent. With two controls at J = 19, they rise to 13.39–14.96 percent. When few treated states contribute to each cohort, tests of the cohort-specific ATTs can overreject more than tests of the aggregate ATT, although rejection frequencies for ATT g and ATT g,t are not monotonically ordered. The cohort-specific curves begin at J = 2 because, at J = 1, deleting a cohort’s only treated state makes the corresponding leave-one-out estimate undefined. Across these figures, jackknife size deteriorates at two distinct boundaries. Rejection is elevated when only a few treated jurisdictions contribute to the ATT being tested. It rises again when only a few comparison jurisdictions remain. Thus, jackknife performance depends on both the number of treated jurisdictions included in a given aggregate or sub-aggregate ATT and the number of comparison jurisdictions used to estimate it, not simply on the total number of sampled jurisdictions or the overall treated share. In these placebo-null simulations, RI rejection frequencies remain much closer to 5 percent 29 for the aggregate, cohort-specific, and policy-specific ATTs. The principal departures occur for state-specific ATTs: RI is conservative when only one state is treated at each treatment date, and some rejection frequencies for early- and late-treated states differ in other cells. This comparison concerns size under the placebo null; it does not establish a general ranking in power or computational cost. Cluster-robust inference performs most reliably with many clusters of similar size and when neither the treated nor comparison group is small (MacK-innon et al., 2023a). These simulations include cases with few, unequal-sized clusters and with few treated or comparison jurisdictions, consistent with jackknife rejection exceeding 5 percent in many cells. These results add to a growing literature, including Mizushima and Powell (2025) and Karim et al. (2026), showing that inferential problems long studied in TWFE settings can also arise with modern staggered-adoption DiD estimators. 
+
+# 7 Conclusion 
+
+Modern staggered-adoption DiD methods improve on conventional two-way fixed-effects re-gressions by avoiding forbidden comparisons and making the underlying treatment-effect aggregation explicit. When policy context or treatment content varies within a timing co-hort, the cohort ATT averages across substantively different interventions or environments. In these settings, jurisdiction-specific ATTs should accompany the cohort average. A cohort ATT, ATT g, remains useful when jurisdictions first treated in period g imple-ment comparable policies in comparable environments. Otherwise, it should be interpreted as a weighted average across different interventions rather than the effect of a common policy. Jurisdiction-specific estimates within each cohort can reveal dispersion that cohort averages conceal. That dispersion may reflect differences in policy design or economic environment, sampling error, or treatment-effect heterogeneity. It may also reflect bias from violations of jurisdiction-level parallel trends. Choosing whether to aggregate by jurisdiction, policy type, or cohort therefore requires substantive knowledge of policy design and the environments in which policies are implemented. Applied work should report jurisdiction-specific ATTs when policy design varies within cohorts. Jurisdiction-specific ATTs, ATT s,t and ATT s, link each reported effect to a particular jurisdiction, policy element, or context. Their identifying assumptions—including parallel trends, no anticipation, and no cross-jurisdiction spillovers—must hold at the jurisdiction rather than cohort level. Both UN-DID and DID-INT estimate jurisdiction-by-time ATTs that can be aggregated to the cohort, jurisdiction, policy-type, and overall levels. In the no-covariate minimum-wage application, the two estimators yield the same estimates. The simulations yield several practical conclusions about inference for aggregate and 30 sub-aggregate ATTs. RI rejection frequencies remain close to 5 percent for most aggre-gate, cohort-, state-, and policy-specific ATTs. Some state-specific tests are conservative when only one jurisdiction implements the placebo policy at each treatment date. RI tests a design-based null rather than the null underlying conventional large-sample inference. When the jackknife remains defined, it follows a two-boundary pattern: it over-rejects when only a few treated jurisdictions contribute to the ATT and again when only a few com-parison jurisdictions remain. The usual leave-one-jurisdiction-out jackknife is unavailable for jurisdiction-specific ATTs. When a jackknife is available, FastJack reproduces full re-estimation only if deleting a jurisdiction leaves the first-stage estimates for the remaining jurisdictions unchanged. Methodological work should develop diagnostics for jurisdiction-level parallel trends and design-based RI procedures with better finite-sample performance when only a few jurisdic-tions implement the policy. The power of RI tests for jurisdiction-specific ATTs remains an important open question, especially when only a few jurisdictions implement the policy. Progress on jurisdiction-level diagnostics, finite-sample RI, and power comparisons would make staggered-adoption DiD more useful for comparing policies that differ in design or implementation context. 31 Statement on Use of AI 
+
+Generative AI was used extensively in preparing this manuscript. The ideas for the esti-mators, the inference procedures, the monte carlo design, and the empirical examples all came from the authors. The literature review is also entirely done by the authors. Chat-GPT helped organize dictated remarks and past beamer slides into a skeletal rough draft. Codex combined disparate code fragments into a unifed monte carlo package, which was then optimized by incorporating code provided by the authors, and suggestions from the authors and Codex. An ensemble of Refine, Codex, Grok, and ChatGPT helped with edit-ing the prose, and still left plenty of errors and ambiguities for the authors to correct and improve themselves with human labour. These tools were mostly used because they are enjoyable to work with, write very elegant code, and to simultaneously improve productivity and reproducibility. 
+
+Data Availability Statement 
+
+The CPS Merged Outgoing Rotation Group earnings files used in the simulations are publicly available from the National Bureau of Economic Research at https://www.nber .org/research/data/current-population-survey-cps-merged-outgoing-rotatio n-group-earnings-data . The county-level teen-employment data used in the minimum-wage application are the replication data for Callaway and Sant’Anna (2021), available at 
+
+https://doi.org/10.1016/j.jeconom.2020.12.001 ; a public replication copy is hosted at https://github.com/pedrohcgs/CS_RR . State statutory minimum-wage levels used to calculate implementation-year percentage changes come from David Neumark’s State Minimum Wage Data Set through September 2019, available at https://sites.socsci.u ci.edu/~dneumark/datasets.html .32 References 
+
+Athey, Susan, and Guido W. Imbens (2022) ‘Design-based analysis in difference-in-differences settings with staggered adoption.’ Journal of Econometrics 226(1), 62–79 Austin, Nichole, and Victoria Apold (2023) ‘Canadian access to assisted reproduction: Map-ping changes over time.’ Journal of Obstetrics and Gynaecology Canada 45(9), 644–645 Bertrand, Marianne, Esther Duflo, and Sendhil Mullainathan (2004) ‘How much should we trust differences-in-differences estimates?’ The Quarterly Journal of Economics 
+
+119(1), 249–275 Borusyak, Kirill, Xavier Jaravel, and Jann Spiess (2024) ‘Revisiting event-study designs: robust and efficient estimation.’ Review of Economic Studies 91(6), 3253–3285 Callaway, Brantly, and Pedro H. C. Sant’Anna (2021) ‘Difference-in-differences with multiple time periods.’ Journal of Econometrics 225(2), 200–230 Conley, Timothy G., and Christopher R. Taber (2011) ‘Inference with “difference in differ-ences” with a small number of policy changes.’ The Review of Economics and Statistics 
+
+93(1), 113–125 De Chaisemartin, Cl´ ement, and Xavier D’Haultfoeuille (2020) ‘Two-way fixed effects estima-tors with heterogeneous treatment effects.’ American Economic Review 110(9), 2964–2996 Goodman-Bacon, Andrew (2021) ‘Difference-in-differences with variation in treatment tim-ing.’ Journal of Econometrics 225(2), 254–277 Hansen, Bruce E. (2025a) ‘Jackknife standard errors for clustered regression.’ Review of Economic Studies. Forthcoming Hansen, Bruce E. (2025b) ‘Standard errors for difference-in-difference regression.’ Journal of Applied Econometrics 40(3), 291–309 Jamieson, Eric (2025) undidR: Difference-in-Differences with Unpoolable Data. R package version 1.0.2 Karim, Sunny, and Matthew D. Webb (2024) ‘Good controls gone bad: Difference-in-differences with covariates.’ arXiv:2412.14447 
+
+Karim, Sunny, Matthew D. Webb, Nichole Austin, and Erin Strumpf (2024) ‘Difference-in-differences with unpoolable data.’ arXiv:2403.15910 
+
+33 Karim, Sunny, Morten Ørregaard Nielsen, James G. MacKinnon, and Matthew D. Webb (2026) ‘Improved inference for CSDID using the cluster jackknife.’ arXiv:2602.12043 
+
+MacKinnon, James G., and Matthew D. Webb (2017) ‘Wild bootstrap inference for wildly different cluster sizes.’ Journal of Applied Econometrics 32(2), 233–254 MacKinnon, James G., and Matthew D. Webb (2020) ‘Randomization inference for difference-in-differences with few treated clusters.’ Journal of Econometrics 218(2), 435– 450 MacKinnon, James G., Morten Ø. Nielsen, and Matthew D. Webb (2023a) ‘Cluster-robust inference: A guide to empirical practice.’ Journal of Econometrics 232, 272–299 MacKinnon, James G., Morten Ø. Nielsen, and Matthew D. Webb (2023b) ‘Fast and re-liable jackknife and bootstrap methods for cluster-robust inference.’ Journal of Applied Econometrics 38, 671–694 MacKinnon, James G., Morten Ørregaard Nielsen, and Matthew D. Webb (2023c) ‘Lever-age, influence, and the jackknife in clustered regression models: Reliable inference using summclust.’ Stata Journal 23(4), 942–982 Mikola, Derek, and Matthew D. Webb (2023) ‘Finish it and it is free: An evaluation of college graduation subsidies.’ Economics of Education Review 93, 102355 Mizushima, Yuji, and David Powell (2025) ‘Inference with modern difference-in-differences methods.’ Technical Report, SSRN 5221387 Racine, Jeffrey S., and James G. MacKinnon (2007) ‘Inference via kernel smoothing of bootstrap P values.’ Computational Statistics & Data Analysis 51(12), 5949–5957 Sun, Liyang, and Sarah Abraham (2021) ‘Estimating dynamic treatment effects in event studies with heterogeneous treatment effects.’ Journal of Econometrics 225(2), 175–199 Webb, Matthew D. (2023) ‘Reworking wild bootstrap-based inference for clustered errors.’ 
+
+Canadian Journal of Economics/Revue canadienne d’´ economique 56(3), 839–858 34

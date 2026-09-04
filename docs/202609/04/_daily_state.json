@@ -1,0 +1,25 @@
+{
+  "date": "20260904",
+  "date_label": "",
+  "generated_at": "2026-09-04 22:35:13 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.01467v1",
+      "route": "202609/04/2609.01467v1-which-policy-works-and-where-estimation-and-inference-for-state-level-treatment-effects-in-difference-in-differences",
+      "title": "Which Policy Works, and Where? Estimation and Inference for State-Level Treatment Effects in Difference-in-Differences",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 6.0,
+      "evidence": "提供州级与辖区层面政策处理效应的双重差分估计方法，可用于评估财政与预算项目绩效。",
+      "first_seen_at": "2026-09-04 22:35:13 UTC",
+      "updated_at": "2026-09-04 22:35:13 UTC"
+    }
+  ]
+}

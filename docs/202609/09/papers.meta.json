@@ -1,0 +1,24 @@
+{
+  "label": "2026-09-09",
+  "date": "2026-09-09",
+  "generated_at": "2026-09-09T21:33:58",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202609/09/2609.08411v1-policy-gains-or-household-need-the-allocation-logic-of-chinas-dibao-program",
+      "section": "quick",
+      "title_en": "Policy Gains or Household Need? The Allocation Logic of China's Dibao Program",
+      "authors": "Haojie Liu, Jiyuan Ling, Zihan Lin",
+      "date": "2026-09-08",
+      "pdf": "https://arxiv.org/pdf/2609.08411v1",
+      "score": "7.0",
+      "evidence": "研究中国低保公共救助资金的分配逻辑，检验按预期政策增益还是家庭需求分配，属绩效预算的核心议题",
+      "tldr": "中国低保分配应基于最需要还是最大政策收益？本文利用中国家庭金融调查数据，通过预测消费和教育收益并恢复接受者选择的优先级来区分两种逻辑。结果显示预测收益仅解释3.1%的分配拟合改善，而家庭优先级占96.9%；低收入、低教育、老年等特征持续预测高优先级。去除家庭优先差异后，与现有接受者重叠仅10.9%，表明低保分配更贴近贫困脆弱性，而非可预测的政策收益。",
+      "tags": "query:budget-perf",
+      "abstract_en": "When social assistance is scarce, should it prioritize households in greatest need or those expected to benefit most? Using panel data from the China Household Finance Survey, we distinguish allocation principles by combining predicted policy gains with entry into China's Minimum Living Standard Guarantee (Dibao). We estimate heterogeneous predicted gains in consumption and education and then recover the conditional priorities revealed by recipient selection. Predicted gains explain little of allocation: a Shapley decomposition attributes 96.9\\% of the improvement in allocation fit to household priorities and 3.1\\% to predicted gains. Lower income, lower education of the household head, and elderly presence consistently predict higher priority across supported outcome-value specifications. Holding local program capacity fixed and removing household-priority differences while retaining the full model's estimated outcome values, the resulting ranking overlaps with recipients by only 10.9\\%, implying 89.1\\% recipient churn. These findings show that Dibao allocation is more closely aligned with household circumstances associated with poverty and vulnerability than with policy gains predictable from the outcomes and information observed in our data, underscoring the distinction between distributional and impact targeting in social assistance.",
+      "source": "arxiv",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

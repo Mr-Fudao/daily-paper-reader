@@ -1,0 +1,54 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-09-09T21:33:04.865786+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 1,
+    "quick_skim_target": 11,
+    "quick_selected": 1
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2609.08411v1",
+      "source": "arxiv",
+      "title": "Policy Gains or Household Need? The Allocation Logic of China's Dibao Program",
+      "abstract": "When social assistance is scarce, should it prioritize households in greatest need or those expected to benefit most? Using panel data from the China Household Finance Survey, we distinguish allocation principles by combining predicted policy gains with entry into China's Minimum Living Standard Guarantee (Dibao). We estimate heterogeneous predicted gains in consumption and education and then recover the conditional priorities revealed by recipient selection. Predicted gains explain little of allocation: a Shapley decomposition attributes 96.9\\% of the improvement in allocation fit to household priorities and 3.1\\% to predicted gains. Lower income, lower education of the household head, and elderly presence consistently predict higher priority across supported outcome-value specifications. Holding local program capacity fixed and removing household-priority differences while retaining the full model's estimated outcome values, the resulting ranking overlaps with recipients by only 10.9\\%, implying 89.1\\% recipient churn. These findings show that Dibao allocation is more closely aligned with household circumstances associated with poverty and vulnerability than with policy gains predictable from the outcomes and information observed in our data, underscoring the distinction between distributional and impact targeting in social assistance.",
+      "authors": [
+        "Haojie Liu",
+        "Jiyuan Ling",
+        "Zihan Lin"
+      ],
+      "primary_category": "econ.EM",
+      "categories": [
+        "econ.EM"
+      ],
+      "published": "2026-09-08T08:18:39+00:00",
+      "link": "https://arxiv.org/pdf/2609.08411v1",
+      "tags": [
+        "keyword:budget-perf",
+        "query:budget-perf"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Examines China Dibao public assistance allocation logic, testing whether allocation follows predicted policy gains or household need, directly relevant to performance-based budgeting",
+      "llm_evidence_cn": "研究中国低保公共救助资金的分配逻辑，检验按预期政策增益还是家庭需求分配，属绩效预算的核心议题",
+      "llm_evidence": "研究中国低保公共救助资金的分配逻辑，检验按预期政策增益还是家庭需求分配，属绩效预算的核心议题",
+      "canonical_evidence": "研究中国低保公共救助资金的分配逻辑，检验按预期政策增益还是家庭需求分配，属绩效预算的核心议题",
+      "llm_tldr_en": "Tests whether China's Dibao assistance targets household need or expected policy gains. Shapley decomposition of panel data shows need-based priorities dominate; predicted policy gains explain only about 3% of allocation fit, relevant for performance-oriented public budgeting.",
+      "llm_tldr_cn": "当救助资金稀缺时，应投向最困难家庭还是预期政策收益最高的家庭？本文利用中国家庭金融调查面板数据估计消费与教育维度的异质性政策增益，并通过Shapley分解还原低保实际分配规则。结果显示，预测收益对分配拟合的改进贡献仅约3.1%，而家庭需求优先特征贡献高达96.9%，低收入、低教育水平和有老人的家庭持续获得更高优先级。这表明低保资金分配在事实上以需求为主而非以绩效表现为主，为理解并改进社会保障领域的绩效预算提供了实证基础。",
+      "llm_tldr": "当救助资金稀缺时，应投向最困难家庭还是预期政策收益最高的家庭？本文利用中国家庭金融调查面板数据估计消费与教育维度的异质性政策增益，并通过Shapley分解还原低保实际分配规则。结果显示，预测收益对分配拟合的改进贡献仅约3.1%，而家庭需求优先特征贡献高达96.9%，低收入、低教育水平和有老人的家庭持续获得更高优先级。这表明低保资金分配在事实上以需求为主而非以绩效表现为主，为理解并改进社会保障领域的绩效预算提供了实证基础。",
+      "llm_tags": [
+        "query:budget-perf"
+      ],
+      "matched_query_tag": "query:budget-perf",
+      "matched_query_text": "performance budgeting concept and implementation",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}

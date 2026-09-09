@@ -1,0 +1,268 @@
+Title: Policy Gains or Household Need? The Allocation Logic of China's Dibao Program
+
+URL Source: https://arxiv.org/pdf/2609.08411v1
+
+Published Time: Wed, 09 Sep 2026 03:25:53 GMT
+
+Number of Pages: 27
+
+Markdown Content:
+# Policy Gains or Household Need? The Allocation Logic of China’s Dibao Program 
+
+Haojie Liu, Jiyuan Ling, and Zihan Lin 1
+
+Abstract 
+
+When social assistance is scarce, should it prioritize households in greatest need or those expected to benefit most? Using panel data from the China Household Finance Survey, we distinguish allocation principles by combining predicted policy gains with entry into China’s Minimum Living Standard Guarantee (Dibao). We estimate heterogeneous predicted gains in consumption and education and then recover the conditional priorities revealed by re-cipient selection. Predicted gains explain little of allocation: a Shapley decomposition attributes 96.9% of the improvement in allocation fit to household priorities and 3.1% to predicted gains. Lower income, lower education of the household head, and elderly presence consistently predict higher priority across supported outcome-value specifications. Holding local program capacity fixed and removing household-priority differences while retaining the full model’s estimated outcome values, the resulting ranking overlaps with recipients by only 10.9%, implying 89.1% recipient churn. These findings show that Dibao allocation is more closely aligned with household circumstances associated with poverty and vulner-ability than with policy gains predictable from the outcomes and information observed in our data, underscoring the distinction between distributional and impact targeting in social assistance. 
+
+Keywords: Dibao; social assistance; allocation priorities; heterogeneous treatment effects 
+
+> 1
+
+Department of Economics, University of California, Riverside, 900 University Avenue, Riverside, CA 92521, USA. Emails: hliu332@ucr.edu ; jling026@ucr.edu ; zlin169@ucr.edu .
+
+1arXiv:2609.08411v1 [econ.EM] 8 Sep 2026 Introduction 
+
+Social assistance programs must decide how to allocate limited resources among eligible households. One criterion is need: assistance should go to those facing the greatest depri-vation. Another is expected impact: assistance should go to those predicted to benefit most. These criteria need not identify the same recipients. A severely deprived household may have modest predicted gains, while a less deprived household may respond more strongly to assistance. This distinction lies at the heart of the tension between targeting deprivation and targeting impact (Haushofer et al. 2025), and more generally between policy gains and differential social priority (Saez and Stantcheva 2016). A large literature studies how scarce transfers should be targeted and how well targeting mechanisms identify disadvantaged households. Early research examines the trade-offs in-volved in categorical and means-tested targeting (Besley and Kanbur 1990; Coady, Grosh, and Hoddinott 2004). Later work emphasizes both the informational advantages and the implementation difficulties of decentralized targeting (Alderman 2002; Galasso and Raval-lion 2005; Niehaus et al. 2013). Research on heterogeneous treatment effects raises a related but distinct issue: the households experiencing the greatest deprivation may not be those with the largest predicted treatment gains (Haushofer et al. 2025). Evaluating an allocation system therefore requires distinguishing disadvantage from predicted benefit. We examine this distinction in China’s Minimum Living Standard Guarantee (Dibao), a large means-tested social assistance program administered through decentralized local insti-tutions. Previous studies document targeting errors and assess whether Dibao reaches poor households and reduces poverty (Gao, Garfinkel, and Zhai 2009; Golan, Sicular, and Umap-athi 2017; Kakwani et al. 2019). These measures of targeting performance, however, do not by themselves reveal why some households are selected over others. An observed allocation may reflect expected policy gains, priority attached to particular household circumstances, 2or some combination of the two. Our central question is whether systematic differences in household priority remain after accounting for policy gains predictable from the researcher’s information set. We distinguish among households’ baseline circumstances, their predicted responses to assistance, and their allocation priority conditional on those responses. This distinction is important because targeting on predicted treatment effects is not simply a more accurate version of targeting on deprivation. If poverty and vulnerability affect selection independently of predicted gains, replacing the existing allocation rule with a gain-based rule would change the distributive criterion used to select recipients. We adapt the revealed-policy-preference framework developed by Björkegren, Blumenstock, and Knight (2026) to study these components. Using panel data from the China Household Finance Survey (CHFS), we first estimate heterogeneous predicted gains in consumption and education under selection on observables and common support. We then combine these predictions with observed Dibao entry and compare entrants with non-entrants within lo-cal allocation markets. This allows us to infer household priorities conditional on predicted program value. The interpretation is necessarily limited by the setting: Dibao receipt is observational and binary, implementation is decentralized, and local administrators may observe information unavailable in the CHFS. We therefore refer to the estimated compo-nent as a revealed conditional allocation priority, rather than as a normative government welfare weight. The results show that household-priority information is far more informative about observed allocation than predicted gains. The gain-only model produces a pairwise concordance of 0.512. Concordance rises to 0.663 in the priority-only model and to 0.667 in the full model. A Shapley decomposition similarly attributes 96.9% of the improvement in allocation fit to household priorities and only 3.1% to predicted gains. Across the supported outcome-3value specifications, poorer households, households headed by less-educated individuals, and households with elderly members consistently receive higher conditional priority. By contrast, the cardinal weights placed on predicted consumption and education gains are weakly identified. The implied differences in recipient composition are large. We construct a counterfactual that holds the number of Dibao slots fixed within each local market, sets household prior-ities equal to one, and retains the outcome-value parameters estimated in the full model. The resulting gain-oriented ranking overlaps with actual recipients by only 10.9%, implying 89.1% recipient churn under the baseline specification. This exercise does not estimate a welfare or efficiency loss. It measures how much recipient selection would change if the pri-orities revealed by observed allocation were removed and households were ranked instead by predicted gains. Results across survey periods and datasets lead to the same broader conclu-sion: household-priority information accounts for substantially more of observed allocation than predicted policy gains. The paper contributes to the targeting literature by separating predicted policy gains from the household priorities revealed by recipient selection. It also clarifies the relationship between deprivation targeting and impact targeting: allocating on predicted treatment ef-fects may change who receives social assistance, rather than merely improve the accuracy of an existing targeting rule. Finally, the analysis extends the revealed-policy-preference framework to an observational setting with binary treatment and decentralized implemen-tation. In this setting, stable household-priority patterns can be recovered even when the cardinal values attached to different outcomes remain weakly identified. Conditional on the outcomes and information observed in our data, Dibao allocation is much more closely aligned with household circumstances associated with poverty and vulnerability than with predicted policy gains. 4Institutional Background 
+
+China’s Minimum Living Standard Guarantee (Dibao) provides means-tested assistance to low-income households. The urban program was established nationwide in 1999, and na-tionwide rural coverage followed in 2007. The 2014 Interim Measures for Social Assistance 
+
+further consolidated the institutional framework. Enacted after our sample period, the 2026 Social Assistance Law preserves the main features relevant to our analysis: eligibility based on household income and assets, locally determined assistance standards, and admin-istrative verification of applicants’ circumstances (State Council of the People’s Republic of China 1999, 2007, 2014; National People’s Congress of the People’s Republic of China 2026). Dibao is a national program, but its administration is largely local. Local authorities set assistance standards and determine eligibility, producing variation in effective thresholds and administrative practices across jurisdictions. In assessing applicants, local officials may also use administrative records and information about household circumstances that are not fully captured in the China Household Finance Survey (CHFS). Observed Dibao entry may therefore reflect not only the characteristics measured in the survey, but also applica-tion decisions, eligibility screening, locally available information, and other dimensions of hardship. This institutional structure informs our definition of local allocation markets. We define each market by survey window × county/district × urban/rural status and compare Dibao entrants with non-entrants within the same market. The comparison therefore allows pro-gram capacity, effective eligibility thresholds, and other implementation conditions to differ across locations and periods, rather than treating these differences as household-level pri-orities. The decentralized nature of Dibao also limits what can be inferred from the household 5component estimated below. Conditional differences in recipient rankings within the same allocation market reveal which households receive greater relative priority, but they do not identify why that priority arises. The estimated differences may reflect distributional concerns, information unavailable in the CHFS, eligibility and application procedures, or other features of local administration. Accordingly, we interpret the household component as a revealed conditional allocation priority, not as a direct estimate of government welfare weights. 
+
+Conceptual Framework Predicted Policy Gains and Allocation Priorities 
+
+Following Björkegren, Blumenstock, and Knight (2026), we distinguish two conceptually different components of observed allocation: the gains households are predicted to obtain from the program and the relative priority assigned to households conditional on those gains. This distinction is central to our analysis. A household may receive assistance because it is predicted to benefit more from Dibao, because its circumstances are associated with greater allocation priority conditional on those gains, or because of both. Observed receipt alone does not distinguish these two channels. Let Ti ∈ { 0, 1} denote Dibao receipt. Household i’s contribution to model-implied welfare is 
+
+Si = w(xi)ui(Ti),
+
+where ui(Ti) denotes policy-relevant welfare and w(xi) > 0 captures the household’s relative weight. To allow Dibao to affect multiple welfare-relevant dimensions, let 6ui(Ti) = ∑
+
+> j
+
+bij vij (Ti) + aiTi,
+
+where vij (Ti) denotes household i’s value of welfare-relevant outcome j under treatment status Ti, bij captures the value attached to that outcome, and ai captures components of program value not represented by the modeled outcomes. The model-implied welfare gain from allocating Dibao to household i is the difference be-tween its contribution to welfare under receipt and non-receipt: 
+
+∆Si = Si(1) − Si(0) .
+
+Substituting the household welfare representation gives 
+
+∆Si = w(xi)[ ui(1) − ui(0)] 
+
+From the definition of ui(Ti),
+
+ui(1) − ui(0) = ai + ∑
+
+> j
+
+bij [vij (1) − vij (0)] 
+
+Defining the treatment-induced change in outcome j as 
+
+∆vij = vij (1) − vij (0) ,
+
+the model-implied gain from allocating Dibao to household i can therefore be written as 7∆Si = w(xi)( ai + ∑
+
+> j
+
+bij ∆vij )
+
+This expression separates two margins of allocation. The term in parentheses captures the welfare gain generated by assigning Dibao to household i, while w(xi) captures the household’s relative priority conditional on that gain. Two households with similar policy gains may therefore receive different allocation priority because their household character-istics imply different relative weights. Conversely, among households with similar priority characteristics, allocation may favor those predicted to benefit more from Dibao. A gain-oriented allocation rule and a distributionally oriented rule therefore need not generate the same recipient ranking. This distinction provides the basis for our empirical decomposition below. The first com-ponent asks how much of observed allocation can be explained by heterogeneous predicted policy gains. The second asks which household characteristics are associated with greater allocation priority after conditioning on those gains. The empirical analysis then evalu-ates how much each component contributes to reproducing the observed ranking of Dibao entrants within local allocation markets. We use this formulation as a revealed-allocation representation rather than a literal de-scription of the government’s decision rule. As emphasized in the institutional discussion above, Dibao receipt is observational and binary, implementation is decentralized, and lo-cal administrators may observe dimensions of eligibility or hardship unavailable in CHFS. Accordingly, w(xi) may capture distributional considerations together with information and institutional processes omitted from the researcher’s model. We therefore interpret the recovered household component as a revealed conditional allocation priority rather than a direct or normative estimate of government welfare weights. 8Data Analysis Windows 
+
+We use household panel data from the China Household Finance Survey (CHFS). Our baseline analysis window, W2, uses household characteristics measured in 2017, identifies new Dibao entrants between 2017 and 2019, and measures subsequent outcomes in 2021. For cross-period validation, W1 uses 2015 characteristics, identifies entry between 2015 and 2017, and measures outcomes in 2019. This structure separates baseline characteristics used to predict gains and allocation priorities from subsequent program entry and post-entry outcomes. In each window, the risk set is restricted to households not receiving Dibao at baseline. Let 
+
+Di,t indicate receipt. Entrants satisfy 
+
+Di,t 0 = 0 , Di,t 1 = 1 ,
+
+whereas nonentrants satisfy 
+
+Di,t 0 = Di,t 1 = 0 .
+
+For the empirical analysis, let Di = 1 denote entry into Dibao between t0 and t1, and 
+
+Di = 0 denote remaining outside the program. The analysis therefore concerns entry into Dibao, rather than differences between the stock of recipients and nonrecipients. This restriction is important because continuing recipients may reflect eligibility and allocation decisions made before the baseline survey, whereas new entry provides a cleaner temporal link between observed baseline characteristics and 9subsequent allocation. 
+
+Outcomes and Covariates 
+
+The baseline welfare vector contains two outcomes: real per-capita food consumption and education expenditure. Food consumption is annual food expenditure divided by household size, deflated by the consumer price index, and transformed to logs; first-stage estimates use four-year changes in this measure. Education expenditure is constructed separately from the CHFS education module as the log of one plus real household spending on education and training, so that educational investment remains distinct from food consumption. Health is not included in the baseline welfare vector because its measurement is less con-sistent across survey waves. We instead introduce health outcomes in robustness exercises to assess whether expanding the set of modeled program benefits materially changes the recovered allocation patterns. Each outcome is mapped onto the welfare scale using a prespecified transformation, 
+
+vij = gj (Yij ).
+
+We distinguish the covariates that index heterogeneous predicted gains, those that enter first-stage nuisance functions, and those that parameterize household allocation priorities. The heterogeneity basis ˜Xi and the priority vector Xi coincide: 
+
+Xi = ( xincome ,i , x size ,i , x child ,i , x elderly ,i , x female ,i , x age ,i , x edu ,i ).
+
+The child indicator denotes the presence of a household member aged 0–15, while the elderly indicator denotes the presence of a member aged 60 or older. Rural status enters the first-10 stage propensity and outcome nuisance models and defines local allocation markets, but it is excluded from both ˜Xi and the baseline priority function. The recovered coefficients on Xi should therefore not be interpreted as ordinary reduced-form predictors of Dibao receipt. 
+
+Analysis Sample 
+
+The baseline W2 allocation sample contains 3,102 households, of which 265 enter Dibao during the allocation period, corresponding to an entry rate of approximately 8.5%. Table 1 reports survey-weighted means for baseline household characteristics and welfare outcomes. In the unweighted analysis sample, entry rates display pronounced socioeconomic gradients. The entry rate declines from 17.1% in the poorest income quintile to 3.1% in the richest. Households with elderly members have an entry rate of 10.1%, compared with 6.8% among households without elderly members. Entry also declines substantially with the education of the household head, from 14.3% in the lowest education group to 6.4% and 4.9% in the middle and highest groups, respectively. Rural households enter at a higher rate than urban households, 11.6% versus 5.9%. These descriptive differences provide useful motivation but do not by themselves identify allocation priorities. In particular, a characteristic may predict Dibao entry because it is associated with economic deprivation, because it predicts larger program gains, because it proxies for information used by local administrators, or through some combination of these channels. The empirical framework below is designed precisely to distinguish the component associated with predicted policy gains from the conditional household priorities needed to reproduce observed recipient rankings. Official CHFS survey weights are used for population statistics and survey-population esti-mands, and observations with missing survey weights are not assigned unit weights. Because 11 outcome availability differs across survey modules and waves, the estimation samples for consumption and education are not necessarily identical. We therefore report outcome-specific sample sizes alongside the corresponding first-stage estimates. 
+
+Table 1. Descriptive Statistics 
+
+Variable Full Sample Non-Entrants Dibao Entrants Difference 
+
+A. Baseline household characteristics 
+
+Income rank 0.487 0.502 0.325 −0.177*** (0.027) Household size 3.354 3.340 3.500 0.160 (0.180) Child present (ages 0–15) 0.380 0.380 0.388 0.009 (0.053) Elderly member present (ages 60+) 0.526 0.517 0.624 0.108** (0.043) Female-headed household 0.186 0.184 0.215 0.032 (0.039) Head age (years) 55.122 54.965 56.811 1.846 (1.240) Head education (normalized 0–1) 0.357 0.363 0.296 −0.067*** (0.016) Rural household 0.410 0.403 0.489 0.085* (0.046) 
+
+B. Baseline welfare outcomes 
+
+Baseline log real per-capita food consumption 8.259 8.302 7.803 −0.499*** (0.094) Baseline log1p real education ex-penditure 3.385 3.434 2.859 −0.575 (0.379)   
+
+> Notes: Survey-weighted means, W2 allocation sample ( N= 3 ,102 ). Difference is entrants minus non-entrants (standard errors in parentheses). *, **, *** denote 10%, 5%, and 1% significance. Rural status does not enter the priority function.
+
+Empirical Strategy Estimating Predicted Policy Gains 
+
+For outcome j, we estimate 
+
+τj ( ˜Xi) = E[vij (1) − vij (0) | ˜Xi], ˆτij = ˆ τj ( ˜Xi),
+
+12 where ˆτij is a predicted conditional mean effect, not an individual treatment effect. Let XCi
+
+denote the pretreatment covariates used to adjust for treatment selection in the propensity-score and conditional-outcome models. This role is distinct from that of ˜Xi, which indexes heterogeneity in predicted gains, and Xi, which enters the household-priority function; the underlying covariate sets may overlap. The causal interpretation requires selection on observables and common support: 
+
+{vij (1) , v ij (0) } ⊥ Di | XCi , 0 < P (Di = 1 | XCi ) < 1.
+
+Accordingly, our estimates capture policy gains predictable from the researcher-observed information set; administrators may possess additional information not observed in CHFS. We estimate household predicted gains using a cross-fitted residual-on-residual R-learner (Nie and Wager 2021), with nuisance functions estimated out of sample using cross-fitting (Chernozhukov et al. 2018). Within each training sample, ˆe(XCi ) is chosen by cross-validation between survey-weighted L2 logistic regression and histogram gradient boosting, and the pooled outcome regression ˆmj (XCi ) is chosen analogously between survey-weighted ridge regression and histogram gradient boosting. Let Yij = ∆ vij denote the first-stage outcome. We residualize 
+
+˜Yij = Yij − ˆmj (XCi ), ˜Di = Di − ˆe(XCi ).
+
+A survey-weighted regression of ˜Yij on ˜Di and ˜Di ˜Xi yields ˆτij = ˆ τj ( ˜Xi). Common support is the overlap of treated and control out-of-fold propensity ranges. These ˆτij are predicted conditional mean effects, not realized individual treatment effects. Separate AIPW esti-mates of average treatment effects on the treated are reported as diagnostics in Figure 2; they are not the household gains used in the allocation analysis. 13 Figure 1. Empirical design and analysis samples. Recovering Allocation Priorities 
+
+For empirical implementation, we normalize the residual program-value component to one and impose common outcome-value parameters across households, ai = 1 and bij = βj .Given ˆτij , predicted program value is 
+
+Gi(β) = 1 + ∑
+
+> j
+
+βj ˆτij 
+
+where baseline program value is normalized to one. Household priority is parameterized as 
+
+ω(Xi; θ) = exp (X′ 
+
+> i
+
+θ),
+
+and the resulting allocation index is 
+
+Qi(β, θ ) = ω(Xi; θ)Gi(β).
+
+The two components have distinct interpretations: Gi(β) captures program value associated with predicted outcome gains, whereas ω(Xi; θ) captures household priority conditional on those gains. Within markets defined by survey window × county/district × urban/rural 14 status, and restricting attention to informative markets ( Nm ≥ 3 and 1 ≤ Km ≤ Nm − 1), parameters minimize 
+
+L(β, θ ) = − ∑
+
+> m
+
+∑
+
+> i∈m
+
+wiDi
+
+[
+
+Qi(β, θ ) − log ∑
+
+> j∈m
+
+exp (Qj (β, θ ))]
+
+,
+
+where wi denotes the official survey weight normalized by its global mean. Pairwise con-cordance is a fit metric, not the estimation objective. We compare gain-only, priority-only, and full specifications on this objective and on concordance, and we decompose their con-tributions to allocation fit. 
+
+Identification and Inference 
+
+Binary allocation provides primarily ordinal information about recipient rankings. Identifi-cation of the cardinal outcome-value parameters β additionally requires sufficiently indepen-dent variation across outcome-specific predicted gains. Correlated gains may therefore leave 
+
+β weakly identified even when the direction of household-priority relationships is stable. Let Lp(β) = min θ L(β, θ ) denote the allocation loss after profiling out the household-priority parameters, and let ˆβ ∈ arg min β Lp(β). We characterize uncertainty in the outcome-value parameters using the near-optimal set 
+
+Sδ = {β : Lp(β) − Lp( ˆβ)
+
+|Lp( ˆβ)| ≤ δ}, δ = 0 .05 .
+
+Importantly, S0.05 is a profile-supported set based on relative allocation loss, not a 95% confidence set. Sampling uncertainty is assessed separately using a two-stage county-cluster bootstrap: the first stage re-estimates predicted household gains, and the second stage re-fits the allocation 15 parameters given those draws. We therefore distinguish sampling variation from weak iden-tification of the outcome-value parameters and place greater emphasis on priority patterns that remain stable across supported specifications. 
+
+Results 
+
+Figure 2 reports first-stage AIPW estimates of average treatment effects on the treated for W2, used only as diagnostics. The ATT is −0.049 for food consumption ( SE = 0 .094 ; 95% CI [−0.233, 0.136]; N = 5 , 724 ; 252 entrants) and 0.085 for education expenditure ( SE =0.383 ; 95% CI [−0.670, 0.840]; N = 5 , 768 ; 248 entrants). Neither estimate is statistically distinguishable from zero. The allocation analysis uses household-level predicted conditional mean effects from the R-learner, whereas Figure 2 reports AIPW average treatment effects as aggregate diagnostics. Health outcomes yield similarly small and imprecise estimates and are considered in the robustness analysis. 
+
+Figure 2. AIPW ATT diagnostics. Predicted Gains versus Household Priorities 
+
+Predicted gains alone reproduce little of observed Dibao allocation. Relative to the unin-formative benchmark, the gain-only model improves the allocation objective by 0.73 and yields pairwise concordance of 0.512. By comparison, the priority-only model improves the objective by 38.00 and achieves concordance of 0.663. Allowing both components to vary raises these figures only modestly, to 39.74 and 0.667. A Shapley decomposition reinforces this contrast. Household priorities account for 38.51, 16 or 96.9%, of the improvement in allocation fit, whereas predicted gains account for 1.23, or 3.1%. 
+
+Figure 3. Household priorities versus predicted gains. 
+
+The 96.9% share should not be interpreted as the weight the government places on household need. It is a decomposition of improvement in allocation fit: conditional on the model and researcher-observed information, nearly all of the incremental ability to reproduce recipient rankings comes from household-priority information rather than predicted consumption and education gains. Thus, predicted gains add relatively little information about who actually enters Dibao once household priorities are incorporated. 
+
+Household Priority Patterns 
+
+The recovered priorities exhibit three particularly stable patterns: poorer households, households with less-educated heads, and households with elderly members receive higher conditional allocation priority. Among the 27 outcome-value specifications satisfying the allocation-compatibility criterion, income and household-head education are negatively associated with priority in every case, while elderly presence predicts higher priority in 26 of 27. Median model-implied relative-priority ratios are approximately 18.7 for the poorest versus richest households, 2.76 for households with low- versus high-education heads, and 2.13 for households with versus 17 Figure 4. Stability and magnitude of recovered household priorities.  
+
+> Notes: Bars report directional stability across the 27 compatible outcome-value specifications. Ratios are median model-implied priority ratios for the three headline contrasts.
+
+without elderly members. These dimensions capture different aspects of socioeconomic disadvantage. Income mea-sures current economic resources, household-head education is associated with longer-run socioeconomic circumstances, and elderly presence captures a distinct dimension of house-hold vulnerability. Their joint stability therefore suggests that observed allocation is asso-ciated with multiple dimensions of disadvantage rather than predicted outcome gains alone. The magnitudes should nevertheless be interpreted as model-implied conditional priority ratios, not cardinal welfare comparisons. 
+
+Weak Identification of Outcome Values 
+
+The best-fitting outcome-value parameters are approximately 
+
+ˆβC = 2 .08 , ˆβE = 0 .78 ,
+
+but the objective profiles are relatively flat, particularly for consumption. 18 Figure 5. Profile-supported outcome-value sets under the 5% objective-gap criterion (not confidence intervals). 
+
+Under the 5% objective-gap criterion, support for βC extends to the upper search boundary of 20, while support for βE extends to approximately 5.25; zero remains supported for both. The point estimates therefore do not establish a robust cardinal ordering between consumption and education gains. This contrasts with the stability of the household-priority patterns across supported outcome-value specifications. We consequently treat the direction of these priority relationships as a more robust empirical result than the point estimates of 
+
+β.
+
+Counterfactual Allocation Fixed-Capacity Reallocation 
+
+We next examine how alternative allocation principles change recipient composition while holding local program capacity fixed. For each market m, we retain the observed number of entrants, 
+
+Km = ∑
+
+> i∈m
+
+Di,
+
+and allocate these Km slots to the highest-ranked households under each counterfactual rule. Program capacity and its distribution across markets therefore remain unchanged; 19 only recipient identities vary. In W2, the full model overlaps with actual recipients by 29.1%. For comparison, random allocation within markets produces mean overlap of 16.6%, with a 95th percentile of 19.6%. The full model therefore reproduces substantially more of the observed recipient composition than random assignment, although overlap itself is a measure of agreement with observed allocation rather than optimality. 
+
+Gain-Only Allocation 
+
+Our main counterfactual removes systematic household-priority differences by setting ω(Xi) = 1 while retaining the full model’s estimated outcome-value parameters ˆβC and ˆβE . Alloca-tion then depends only on predicted gains: 
+
+Qgain  
+
+> i
+
+= 1 + ˆβC ˆτiC + ˆβE ˆτiE .
+
+Holding local capacity fixed, this priority-removed ranking overlaps with actual recipients by only 10.9%, implying 89.1% recipient churn—distinct from the re-estimated gain-only model above (concordance 0.512). This counterfactual illustrates that changing the targeting objective can alter beneficiary incidence substantially even without changing the number or geographic distribution of program slots. The 89.1% churn is not an efficiency or welfare loss: predicted gains are conditional mean effects based on researcher-observed information, the modeled outcomes capture only part of program value, and their relative outcome weights are weakly identified. Rather, the counterfactual quantifies how different a gain-oriented recipient ranking is from observed Dibao allocation. 20 Alternative Rules 
+
+Figure 6 compares the baseline results with alternative allocation rules. Food-consumption-gain-only and education-gain-only rules overlap with actual recipients by 17.0% and 13.6%, respectively. In contrast, specifications retaining household priorities produce overlaps of 27.9% for priority only, 28.3% when health is added, and 29.4% under a reduced priority specification, all close to the full model’s 29.1%. 
+
+Figure 6. Fixed-capacity allocation rules and overlap with observed Dibao entry. 
+
+The contrast is therefore not specific to a single predicted-gain ranking. Across these coun-terfactuals, rules retaining household priorities reproduce observed recipient composition substantially more closely than rules driven primarily by predicted gains. Taken together with the ranking results, this suggests that moving from observed Dibao allocation toward impact-oriented targeting would represent more than a change in predictive methodology: it would select a substantially different set of beneficiaries. 21 Robustness and Validation Internal Robustness 
+
+The main findings are robust to alternative specifications. Adding health to the welfare vector yields 28.3% overlap with actual recipients, while a reduced priority specification yields 29.4%, compared with 29.1% in the baseline model. Priority directions are also stable. Among the 27 of 40 outcome-value specifications satisfying the compatibility criterion, lower income and lower household-head education imply higher priority in all 27, while elderly presence implies higher priority in 26. Thus, the central priority patterns do not depend on the baseline outcome set or a particular outcome-value specification. 
+
+Weak Identification and Allocation Uncertainty 
+
+Weak identification of outcome values generates greater uncertainty about individual coun-terfactual assignments. Of 1,768 ( βC , β E ) combinations considered, 603 lie within the 5% supported region. Across these 603 specifications, full-model overlap with actual recipients ranges from 14.3% to 31.7%, and 60.1% of households are either always selected or never selected. When alternative specifications and bootstrap uncertainty are also incorporated, this determinate-selection share falls to 47.0%. These results qualify the interpretation of any single counterfactual allocation: the model does not uniquely identify which individual households would be selected across all em-pirically supported parameter values. The more robust findings concern the structure of observed allocation. Predicted gains remain weakly aligned with recipient rankings, while the priority directions associated with income, household-head education, and elderly pres-ence persist across supported specifications. 22 Cross-Period and Cross-Dataset Validation 
+
+The same pattern extends beyond the baseline estimation window. Applying the W1 al-location rule to W2 while holding W2 market capacities fixed yields 28.3% overlap with actual recipients, compared with 29.1% for the W2 rule. The small difference indicates substantial cross-period stability in the overall allocation relationship. External validation using CHARLS and CFPS produces the same qualitative result despite differences in samples and outcome measurement. Household priorities account for 96.9%, 85.9%, and 81.8% of the improvement in allocation fit in CHFS, CHARLS, and CFPS, respectively, compared with 3.1%, 14.1%, and 18.2% for predicted gains. Held-out ranking improvements similarly favor household priorities: 1.46 versus 0.05 in CHARLS and 2.85 versus 0.80 in CFPS. These exercises support the broader distinction between household priorities and predicted gains rather than validating the specific priority ratios estimated from CHFS. 
+
+Discussion and Conclusion 
+
+Our results point to a basic difference between targeting households according to need and targeting them according to predicted impact. Under need-based targeting, poverty and vulnerability may affect a household’s priority even when its predicted gains are small. Under impact targeting, assistance is directed toward households expected to respond more strongly to the program. In Dibao, observed recipient rankings are much more closely related to need-related household characteristics than to predicted gains. In the Shapley decomposition, household priorities account for 96.9% of the improvement in allocation fit, while predicted consumption and education gains account for 3.1%. This difference has a direct policy implication. Allocating assistance according to predicted treatment effects is not simply a technical way to implement the existing objective more 23 accurately. If the existing system gives separate priority to poverty and vulnerability, re-placing that priority with predicted gains changes the basis on which recipients are selected. To illustrate this point, we hold the number of Dibao slots fixed within each local market, set household priorities equal to one, and retain the outcome-value parameters estimated in the full model. The resulting ranking overlaps with actual recipients by only 10.9%, implying 89.1% recipient churn. Thus, even with no change in the number or geographic distribution of program slots, allocating on predicted gains would select a substantially different group of households. This counterfactual does not show that gain-based allocation is better or worse than ob-served Dibao allocation. The 89.1% churn measures the difference between two recipient rankings; it is not an estimate of welfare or efficiency loss. The predicted gains are condi-tional mean effects estimated from the outcomes and information available in our data. The model includes consumption and education outcomes, but it does not capture every benefit of Dibao that may matter to households or administrators. In addition, the relative values assigned to these outcomes are weakly identified. The counterfactual should therefore be read as a comparison between two allocation principles, not as an estimate of an optimal policy. The estimated household priorities must also be interpreted carefully. They describe which households receive higher priority after accounting for policy gains predictable from the researcher’s information set, but they do not explain why those households receive priority. The estimates may reflect concern for poverty and vulnerability, information available to local administrators but not recorded in the CHFS, differences in eligibility or application behavior, or other features of local implementation. For this reason, the household compo-nent is a revealed conditional allocation priority rather than a government welfare weight. It is useful for describing observed allocation, but it should not be directly converted into a targeting formula. 24 Subject to these limits, the main priority patterns are stable. Lower income, lower education of the household head, and the presence of elderly household members consistently predict higher conditional priority across the supported outcome-value specifications. The relative values assigned to predicted consumption and education gains are much less precisely iden-tified. Results from other survey periods and datasets also show that household-priority information is more informative about observed allocation than predicted gains. These ex-ercises support the general pattern, but they do not show that the specific priority ratios estimated from the CHFS apply to other places, periods, or programs. The same distinction matters for social programs beyond Dibao. Better methods for pre-dicting treatment effects can help identify who is likely to benefit most, but they cannot by themselves determine who should receive assistance. That decision also depends on how the program values poverty, vulnerability, and other household circumstances. We do not take a position on whether allocation should place more weight on need or on predicted impact. Our empirical conclusion is narrower: conditional on the outcomes and informa-tion observed in our data, Dibao entry is much more closely related to lower income, lower education of the household head, and the presence of elderly members than to predicted consumption and education gains. Predicting who is likely to benefit most and deciding who should receive priority are therefore two separate allocation questions. 
+
+References 
+
+Alderman, Harold. 2002. “Do Local Officials Know Something We Don’t? Decentralization of Targeted Transfers in Albania.” Journal of Public Economics 83 (3): 375–404. Besley, Timothy, and Ravi Kanbur. 1990. “The Principles of Targeting.” World Bank Policy Research Working Paper 385. Washington, DC: World Bank. Björkegren, Daniel, Joshua E. Blumenstock, and Samsun Knight. 2026. “What Do Policies 25 Value?” Review of Economic Studies 93 (4): 2424–2450. Chernozhukov, Victor, Denis Chetverikov, Mert Demirer, Esther Duflo, Christian Hansen, Whitney Newey, and James Robins. 2018. “Double/Debiased Machine Learning for Treatment and Structural Parameters.” Econometrics Journal 21 (1): C1–C68. Coady, David, Margaret Grosh, and John Hoddinott. 2004. Targeting of Transfers in Developing Countries: Review of Lessons and Experience . Washington, DC: World Bank. Galasso, Emanuela, and Martin Ravallion. 2005. “Decentralized Targeting of an An-tipoverty Program.” Journal of Public Economics 89 (4): 705–727. Gao, Qin, Irwin Garfinkel, and Fuhua Zhai. 2009. “Anti-Poverty Effectiveness of the Minimum Living Standard Assistance Policy in Urban China.” Review of Income and Wealth 55 (Special Issue 1): 630–655. Golan, Jennifer, Terry Sicular, and Nithin Umapathi. 2017. “Unconditional Cash Transfers in China: Who Benefits from the Rural Minimum Living Standard Guarantee (Dibao) Program?” World Development 93: 316–336. Haushofer, Johannes, Paul Niehaus, Carlos Paramo, Edward Miguel, and Michael Walker. 2025. “Targeting Impact versus Deprivation.” American Economic Review 115 (6): 1936–1974. Kakwani, Nanak, Shi Li, Xiaobing Wang and Mengbing Zhu. 2019. “Evaluating the Effec-tiveness of the Rural Minimum Living Standard Guarantee (Dibao) Program in China.” 
+
+China Economic Review 53: 1–14. National People’s Congress of the People’s Republic of China. 2026. Social Assistance Law of the People’s Republic of China . Adopted April 2026; effective July 1, 2026. In 26 Chinese. Nie, Xinkun, and Stefan Wager. 2021. “Quasi-Oracle Estimation of Heterogeneous Treat-ment Effects.” Biometrika 108 (2): 299–319. Niehaus, Paul, Antonia Atanassova, Marianne Bertrand, and Sendhil Mullainathan. 2013. “Targeting with Agents.” American Economic Journal: Economic Policy 5 (1): 206–238. Saez, Emmanuel, and Stefanie Stantcheva. 2016. “Generalized Social Marginal Welfare Weights for Optimal Tax Theory.” American Economic Review 106 (1): 24–45. State Council of the People’s Republic of China. 1999. “Regulations on Minimum Living Security for Urban Residents.” State Council Order No. 271. Issued September 28, 1999; effective October 1, 1999. In Chinese. State Council of the People’s Republic of China. 2007. “Notice on Establishing the Rural Minimum Living Security System Nationwide.” Guo Fa [2007] No. 19. In Chinese. State Council of the People’s Republic of China. 2014. “Interim Measures for Social Assistance.” State Council Order No. 649. Effective May 1, 2014. In Chinese. 27

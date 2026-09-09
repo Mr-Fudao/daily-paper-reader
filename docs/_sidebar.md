@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-09-09 <!--dpr-date:20260909-->
+    * 速读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202609/09/2609.08411v1-policy-gains-or-household-need-the-allocation-logic-of-chinas-dibao-program" data-sidebar-item="{&quot;title&quot;: &quot;Policy Gains or Household Need? The Allocation Logic of China&#x27;s Dibao Program&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2609.08411v1-policy-gains-or-household-need-the-allocation-logic-of-chinas-dibao-program&quot;, &quot;score&quot;: &quot;7.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;budget-perf&quot;}], &quot;evidence&quot;: &quot;研究中国低保公共救助资金的分配逻辑，检验按预期政策增益还是家庭需求分配，属绩效预算的核心议题&quot;}">Policy Gains or Household Need? The Allocation Logic of China&#x27;s Dibao Program</a>
   * 2026-09-04 <!--dpr-date:20260904-->
     * 速读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202609/04/2609.01467v1-which-policy-works-and-where-estimation-and-inference-for-state-level-treatment-effects-in-difference-in-differences" data-sidebar-item="{&quot;title&quot;: &quot;Which Policy Works, and Where? Estimation and Inference for State-Level Treatment Effects in Difference-in-Differences&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2609.01467v1-which-policy-works-and-where-estimation-and-inference-for-state-level-treatment-effects-in-difference-in-differences&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;budget-perf&quot;}], &quot;evidence&quot;: &quot;提供州级与辖区层面政策处理效应的双重差分估计方法，可用于评估财政与预算项目绩效。&quot;}">Which Policy Works, and Where? Estimation and Inference for State-Level Treatment Effects in Difference-in-Differences</a>

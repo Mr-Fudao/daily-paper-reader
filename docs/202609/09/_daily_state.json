@@ -1,0 +1,25 @@
+{
+  "date": "20260909",
+  "date_label": "",
+  "generated_at": "2026-09-09 21:33:56 UTC",
+  "recommend_exists": true,
+  "run_count": 1,
+  "papers": [
+    {
+      "paper_id": "2609.08411v1",
+      "route": "202609/09/2609.08411v1-policy-gains-or-household-need-the-allocation-logic-of-chinas-dibao-program",
+      "title": "Policy Gains or Household Need? The Allocation Logic of China's Dibao Program",
+      "section": "quick",
+      "tags": [
+        {
+          "kind": "query",
+          "label": "budget-perf"
+        }
+      ],
+      "score": 7.0,
+      "evidence": "研究中国低保公共救助资金的分配逻辑，检验按预期政策增益还是家庭需求分配，属绩效预算的核心议题",
+      "first_seen_at": "2026-09-09 21:33:56 UTC",
+      "updated_at": "2026-09-09 21:33:56 UTC"
+    }
+  ]
+}

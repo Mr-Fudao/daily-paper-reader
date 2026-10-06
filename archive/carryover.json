@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-10-04T22:06:39.164679+00:00",
-  "updated_date": "20261004",
+  "generated_at": "2026-10-06T00:42:54.980314+00:00",
+  "updated_date": "20261006",
   "carryover_days": 9,
   "tag_states": {
     "budget-perf": {
-      "updated_date": "20261004",
+      "updated_date": "20261006",
       "carryover_days": 9,
       "items": []
     }
